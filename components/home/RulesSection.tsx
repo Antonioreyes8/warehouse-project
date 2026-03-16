@@ -1,20 +1,19 @@
 import Image from "next/image";
 
 export default function RulesSection() {
-	const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
 	return (
 		<section className="rules_section">
 			<div className="rules_left">
 				<Image
-					src={`${baseUrl}/storage/v1/object/public/posters/party.gif`}
+					src="https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/party.gif"
 					alt="Party"
-					width={600} // intrinsic width
-					height={400} // intrinsic height
-					style={{height: "auto" }} // scales automatically
+					width={600}
+					height={400}
+					style={{height: "auto" }}
 					unoptimized
 				/>
 			</div>
+
 			<div className="rules_right">
 				<h2>Rules</h2>
 				<ol>
