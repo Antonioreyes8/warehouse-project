@@ -1,0 +1,143 @@
+.manifesto_section {
+	font-family: "TimesNewRoman", serif;
+	display: flex;
+	justify-content: center;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 100px;
+	padding-bottom: 150px;
+	font-size: 28px;
+	background-color: #2a2a2a;
+	color: #d3d3d3;
+}
+
+.manifesto_section h2 {
+	font-family: "TimesNewRomanExtraBold", serif;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	font-size: 32px;
+	text-decoration: underline;
+	padding-bottom: 20px;
+}
+
+.manifesto_content {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	text-align: center;
+}
+
+.rules_section {
+	font-family: "TimesNewRoman", serif;
+	display: flex;
+	padding-top: 100px;
+	padding-bottom: 100px;
+	font-size: 28px;
+	background-color: #d3d3d3;
+	color: #2a2a2a;
+}
+
+.rules_section h2 {
+	font-family: "TimesNewRomanExtraBold", serif;
+	font-size: 32px;
+	padding-bottom: 20px;
+	text-decoration: underline;
+}
+.rules_right,
+.rules_left {
+	width: 50%;
+}
+
+.rules_right,
+.rules_left {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.rules_right ol li {
+	margin-bottom: 0.75rem;
+}
+
+.projects_section {
+	padding: 100px;
+	font-family: "TimesNewRoman", serif;
+	text-align: center;
+	font-size: 28px;
+}
+
+.projects_section h2 {
+	font-family: "TimesNewRomanExtraBold", serif;
+	font-size: 32px;
+	padding-bottom: 20px;
+	text-decoration: underline;
+}
+
+.projects_grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+	gap: 2rem; /* space between projects */
+	margin-top: 2rem;
+}
+
+.project_card {
+	background: #f8f8f8; /* optional visual separation */
+	padding: 1.5rem;
+	border-radius: 8px;
+	text-align: left; /* title and desc left-aligned */
+}
+
+@media (max-width: 1024px) {
+	/* typical iPad width */
+	.rules_left img {
+		width: 400px !important; /* smaller width for tablet */
+		height: auto !important; /* maintain aspect ratio */
+		padding-bottom: 50px;
+	}
+
+	.rules_section {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.manifesto_section {
+		font-size: 16px;
+		padding-top: 100px;
+		padding-bottom: 100px;
+	}
+	.rules_section {
+		font-size: 16px;
+		padding-top: 50px;
+		padding-bottom: 50px;
+	}
+
+	.manifesto_section h2 {
+		font-size: 24px;
+	}
+
+	.rules_section h2 {
+		font-size: 24px;
+	}
+
+	.rules_right,
+	.rules_left {
+		width: 100%;
+	}
+
+	.projects_grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.project_card img {
+		height: 150px !important;
+		width: auto !important;
+	}
+
+	.projects_section {
+		padding: none;
+		font-size: 16px;
+	}
+}

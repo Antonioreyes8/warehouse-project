@@ -1,0 +1,52 @@
+@font-face {
+	font-family: "TimesNewRoman";
+	src: url("/fonts/TimesNewRoman.woff2") format("woff2");
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: "TimesNewRomanExtraBold";
+	src: url("/fonts/MTimes-ExtraBold.woff2") format("woff2");
+	font-weight: 800;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+header {
+  font-family: 'TimesNewRomanExtraBold', serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  padding: 50px;
+  background-color: #2A2A2A;
+	color: #D3D3D3;
+}
+
+.footer {
+  font-family: 'TimesNewRoman', serif;
+  display: flex;
+  height: 100svh;
+  background-color: #D3D3D3;
+  color: #2A2A2A;
+}
+
+.footer_left,
+.footer_right {
+  width: 50%;
+}
+
+.footer_left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
