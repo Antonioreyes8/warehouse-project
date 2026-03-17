@@ -31,7 +31,7 @@ export default function ProjectsSection() {
 								alt={project.title}
 								width={100}
 								height={250}
-								style={{ width: "200px", height: "auto" }}
+								style={{ width: "400px", height: "auto" }}
 								unoptimized
 							/>
 							<h3>{project.title}</h3>

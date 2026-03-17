@@ -92,7 +92,7 @@
 @media (max-width: 1024px) {
 	/* typical iPad width */
 	.rules_left img {
-		width: 400px !important; /* smaller width for tablet */
+		width: 500px !important; /* smaller width for tablet */
 		height: auto !important; /* maintain aspect ratio */
 		padding-bottom: 50px;
 	}
