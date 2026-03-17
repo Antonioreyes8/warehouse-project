@@ -6,9 +6,9 @@ export default function Footer() {
       <div className="footer_left">
         <div>
           <p><Link href="/" className="link">Home</Link></p>
-          <p><Link href="/about" className="link">About</Link></p>
+          <p><Link href="/about" className="link">Manifesto</Link></p>
           <p>Financial Hub</p>
-          <p>Community Guidelines</p>
+          <p><Link href="/guidelines" className="link">Community Guidelines</Link></p>
           <p>FAQ</p>
           <p>Contact</p>
           <br />

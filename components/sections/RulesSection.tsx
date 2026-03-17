@@ -17,10 +17,10 @@ export default function RulesSection() {
 			<div className="rules_right">
 				<h2>BEFORE YOU COME</h2>
 				<ol>
-					<li>Come for the music</li>
 					<li>Be open to unfamiliar art</li>
 					<li>Respect everybody</li>
 					<li>Dress to express yourself</li>
+					<li>You may be recorded</li>
 					<li>Dance your heart out</li>
 				</ol>
 			</div>

@@ -1,31 +1,31 @@
-.manifesto_section {
+.indented {
+	margin-left: 20px;
+}
+
+.manifesto_and_guidelines_section {
 	font-family: "TimesNewRoman", serif;
 	display: flex;
-	justify-content: center;
 	padding-left: 10%;
 	padding-right: 10%;
 	padding-top: 100px;
 	padding-bottom: 150px;
-	font-size: 28px;
+	font-size: 24px;
 	background-color: #2a2a2a;
 	color: #d3d3d3;
 }
 
-.manifesto_section h2 {
+.manifesto_and_guidelines_section h2 {
 	font-family: "TimesNewRomanExtraBold", serif;
 	display: flex;
 	justify-content: center;
-	text-align: center;
-	font-size: 32px;
 	text-decoration: underline;
 	padding-bottom: 20px;
 }
 
-.manifesto_content {
+.manifesto_and_guidelines_content {
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
-	text-align: center;
 }
 
 .rules_section {
@@ -103,7 +103,7 @@
 		text-align: center;
 	}
 
-	.manifesto_section {
+	.manifesto_and_guidelines_section {
 		font-size: 16px;
 		padding-top: 100px;
 		padding-bottom: 100px;
@@ -114,7 +114,7 @@
 		padding-bottom: 50px;
 	}
 
-	.manifesto_section h2 {
+	.manifesto_and_guidelines_section h2 {
 		font-size: 24px;
 	}
 
