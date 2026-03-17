@@ -31,13 +31,18 @@ header {
 	color: #d3d3d3;
 }
 
+.link {
+  text-decoration: none;
+  color: #2a2a2a;
+}
+
 .footer {
 	font-family: "TimesNewRoman", serif;
 	display: flex;
 	height: 100svh;
 	background-color: #d3d3d3;
 	color: #2a2a2a;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .footer_left,
@@ -62,6 +67,7 @@ header {
     padding-top: 200px;
     padding-bottom: 200px;
     height: auto;
+    font-size: 16px;
   }
   .footer_left,
   .footer_right {

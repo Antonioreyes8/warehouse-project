@@ -1,12 +1,11 @@
-// app/page.tsx
-import ProjectsSection from '../components/home/ProjectsSection';
-import RulesSection from '../components/home/RulesSection';
+import ProjectsSection from "@/components/sections/ProjectsSection";
+import RulesSection from "@/components/sections/RulesSection";
 
-export default function Page() {
-  return (
-    <>
-      <RulesSection />
-      <ProjectsSection />
-    </>
-  );
+export default function HomePage() {
+	return (
+		<>
+			<RulesSection />
+			<ProjectsSection />
+		</>
+	);
 }

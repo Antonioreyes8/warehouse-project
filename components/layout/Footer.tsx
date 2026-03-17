@@ -1,9 +1,12 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer_left">
         <div>
-          <p>About</p>
+          <p><Link href="/" className="link">Home</Link></p>
+          <p><Link href="/about" className="link">About</Link></p>
           <p>Financial Hub</p>
           <p>Community Guidelines</p>
           <p>FAQ</p>
