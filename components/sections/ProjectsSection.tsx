@@ -3,17 +3,17 @@ import Image from "next/image";
 export default function ProjectsSection() {
 	const projects = [
 		{
-			title: "I. Party At The Warehouse",
+			title: "I.",
 			desc: "September 25'",
 			img: "https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/poster1.jpg",
 		},
 		{
-			title: "II. Party At The Warehouse: Masquerade",
+			title: "II.",
 			desc: "January 26'",
 			img: "https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/poster2.png",
 		},
 		{
-			title: "III. Coming Soon",
+			title: "III.",
 			desc: "May 26'",
 			img: "https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/black_img.jpg",
 		},
@@ -26,6 +26,7 @@ export default function ProjectsSection() {
 				<div className="projects_grid">
 					{projects.map((project, index) => (
 						<div className="project_card" key={index}>
+							<h3>{project.title}</h3>
 							<Image
 								src={project.img}
 								alt={project.title}
@@ -34,7 +35,6 @@ export default function ProjectsSection() {
 								style={{ width: "300px", height: "auto" }}
 								unoptimized
 							/>
-							<h3>{project.title}</h3>
 							<p>{project.desc}</p>
 						</div>
 					))}

@@ -57,6 +57,10 @@ header {
 	align-items: center;
 }
 
+.indented {
+	margin-left: 20px;
+}
+
 @media (max-width: 1024px) {
 
   header {
