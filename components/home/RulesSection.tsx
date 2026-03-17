@@ -15,7 +15,7 @@ export default function RulesSection() {
 			</div>
 
 			<div className="rules_right">
-				<h2>Read before you come</h2>
+				<h2>BEFORE YOU COME</h2>
 				<ol>
 					<li>Come for the music</li>
 					<li>Be open to unfamiliar art</li>

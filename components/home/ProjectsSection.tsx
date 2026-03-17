@@ -22,7 +22,7 @@ export default function ProjectsSection() {
 	return (
 		<section id="projects" className="projects_section">
 			<div className="projects_container">
-				<h2>Projects</h2>
+				<h2>PROJECTS</h2>
 				<div className="projects_grid">
 					{projects.map((project, index) => (
 						<div className="project_card" key={index}>
