@@ -1,7 +1,7 @@
 export default function GuidelinesSection() {
 	return (
-		<section className="manifesto_and_guidelines_section">
-			<div className="manifesto_and_guidelines_content">
+		<section className="basic_section">
+			<div className="basic_content">
 				<div>
 					<h2>Community Guidelines</h2>
 					<h3>Article I. Our Mission & Shared Responsibility</h3>

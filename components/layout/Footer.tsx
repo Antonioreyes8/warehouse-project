@@ -9,7 +9,7 @@ export default function Footer() {
           <p><Link href="/about" className="link">Manifesto</Link></p>
           <p>Financial Hub</p>
           <p><Link href="/guidelines" className="link">Community Guidelines</Link></p>
-          <p>FAQ</p>
+          <p><Link href="/FAQ" className="link">FAQ</Link></p>
           <p>Contact</p>
           <br />
           <p>Denton, Texas</p>

@@ -14,9 +14,13 @@
 	padding-bottom: 20px;
 	text-decoration: underline;
 }
-.rules_right,
+
 .rules_left {
-	width: 50%;
+	width: 60%;
+}
+
+.rules_right {
+	width: 40%
 }
 
 .rules_right,

@@ -3,7 +3,7 @@ import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import '../css/globals.css';
 import '../css/home.css';
-import '../css/manifesto_and_guidelines.css';
+import '../css/basic_template.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

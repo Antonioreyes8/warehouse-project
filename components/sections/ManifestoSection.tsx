@@ -1,7 +1,7 @@
 export default function ManifestoSection() {
 	return (
-		<section className="manifesto_and_guidelines_section">
-			<div className="manifesto_and_guidelines_content">
+		<section className="basic_section">
+			<div className="basic_content">
 				<div>
 					<h2>Our Manifesto</h2>
 					<br></br>

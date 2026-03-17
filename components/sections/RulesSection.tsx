@@ -7,7 +7,7 @@ export default function RulesSection() {
 				<Image
 					src="https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/party.gif"
 					alt="Party"
-					width={600}
+					width={700}
 					height={400}
 					style={{height: "auto" }}
 					unoptimized

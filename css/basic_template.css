@@ -1,4 +1,4 @@
-.manifesto_and_guidelines_section {
+.basic_section {
 	font-family: "TimesNewRoman", serif;
 	display: flex;
 	padding-left: 10%;
@@ -10,7 +10,7 @@
 	color: #d3d3d3;
 }
 
-.manifesto_and_guidelines_section h2 {
+.basic_section h2 {
 	font-family: "TimesNewRomanExtraBold", serif;
 	display: flex;
 	justify-content: center;
@@ -18,20 +18,20 @@
 	padding-bottom: 20px;
 }
 
-.manifesto_and_guidelines_content {
+.basic_content {
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
 }
 
 @media (max-width: 1024px) {
-    .manifesto_and_guidelines_section {
+    .basic_section {
 		font-size: 16px;
 		padding-top: 100px;
 		padding-bottom: 100px;
 	}
 
-    .manifesto_and_guidelines_section h2 {
+    .basic_section h2 {
 		font-size: 24px;
 	}
 }
