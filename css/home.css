@@ -127,6 +127,12 @@
 		width: 100%;
 	}
 
+	.rules_left img {
+		width: 300px !important; /* smaller width for tablet */
+		height: auto !important; /* maintain aspect ratio */
+		padding-bottom: 50px;
+	}
+
 	.projects_grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
@@ -137,7 +143,12 @@
 	}
 
 	.projects_section {
-		padding: none;
+		padding: 0;
+		padding-top: 50px;
 		font-size: 16px;
+	}
+
+	.projects_section h2 {
+		font-size: 24px;
 	}
 }
