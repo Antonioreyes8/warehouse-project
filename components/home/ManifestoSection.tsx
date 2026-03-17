@@ -3,7 +3,7 @@ export default function ManifestoSection() {
 		<section className="manifesto_section">
 			<div className="manifesto_content">
 				<div>
-					<h2>Manifesto</h2>
+					<h2>Our Manifesto</h2>
 					<p>
 						Artistic expression is fundamental to how communities heal, connect,
 						and grow. Yet today creativity is increasingly constrained by
