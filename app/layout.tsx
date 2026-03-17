@@ -4,6 +4,7 @@ import Footer from '../components/layout/Footer';
 import '../css/globals.css';
 import '../css/home.css';
 import '../css/basic_template.css';
+import '../css/contact.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
