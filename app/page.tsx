@@ -1,5 +1,5 @@
-import ProjectsSection from "@/components/sections/ProjectsSection";
-import RulesSection from "@/components/sections/RulesSection";
+import ProjectsSection from "@/app/home/projectsSection";
+import RulesSection from "@/app/home/rulesSection";
 
 export default function HomePage() {
 	return (

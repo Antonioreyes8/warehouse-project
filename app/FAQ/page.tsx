@@ -1,9 +1,9 @@
-import FAQSection from "@/components/sections/FAQSection";
+import FAQSection from "@/app/faq/faqSection";
 
 export default function FAQPage() {
-  return (
-    <main>
-      <FAQSection />
-    </main>
-  );
+	return (
+		<main>
+			<FAQSection />
+		</main>
+	);
 }

@@ -1,6 +1,8 @@
+import styles from "./contact.module.css";
+
 export default function ContactSection() {
   return (
-    <section className="basic_section">
+    <section className="basic_section"> {/* Keeps your global section padding/font */}
       <div className="basic_content">
         <div>
           <h2>Contact</h2>
@@ -11,7 +13,7 @@ export default function ContactSection() {
           </p>
 
           <form
-            className="contact_form"
+            className={styles.contact_form} // This activates all your custom CSS
             action="https://formspree.io/f/YOUR_FORM_ID"
             method="POST"
           >

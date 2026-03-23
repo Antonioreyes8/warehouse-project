@@ -111,6 +111,28 @@ export default function ManifestoSection() {
 						mutual investment transforms art from an isolated act into a shared
 						process of meaning making.
 					</p>
+					<br></br>
+					<h3>IV. The Responsibility of Institutional Power</h3>
+					<br></br>
+					<p>
+						We recognize that as a digital platform, we function as an
+						institution of power, and we refuse the false comfort of neutrality.
+						Technology is never impartial; it either upholds the status quo or
+						actively works to dismantle it. To remain silent in the face of
+						systemic injustice—digital gentrification, racism, and classism—is
+						to be complicit in the extraction of the very culture we claim to
+						protect.
+					</p>
+					<br></br>
+					<p>
+						We embrace our mandate to speak up and show up for the artists we
+						host. This space is not merely a passive repository for art; it is a
+						vocal advocate. We take responsibility for using our institutional
+						influence to challenge exploitative systems, ensuring that our
+						stewardship serves as a site of active resistance and dignified
+						protection for the marginalized creators who are the lifeblood of
+						our community.
+					</p>
 				</div>
 			</div>
 		</section>

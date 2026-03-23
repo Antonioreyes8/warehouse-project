@@ -1,0 +1,83 @@
+@font-face {
+	font-family: "TimesNewRoman";
+	src: url("/fonts/TimesNewRoman.woff2") format("woff2");
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: "TimesNewRomanExtraBold";
+	src: url("/fonts/MTimes-ExtraBold.woff2") format("woff2");
+	font-weight: 800;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.link {
+	text-decoration: none;
+	color: #2a2a2a;
+}
+
+.indented {
+	margin-left: 20px;
+}
+
+.basic_section {
+	font-family: "TimesNewRoman", serif;
+	display: flex;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 100px;
+	padding-bottom: 150px;
+	font-size: 24px;
+	background-color: #2a2a2a;
+	color: #d3d3d3;
+}
+
+.basic_section h2 {
+	font-family: "TimesNewRomanExtraBold", serif;
+	display: flex;
+	justify-content: center;
+	text-decoration: underline;
+	padding-bottom: 20px;
+}
+
+.basic_content {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+	header {
+		font-size: 28px;
+	}
+	.footer {
+		flex-direction: column;
+		padding-top: 200px;
+		padding-bottom: 200px;
+		height: auto;
+		font-size: 16px;
+	}
+	.footer_left,
+	.footer_right {
+		width: 100%;
+	}
+
+	.basic_section {
+		font-size: 16px;
+		padding-top: 100px;
+		padding-bottom: 100px;
+	}
+
+	.basic_section h2 {
+		font-size: 24px;
+	}
+}

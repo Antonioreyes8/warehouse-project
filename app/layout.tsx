@@ -1,10 +1,10 @@
 // app/layout.tsx
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
-import '../css/globals.css';
-import '../css/home.css';
-import '../css/basic_template.css';
-import '../css/contact.css';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import './globals.css'
+import './home/home.module.css';
+import './contact/contact.module.css';
+import './components/components.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
