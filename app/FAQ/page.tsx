@@ -1,4 +1,4 @@
-import FAQSection from "@/app/faq/faqSection";
+import FAQSection from "@/app/FAQ/faqSection";
 
 export default function faqPage() {
 	return (
