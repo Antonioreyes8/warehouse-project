@@ -1,0 +1,96 @@
+.projectMain {
+	margin: 0 auto;
+	padding: 48px 24px;
+	background-color: #2a2a2a;
+	color: #d3d3d3;
+}
+
+.projectMain img {
+	width: 25%;
+	height: auto;
+	margin-bottom: 16px;
+}
+
+.projectMain p {
+	margin-bottom: 8px;
+	line-height: 1.6;
+}
+
+.causeSection {
+	margin-top: 48px;
+}
+
+.causeSection h2 {
+	font-size: 1.75rem;
+	margin-bottom: 16px;
+}
+
+.causeSection p {
+	font-size: 1rem;
+	line-height: 1.6;
+	color: #333;
+}
+
+.collaboratorsSection {
+	margin-top: 48px;
+}
+
+.collaboratorsSection h2 {
+	font-size: 1.75rem;
+	margin-bottom: 16px;
+}
+
+.collaboratorsCategory {
+	margin-bottom: 24px;
+}
+
+.collaboratorsCategory h3 {
+	font-size: 1.25rem;
+	margin-bottom: 8px;
+}
+
+.collaboratorsGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 8px;
+}
+
+.collaboratorName {
+	font-weight: 500;
+}
+
+.recapSection {
+	margin-top: 48px;
+}
+
+.recapSection h2 {
+	font-size: 1.75rem;
+	margin-bottom: 16px;
+}
+
+.recapGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 16px;
+}
+
+.recapItem {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 4 / 3; /* Makes each grid cell roughly rectangular */
+	overflow: hidden;
+}
+
+.recapItem img,
+.recapItem video {
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* fills container without stretching */
+	display: block;
+}
+
+@media (max-width: 1024px) {
+    .projectMain img {
+        width: 50%;
+    }
+}
