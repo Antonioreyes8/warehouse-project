@@ -5,7 +5,7 @@
 	color: #d3d3d3;
 }
 
-.projectMain img {
+.projectPoster {
 	width: 25%;
 	height: auto;
 	margin-bottom: 16px;
@@ -28,7 +28,6 @@
 .causeSection p {
 	font-size: 1rem;
 	line-height: 1.6;
-	color: #333;
 }
 
 .collaboratorsSection {
@@ -90,7 +89,7 @@
 }
 
 @media (max-width: 1024px) {
-    .projectMain img {
+    .projectPoster {
         width: 50%;
     }
 }
