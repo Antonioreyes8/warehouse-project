@@ -7,7 +7,7 @@ import CauseSection from "./../causeSection";
 import CollaboratorsSection from "./../collaboratorsSection";
 import RecapSection from "./../recapSection";
 
-import styles from "./project.module.css";
+import styles from "../project.module.css";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }> | { slug: string }; // may be Promise

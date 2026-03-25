@@ -30,6 +30,28 @@
 	line-height: 1.6;
 }
 
+.causeSection ul {
+	margin-top: 12px;
+	padding-left: 20px;
+	list-style-type: disc;
+}
+
+.causeSection ul li {
+	margin-bottom: 8px;
+	font-size: 0.95rem;
+}
+
+.causeSection a {
+	color: #1e90ff; /* DodgerBlue for links */
+	text-decoration: none;
+	transition: color 0.2s ease-in-out;
+}
+
+.causeSection a:hover {
+	color: #63b3ed; /* lighter blue on hover */
+	text-decoration: underline;
+}
+
 .collaboratorsSection {
 	margin-top: 48px;
 }
@@ -89,7 +111,7 @@
 }
 
 @media (max-width: 1024px) {
-    .projectPoster {
-        width: 50%;
-    }
+	.projectPoster {
+		width: 50%;
+	}
 }

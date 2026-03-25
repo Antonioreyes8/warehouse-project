@@ -1,5 +1,5 @@
 import { Media } from "./data";
-import styles from "./[slug]/project.module.css";
+import styles from "./project.module.css";
 
 export default function RecapSection({
   recapSection,

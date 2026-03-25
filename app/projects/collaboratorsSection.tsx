@@ -1,5 +1,5 @@
 import { Collaborator } from "./data";
-import styles from "./[slug]/project.module.css";
+import styles from "./project.module.css";
 
 export default function CollaboratorsSection({
   collaboratorsSection,
