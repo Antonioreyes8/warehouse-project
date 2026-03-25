@@ -54,12 +54,12 @@
 .projects_grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
-	gap: 2rem; /* space between projects */
+	gap: 1rem; /* space between projects */
 	margin-top: 2rem;
 }
 
 .project_card {
-	padding: 1.5rem;
+	padding: 1rem;
 	text-align: left; /* title and desc left-aligned */
 }
 
@@ -102,7 +102,7 @@
 	}
 
 	.project_card img {
-		height: 150px !important;
+		height: 200px !important;
 		width: auto !important;
 	}
 
