@@ -29,7 +29,8 @@ export default function CollaboratorsSection({
     "Organizers",
     "Preparation",
     "Media",
-    "Other",
+    "Non-Performative Artists",
+    "Technical Production",
   ];
 
   const sortedRoles = roleOrder.filter((role) => grouped[role]);
