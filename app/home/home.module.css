@@ -77,7 +77,7 @@
 	.rules_section {
 		flex-direction: column;
 		align-items: center;
-		text-align: center;
+		justify-content: center;
 		padding-top: 50px;
 		padding-bottom: 50px;
 		font-size: 18px;
@@ -88,30 +88,35 @@
 	}
 
 	.rules_overlay {
-		max-width: 90%;
-		padding: 16px;
-		bottom: 10px;
-		left: 10px;
+		position: static; /* move under GIF */
+		margin: 20px auto 0 auto; /* spacing */
+		padding: 12px; /* smaller padding */
 	}
 
 	.rules_overlay h2 {
-		font-size: 2rem;
+		font-size: 1.8rem;
 		padding-bottom: 12px;
 	}
 
 	.rules_overlay ol li {
-		font-size: 16px;
-		margin-bottom: 0.5rem;
+		font-size: 14px;
+		margin-bottom: 0.4rem;
 	}
 
-	/* Projects Grid - Tablet fixes */
 	.projects_grid {
-		grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
-		gap: 1rem;
+		grid-template-columns: repeat(2, 1fr);
 	}
-
-	.project_card {
-		padding: 1rem;
-		text-align: left;
+	.project_card img {
+		height: 180px !important;
+		width: auto !important;
+	}
+	.projects_section {
+		padding-top: 50px;
+		font-size: 16px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	.projects_section h2 {
+		font-size: 3rem;
 	}
 }
