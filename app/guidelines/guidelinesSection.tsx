@@ -22,7 +22,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Public Environment Notice:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						This space is a public-facing environment. By entering and
 						participating in community activities, members acknowledge and
@@ -31,7 +31,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Purpose of Documentation:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Media captured within the space is intended for shared use within
 						the community. The primary goal of this documentation is to
@@ -40,7 +40,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Shared Visibility & Privacy:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Members are encouraged to document and share their personal
 						experiences. However, we expect a high degree of professional
@@ -49,7 +49,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Consent and Liability:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						For content published via official organization accounts, the
 						leadership will take reasonable precautions to obtain specific
@@ -57,7 +57,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Third-Party Disclaimer:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						While the organization strives for a culture of consent, it does not
 						assume liability for the actions of third parties or individual
@@ -74,7 +74,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Equipment Integrity:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						All tools, technology, and hardware must be used solely for their
 						intended purposes. Destruction, negligent misuse, or unauthorized
@@ -82,7 +82,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Zonal Respect:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Dedicated areas are optimized for specific activities. Members must
 						respect the boundaries of these zones to ensure the safety and focus
@@ -90,7 +90,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Operational Flow:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Members are required to follow the established organization and flow
 						of activities to maintain an efficient and harmonious environment.
@@ -99,14 +99,14 @@ export default function GuidelinesSection() {
 					<h3>Article IV. Commitment to Safety & Inclusion</h3>
 					<br></br>
 					<p>
-						We do not merely offer a "safe space"; we maintain an Intentional
-						Sanctuary. We are a community that actively prioritizes the safety,
-						dignity, and equity of women, LGBTQ+ individuals, immigrants, and
-						working class artists. We are committed to fostering an environment
-						where all members feel empowered to express themselves without fear
-						of discrimination, harassment, or marginalization. We expect all
-						members to uphold these values and to contribute to a culture of
-						radical respect and mutual support.
+						We do not merely offer a &quot;safe space&quot;; we maintain an
+						Intentional Sanctuary. We are a community that actively prioritizes
+						the safety, dignity, and equity of women, LGBTQ+ individuals,
+						immigrants, and working class artists. We are committed to fostering
+						an environment where all members feel empowered to express
+						themselves without fear of discrimination, harassment, or
+						marginalization. We expect all members to uphold these values and to
+						contribute to a culture of radical respect and mutual support.
 					</p>
 					<br></br>
 					<h3>Article V. Leadership & Governance</h3>
@@ -116,7 +116,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Zero-Tolerance Policy:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Harassment, discrimination, intimidation, or the intentional
 						exclusion of any member based on identity or background is a
@@ -132,7 +132,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Facilitator Authority:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Organizers and facilitators are the designated leads for safety and
 						scheduling. Their instructions regarding the use of the space must
@@ -140,7 +140,7 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Finality of Decisions:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Decisions made by leadership regarding the protection of the
 						community, the space, or its members are final.
@@ -154,14 +154,14 @@ export default function GuidelinesSection() {
 					</p>
 					<br></br>
 					<h4>Authorized Use Only:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						The exploitation, manipulation, or misrepresentation of the space
 						for personal gain outside of its intended purpose is prohibited.
 					</p>
 					<br></br>
 					<h4>Illegal Activity:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						The possession, sale, or distribution of illegal substances and any
 						engagement in illegal activities are strictly prohibited.
@@ -172,14 +172,14 @@ export default function GuidelinesSection() {
 					<p>We hold our members to a high standard of conduct.</p>
 					<br></br>
 					<h4>Corrective Action:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Any individual found in violation of these guidelines may be asked
 						to vacate the space immediately.
 					</p>
 					<br></br>
 					<h4>Permanent Removal:</h4>
-                    <br></br>
+					<br></br>
 					<p className="indented">
 						Repeated or severe violations will result in the permanent
 						revocation of membership and a ban from all future events and

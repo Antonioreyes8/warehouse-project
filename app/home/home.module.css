@@ -1,40 +1,48 @@
+/* Rules Section */
 .rules_section {
 	font-family: "TimesNewRoman", serif;
 	display: flex;
-	padding-top: 100px;
+	justify-content: center;
+	padding-top: 50px;
 	padding-bottom: 100px;
 	font-size: 24px;
 	background-color: #2a2a2a;
 	color: #d3d3d3;
 }
 
-.rules_section h2 {
+.rules_media {
+	position: relative;
+	width: 80%;
+}
+
+.rules_media img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+.rules_overlay {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	background-color: rgba(0, 0, 0, 0.75);
+	padding: 24px;
+	max-width: 400px;
+}
+
+.rules_overlay h2 {
 	font-family: "TimesNewRomanExtraBold", serif;
-	font-size: 32px;
+	font-size: 3rem;
 	padding-bottom: 20px;
 	text-decoration: underline;
 }
 
-.rules_left {
-	width: 60%;
-}
-
-.rules_right {
-	width: 40%
-}
-
-.rules_right,
-.rules_left {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
-.rules_right ol li {
+.rules_overlay ol li {
 	margin-bottom: 0.75rem;
+	margin-left: 30px;
 }
 
+/* Projects Section */
 .projects_section {
 	padding: 100px;
 	font-family: "TimesNewRoman", serif;
@@ -46,7 +54,7 @@
 
 .projects_section h2 {
 	font-family: "TimesNewRomanExtraBold", serif;
-	font-size: 32px;
+	font-size: 3rem;
 	padding-bottom: 20px;
 	text-decoration: underline;
 }
@@ -63,57 +71,47 @@
 	text-align: left; /* title and desc left-aligned */
 }
 
+/* Tablet / smaller screens */
 @media (max-width: 1024px) {
-	/* typical iPad width */
-	.rules_left img {
-		width: 500px !important; /* smaller width for tablet */
-		height: auto !important; /* maintain aspect ratio */
-		padding-bottom: 50px;
-	}
-
+	/* Rules Section adjustments (unchanged) */
 	.rules_section {
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-	}
-	.rules_section {
-		font-size: 16px;
 		padding-top: 50px;
 		padding-bottom: 50px;
+		font-size: 18px;
 	}
 
-	.rules_section h2 {
-		font-size: 24px;
-	}
-
-	.rules_right,
-	.rules_left {
+	.rules_media {
 		width: 100%;
 	}
 
-	.rules_left img {
-		width: 300px !important; /* smaller width for tablet */
-		height: auto !important; /* maintain aspect ratio */
-		padding-bottom: 50px;
+	.rules_overlay {
+		max-width: 90%;
+		padding: 16px;
+		bottom: 10px;
+		left: 10px;
 	}
 
-	.projects_grid {
-		grid-template-columns: repeat(2, 1fr);
+	.rules_overlay h2 {
+		font-size: 2rem;
+		padding-bottom: 12px;
 	}
 
-	.project_card img {
-		height: 180px !important;
-		width: auto !important;
-	}
-
-	.projects_section {
-		padding-top: 50px;
+	.rules_overlay ol li {
 		font-size: 16px;
-		padding-left: 10px;
-		padding-right: 10px;
+		margin-bottom: 0.5rem;
 	}
 
-	.projects_section h2 {
-		font-size: 24px;
+	/* Projects Grid - Tablet fixes */
+	.projects_grid {
+		grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+		gap: 1rem;
+	}
+
+	.project_card {
+		padding: 1rem;
+		text-align: left;
 	}
 }

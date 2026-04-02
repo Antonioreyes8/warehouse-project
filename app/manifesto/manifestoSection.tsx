@@ -12,12 +12,12 @@ export default function ManifestoSection() {
 					</p>
 					<br></br>
 					<p>
-						We want to build a community that views its members as real people.
+						We want to build a community that sees its members as real people.
 					</p>
 					<br></br>
 					<p>
-						This is our chance to make a change and be a part of something
-						bigger
+						This is our chance to create change and to be part of something
+						bigger than ourselves.
 					</p>
 					<br></br>
 					<h3>II. Artistic Liberation</h3>
@@ -34,7 +34,7 @@ export default function ManifestoSection() {
 					</p>
 					<br></br>
 					<p>
-						At the same time, Gentrification has dismantled many of the physical
+						At the same time, gentrification has dismantled many of the physical
 						spaces where artists and subcultures once gathered. As creative work
 						becomes shaped by market demands, art risks losing the freedom and
 						meaning that give it power.
@@ -43,42 +43,38 @@ export default function ManifestoSection() {
 					<h3>III. For the Marginalized</h3>
 					<br></br>
 					<p>
-						Our mission is to redistribute influence in our community and
-						empower systemically marginalized communities.
+						Our mission is to redistribute influence within our community and
+						empower those who have been systemically marginalized.
 					</p>
 					<br></br>
-					<p>
-						In this space, respect is not a passive action rather it's an active
-						choice.
-					</p>
+					<p>In this space, respect is not passive. It is an active choice.</p>
 					<br></br>
 					<p>
-						We believe the art and the artists are inseperatable. The art and
-						artists you support are part of a larger context often abstracted
-						from reality.
+						We believe art and artist are inseparable. The art you support
+						exists within a broader context, one that is often abstracted or
+						erased.
 					</p>
 					<br></br>
 					<h3>IV. Institutional Power</h3>
 					<br></br>
 					<p>
-						We believe we have responsibility of clarity about who we support.
+						We believe we have a responsibility to be clear about who and what
+						we support.
 					</p>
 					<br></br>
 					<p>
-						Neutrality and complicity allow cycles to continue and in our effort
-						to make a change we acknowledge our duty to be not only transparent
-						and speak up but also be apart of the change we want to see in the
-						world.
+						Neutrality and complicity allow harmful cycles to continue. In our
+						effort to create change, we acknowledge our duty not only to be
+						transparent and speak out, but to actively participate in the change
+						we want to see.
 					</p>
 					<br></br>
 					<p>
-						Our proceeds will be clearly public and we will be do our best
-						to denounce oppression where we see it.
+						Our proceeds will be public, and we will do our best to denounce
+						oppression wherever we encounter it.
 					</p>
 					<br></br>
-					<p>
-						All this in effort for change.
-					</p>
+					<p>All of this is in service of change.</p>
 				</div>
 			</div>
 		</section>

@@ -17,6 +17,8 @@ export type Collaborator = {
 		| "Media"
 		| "Non-Performative Artists"
 		| "Technical Production";
+	slug?: string;
+	username?: string;
 };
 
 // Project type
@@ -103,7 +105,7 @@ Ultimately, the project demonstrated that raising awareness is most effective wh
 			{ name: "Sebastian Evans", role: "Organizers" },
 			{ name: "Wyatt Sanchez", role: "Organizers" },
 			{ name: "Gabriel Cook", role: "Organizers" },
-			{ name: "Anthony Bailey", role: "Organizers" },
+			{ name: "Antonio Reyes", role: "Organizers", username: "antonioreyes" },
 			{ name: "Julian Cox", role: "Organizers" },
 			{ name: "Matthew Gray", role: "Organizers" },
 			{ name: "David Brooks", role: "Organizers" },

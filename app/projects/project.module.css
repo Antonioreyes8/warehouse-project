@@ -21,7 +21,7 @@
 }
 
 .causeSection h2 {
-	font-size: 1.75rem;
+	font-size: 3rem;
 	margin-bottom: 16px;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .collaboratorsSection h2 {
-	font-size: 1.75rem;
+	font-size: 3rem;
 	margin-bottom: 16px;
 }
 
@@ -66,7 +66,7 @@
 }
 
 .collaboratorsCategory h3 {
-	font-size: 1.25rem;
+	font-size: 2rem;
 	margin-bottom: 8px;
 }
 
@@ -76,8 +76,13 @@
 	gap: 8px;
 }
 
-.collaboratorName {
-	font-weight: 500;
+.collaboratorName a {
+	text-decoration: none;
+	color: #d3d3d3;
+}
+
+.collaboratorName a:hover {
+	text-decoration: underline;
 }
 
 .recapSection {
@@ -85,7 +90,7 @@
 }
 
 .recapSection h2 {
-	font-size: 1.75rem;
+	font-size: 3rem;
 	margin-bottom: 16px;
 }
 
