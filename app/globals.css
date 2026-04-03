@@ -127,41 +127,30 @@ li {
 @media (max-width: 1024px) {
 	h1 {
 		font-size: 2rem;
-		font-weight: 700;
 	}
 
 	h2 {
 		font-size: 1.75rem;
-		font-weight: 600;
 	}
 
 	h3 {
 		font-size: 1.25rem;
-		font-weight: 500;
 	}
 
 	p {
 		font-size: 1rem;
-		font-weight: 400;
 	}
 
 	li {
 		font-size: 1rem;
-		font-weight: 400;
 	}
 
 	a {
 		font-size: 1rem;
-		font-weight: 400;
 	}
 
 	.basic_section {
-		font-size: 16px;
 		padding-top: 100px;
 		padding-bottom: 100px;
-	}
-
-	.basic_section h2 {
-		font-size: 24px;
 	}
 }

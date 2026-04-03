@@ -68,15 +68,16 @@
 		align-items: center;
 		justify-content: center;
 		padding-bottom: 50px;
+		overflow: hidden;
 	}
 
 	.rules_media {
-		width: 100%;
+		width: 200%;
 	}
 
 	.rules_overlay {
-		background-color: #2a2a2a;
-		position: static; /* move under GIF */
+		background-color: rgba(0, 0, 0, 0.75);
+		left: 100px; /* move under GIF */
 		margin: 20px auto 0 auto; /* spacing */
 		padding: 12px; /* smaller padding */
 	}
