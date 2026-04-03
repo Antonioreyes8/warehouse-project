@@ -15,7 +15,7 @@ export default function RulesSection() {
 				/>
 
 				<div className={styles.rules_overlay}>
-					<h2>BEFORE YOU COME</h2>
+					<h3>BEFORE YOU COME</h3>
 					<ol className={styles.rules_list}>
 						<li>Be open to unfamiliar art</li>
 						<li>Respect everybody</li>

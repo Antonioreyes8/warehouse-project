@@ -21,7 +21,7 @@
 .rules_overlay {
 	position: absolute;
 	bottom: 20px;
-	right: 20px;
+	right: 100px;
 	background-color: rgba(0, 0, 0, 0.75);
 	padding: 24px;
 	max-width: 400px;

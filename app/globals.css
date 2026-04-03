@@ -145,6 +145,16 @@ li {
 		font-weight: 400;
 	}
 
+	li {
+		font-size: 1rem;
+		font-weight: 400;
+	}
+
+	a {
+		font-size: 1rem;
+		font-weight: 400;
+	}
+
 	.basic_section {
 		font-size: 16px;
 		padding-top: 100px;
