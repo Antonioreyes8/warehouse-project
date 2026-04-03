@@ -10,7 +10,7 @@ export default function RulesSection() {
 					alt="Party"
 					width={700}
 					height={400}
-					style={{ height: "auto" }}
+					style={{ height: "auto", width: "100%" }}
 					unoptimized
 				/>
 

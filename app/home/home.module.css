@@ -1,18 +1,15 @@
 /* Rules Section */
 .rules_section {
-	font-family: "TimesNewRoman", serif;
 	display: flex;
 	justify-content: center;
-	padding-top: 50px;
 	padding-bottom: 100px;
-	font-size: 24px;
 	background-color: #2a2a2a;
 	color: #d3d3d3;
 }
 
 .rules_media {
 	position: relative;
-	width: 80%;
+	width: 100%;
 }
 
 .rules_media img {
@@ -31,10 +28,7 @@
 }
 
 .rules_overlay h2 {
-	font-family: "TimesNewRomanExtraBold", serif;
-	font-size: 3rem;
 	padding-bottom: 20px;
-	text-decoration: underline;
 }
 
 .rules_overlay ol li {
@@ -45,18 +39,13 @@
 /* Projects Section */
 .projects_section {
 	padding: 100px;
-	font-family: "TimesNewRoman", serif;
 	text-align: center;
-	font-size: 24px;
 	background-color: #d3d3d3;
 	color: #2a2a2a;
 }
 
 .projects_section h2 {
-	font-family: "TimesNewRomanExtraBold", serif;
-	font-size: 3rem;
 	padding-bottom: 20px;
-	text-decoration: underline;
 }
 
 .projects_grid {
@@ -78,9 +67,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding-top: 50px;
 		padding-bottom: 50px;
-		font-size: 18px;
 	}
 
 	.rules_media {
@@ -95,7 +82,6 @@
 	}
 
 	.rules_overlay ol li {
-		font-size: 14px;
 		margin-bottom: 0.4rem;
 	}
 
@@ -108,11 +94,7 @@
 	}
 	.projects_section {
 		padding-top: 50px;
-		font-size: 16px;
 		padding-left: 10px;
 		padding-right: 10px;
-	}
-	.projects_section h2 {
-		font-size: 3rem;
 	}
 }

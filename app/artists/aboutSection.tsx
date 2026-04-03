@@ -14,7 +14,7 @@ export default function AboutSection({ profile }: { profile: Artist }) {
 						height={100}
 					/>
 				)}
-				<h1>{profile.name}</h1>
+				<h2>{profile.name}</h2>
 				<p>@{profile.username} (He/Him)</p>
 			</div>
 			<div className={styles.infoandlinksContainer}>
@@ -38,19 +38,19 @@ export default function AboutSection({ profile }: { profile: Artist }) {
 					</div>
 
 					<div className={styles.rightColumn}>
-                        <h3>Ethnicity</h3>
+                        <h3>Ethnic background:</h3>
 						<p>Hispanic/Latino</p>
 						<br></br>
 
-						<h3>Contact</h3>
+						<h3>Contact:</h3>
 						<p>tony@surco.studio</p>
 						<br></br>
 
-						<h3>Status</h3>
-						<p>Open to work</p>
+						<h3>Status:</h3>
+						<p>Open for work</p>
 						<br></br>
 
-						<h3>Member since</h3>
+						<h3>Member since:</h3>
 						<p>May 2025</p>
 					</div>
 				</div>
