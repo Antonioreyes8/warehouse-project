@@ -67,7 +67,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding-bottom: 50px;
+		padding-bottom: 100px;
 		overflow: hidden;
 	}
 
@@ -77,9 +77,11 @@
 
 	.rules_overlay {
 		background-color: rgba(0, 0, 0, 0.75);
-		left: 100px; /* move under GIF */
 		margin: 20px auto 0 auto; /* spacing */
 		padding: 12px; /* smaller padding */
+		max-width: 250px;
+		right: 20px;
+		left: 20px;
 	}
 
 	.rules_overlay ol li {
