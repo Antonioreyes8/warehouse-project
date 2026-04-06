@@ -17,9 +17,9 @@ export default function FAQSection() {
 					<h3>Will I be photographed or recorded?</h3>
 					<br />
 					<p className="indented">
-						Yes. This is a public-facing environment where photography and
-						video recording may occur. By participating, you acknowledge that
-						your likeness may be captured.
+						Yes. This is a public-facing environment where photography and video
+						recording may occur. By participating, you acknowledge that your
+						likeness may be captured.
 					</p>
 
 					<br />
@@ -34,9 +34,8 @@ export default function FAQSection() {
 					<h3>Can I request privacy?</h3>
 					<br />
 					<p className="indented">
-						Yes. Members are expected to respect privacy requests, especially
-						in sensitive or focused settings. Communicate your preferences
-						clearly.
+						Yes. Members are expected to respect privacy requests, especially in
+						sensitive or focused settings. Communicate your preferences clearly.
 					</p>
 
 					<br />
@@ -59,8 +58,8 @@ export default function FAQSection() {
 					<h3>What behavior is not tolerated?</h3>
 					<br />
 					<p className="indented">
-						Harassment, discrimination, intimidation, or exclusion of any
-						kind is strictly prohibited. We enforce a zero-tolerance policy.
+						Harassment, discrimination, intimidation, or exclusion of any kind
+						is strictly prohibited. We enforce a zero-tolerance policy.
 					</p>
 
 					<br />
@@ -83,8 +82,8 @@ export default function FAQSection() {
 					<h3>What happens if guidelines are violated?</h3>
 					<br />
 					<p className="indented">
-						Violations may result in removal from the space. Severe or
-						repeated issues can lead to permanent bans.
+						Violations may result in removal from the space. Severe or repeated
+						issues can lead to permanent bans.
 					</p>
 				</div>
 			</div>

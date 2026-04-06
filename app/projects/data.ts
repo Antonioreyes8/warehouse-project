@@ -1,5 +1,23 @@
+/**
+ * File: app/projects/data.ts
+ * Purpose: Defines data types and static project data for the application.
+ * Responsibilities:
+ *   - Define TypeScript types for Media, Collaborator, Project
+ *   - Export static project array with metadata
+ * Key Concepts:
+ *   - TypeScript type definitions
+ *   - Static data storage for projects
+ * Dependencies:
+ *   - CauseSectionType from causeSection.tsx
+ * How It Fits:
+ *   - Provides data models and sample data used by project pages and components
+ */
+
 // Reuse the CauseSectionType we defined earlier
 import { CauseSectionType } from "./causeSection";
+
+// Type definitions section
+// Defines the data structures used throughout the projects feature
 
 // Media type
 export type Media = {
@@ -33,6 +51,9 @@ export type Project = {
 	recapSection?: Media[]; // Can stay empty if using dynamic fetch
 	sources?: { title: string; url: string }[]; // Optional legacy field if needed
 };
+
+// Static project data section
+// Contains sample project data with collaborators and metadata
 export const projects: Project[] = [
 	{
 		slug: "project-I",

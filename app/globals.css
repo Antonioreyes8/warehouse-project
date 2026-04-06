@@ -1,3 +1,18 @@
+/*
+File: app/globals.css
+Purpose: Global CSS styles and typography definitions for the application.
+Responsibilities:
+  - Define custom font faces
+  - Set global element styles and typography
+  - Provide responsive breakpoints
+Key Concepts:
+  - CSS custom properties, font loading, global resets
+Dependencies:
+  - Font files in /public/fonts/
+How It Fits:
+  - Applied globally via layout.tsx for consistent styling across all pages
+*/
+
 @font-face {
 	font-family: "TimesNewRoman";
 	src: url("/fonts/TimesNewRoman.woff2") format("woff2");

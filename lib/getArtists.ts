@@ -1,5 +1,24 @@
+/**
+ * File: lib/getArtists.ts
+ * Purpose: Defines the Artist type and provides functions to fetch artist data from Supabase.
+ * Responsibilities:
+ *   - Define Artist data structure
+ *   - Fetch artist profile by username from database
+ * Key Concepts:
+ *   - TypeScript type definitions for data models
+ *   - Asynchronous data fetching from Supabase
+ *   - Error handling in database queries
+ * Dependencies:
+ *   - supabaseClient.ts for database connection
+ *   - Supabase profiles table
+ * How It Fits:
+ *   - Used by artist profile pages in app/artists/ to retrieve and display artist information
+ */
+
 import { supabase } from "./supabaseClient";
 
+// Type definitions section
+// Defines the structure of artist data as stored in Supabase
 export type Artist = {
 	id: string;
 	name: string;
@@ -7,8 +26,27 @@ export type Artist = {
 	bio: string | null;
 	avatar_url: string | null;
 	instagram?: string | null;
+	youtube?: string | null;
+	patreon?: string | null;
+	facebook?: string | null;
+	tik_tok?: string | null;
+	etsy?: string | null;
+	personal_website?: string | null;
+	soundcloud?: string | null;
+	bandcamp?: string | null;
 };
 
+/**
+ * Description: Fetches a single artist profile from the Supabase profiles table by username.
+ * Parameters:
+ *   - username: string - The unique username identifier for the artist
+ * Returns:
+ *   - Promise<Artist | null> - The artist data if found, null if not found or error
+ * Side Effects:
+ *   - Logs errors to console if query fails
+ * Concepts Used:
+ *   - Supabase query builder, async/await for database operations
+ */
 export async function getArtistByUsername(
 	username: string,
 ): Promise<Artist | null> {
