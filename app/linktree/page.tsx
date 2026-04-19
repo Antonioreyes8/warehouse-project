@@ -7,6 +7,12 @@ const contactlinks = [
 		url: "/https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=dialog",
 	},
 ];
+const sociallinks = [
+	{
+		title: "Instagram",
+		url: "https://www.instagram.com/warehouseprojectdenton/",
+	},
+];
 
 export default function LinksPage() {
 	return (
@@ -29,6 +35,16 @@ export default function LinksPage() {
 					{contactlinks.map((contactlink, i) => (
 						<a key={i} href={contactlink.url} className={styles.link}>
 							{contactlink.title}
+						</a>
+					))}
+				</div>
+
+				<p className={styles.subtitle}>Social</p>
+
+				<div className={styles.links}>
+					{sociallinks.map((sociallink, i) => (
+						<a key={i} href={sociallink.url} className={styles.link}>
+							{sociallink.title}
 						</a>
 					))}
 				</div>
