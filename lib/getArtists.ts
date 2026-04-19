@@ -34,6 +34,7 @@ export type Artist = {
 	personal_website?: string | null;
 	soundcloud?: string | null;
 	bandcamp?: string | null;
+	email?: string | null;
 };
 
 /**
@@ -62,4 +63,58 @@ export async function getArtistByUsername(
 	}
 
 	return data;
+}
+
+/**
+ * Description: Fetches an artist profile by Supabase auth user ID.
+ * Parameters:
+ *   - userId: string - The Supabase auth user ID
+ * Returns:
+ *   - Promise<Artist | null> - The artist data if found, null if not found or error
+ * Side Effects:
+ *   - Logs errors to console if query fails
+ * Concepts Used:
+ *   - Supabase query builder for authenticated user data
+ */
+export async function getArtistByUserId(
+	userId: string,
+): Promise<Artist | null> {
+	const { data, error } = await supabase
+		.from("profiles")
+		.select("*")
+		.eq("id", userId)
+		.maybeSingle();
+
+	if (error) {
+		console.error("Error fetching artist by user ID:", error);
+		return null;
+	}
+
+	return data;
+}
+
+/**
+ * Description: Checks if an email is authorized for artist access.
+ * Parameters:
+ *   - email: string - The email to check
+ * Returns:
+ *   - Promise<boolean> - True if the email is authorized, false otherwise
+ * Side Effects:
+ *   - Logs errors to console if query fails
+ * Concepts Used:
+ *   - Supabase query to check authorization status
+ */
+export async function isEmailAuthorized(email: string): Promise<boolean> {
+	const { data, error } = await supabase
+		.from("authorized_artists")
+		.select("email")
+		.eq("email", email)
+		.maybeSingle();
+
+	if (error) {
+		console.error("Error checking email authorization:", error);
+		return false;
+	}
+
+	return !!data;
 }

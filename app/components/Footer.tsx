@@ -45,8 +45,22 @@ export default function Footer() {
 						</Link>
 					</p>
 					<p>
-						<Link href="/contact" className="link">
-							Contact
+						<Link
+							href="https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=header"
+							className="link"
+						>
+							Join the team
+						</Link>
+					</p>
+					<p>
+						<Link href="/linktree" className="link">
+							Linktree
+						</Link>
+					</p>
+					<br />
+					<p>
+						<Link href="/login" className="link">
+							Artist Login
 						</Link>
 					</p>
 					<br />
@@ -54,7 +68,6 @@ export default function Footer() {
 					<p>The Warehouse Project © 2026</p>
 				</div>
 			</div>
-
 			<div className="footer_right"></div>
 		</footer>
 	);

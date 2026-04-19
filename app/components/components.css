@@ -7,17 +7,25 @@ header {
 	background-color: #2a2a2a;
 	color: white;
 	width: 100%;
+	/*border: 1px solid white;*/
 }
 
 .Header {
-	width: 90vw;
-	font-size: 6.5vw;
+	width: 100%;
 	font-weight: 800;
-	letter-spacing: -2px;
 	text-transform: uppercase;
 	line-height: 1;
 	text-align: center;
 	white-space: nowrap;
+	position: relative;
+	height: 100%;
+	/*border: 1px solid white;*/
+}
+
+.title {
+	color: white;
+	text-decoration: none;
+	font-size: 5rem;
 }
 
 .footer {
@@ -66,5 +74,9 @@ header {
 	.footer_left,
 	.footer_right {
 		width: 100%;
+	}
+
+	.title {
+		font-size: 1.5rem;
 	}
 }
