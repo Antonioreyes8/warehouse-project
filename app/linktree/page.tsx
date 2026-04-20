@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./linktree.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
