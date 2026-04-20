@@ -38,10 +38,15 @@ interface AboutSectionProps {
 	profile: Artist;
 }
 
-function calculateAgeFromBirthday(birthday: string | null | undefined): string {
-	if (!birthday) return "Not provided";
+function calculateAgeFromBirthday(
+	birthday: string | null | undefined,
+): string | null {
+	// Birthday-derived age helper
+	// Age is a computed display value only. We return null when birthday is missing/invalid
+	// so the UI can omit the row entirely instead of showing placeholder text.
+	if (!birthday) return null;
 	const birth = new Date(birthday);
-	if (Number.isNaN(birth.getTime())) return "Not provided";
+	if (Number.isNaN(birth.getTime())) return null;
 
 	const today = new Date();
 	let age = today.getFullYear() - birth.getFullYear();
@@ -51,12 +56,52 @@ function calculateAgeFromBirthday(birthday: string | null | undefined): string {
 		age -= 1;
 	}
 
-	return age >= 0 ? String(age) : "Not provided";
+	return age >= 0 ? String(age) : null;
+}
+
+function hasText(value: unknown): boolean {
+	// Defensive text check helper
+	// Some profile fields can come through as non-string types (for example database casts).
+	// This helper prevents runtime crashes and ensures visibility checks stay reliable.
+	if (value === null || value === undefined) {
+		return false;
+	}
+
+	if (typeof value === "string") {
+		return value.trim().length > 0;
+	}
+
+	return String(value).trim().length > 0;
 }
 
 export default function AboutSection({ profile }: AboutSectionProps) {
+	// Visibility state section
+	// These booleans implement "artist controls what is public":
+	// if a field has no meaningful value, we do not render that row at all.
+	const age = calculateAgeFromBirthday(profile.birthday);
+
+	const hasBasedIn = hasText(profile.based_in);
+	const hasMediums = hasText(profile.mediums);
+	const hasPastProjects = hasText(profile.past_projects);
+	const hasEthnicBackground = hasText(profile.ethnic_background);
+	const hasContact = hasText(profile.contact);
+	const hasStatus = hasText(profile.status);
+	const hasMemberSince = hasText(profile.member_since);
+
+	const hasLeftColumn = Boolean(
+		age || hasBasedIn || hasMediums || hasPastProjects,
+	);
+	const hasRightColumn = Boolean(
+		hasEthnicBackground || hasContact || hasStatus || hasMemberSince,
+	);
+	const hasAnyInfo = hasLeftColumn || hasRightColumn;
+
 	return (
 		<section className={styles.aboutSection}>
+			{/* Header block
+			    - Avatar is optional and rendered only when present.
+			    - Name/username remain visible as the primary profile identity.
+			*/}
 			<div className={styles.headerContainer}>
 				{profile.avatar_url && (
 					<Image
@@ -71,53 +116,89 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 			</div>
 			{/* Main content area with info and bio */}
 			<div className={styles.infoandlinksContainer}>
-				{/* Personal information in two columns */}
-				<div className={styles.infoContainer}>
-					<div className={styles.leftColumn}>
-						<div className={styles.infoRow}>
-							<h3>Age:</h3>
-							<p>{calculateAgeFromBirthday(profile.birthday)}</p>
-						</div>
-						<div className={styles.infoRow}>
-							<h3>Based in:</h3>
-							<p>{profile.based_in || "Not provided"}</p>
-						</div>
-						<div className={styles.infoRow}>
-							<h3>Mediums:</h3>
-							<p>{profile.mediums || "Not provided"}</p>
-						</div>
-						<div className={styles.infoRow}>
-							<h3>Past Projects:</h3>
-							<p>{profile.past_projects || "Not provided"}</p>
-						</div>
-					</div>
+				{/* Personal information block
+				    - Entire block hides when no info fields exist.
+				    - Each column is conditionally rendered only if it has at least one row.
+				    - This avoids empty placeholders and keeps layout intentional.
+				*/}
+				{hasAnyInfo && (
+					<div className={styles.infoContainer}>
+						{hasLeftColumn && (
+							<div
+								className={`${styles.leftColumn} ${!hasRightColumn ? styles.singleColumn : ""}`}
+							>
+								{age && (
+									<div className={styles.infoRow}>
+										<h3>Age:</h3>
+										<p>{age}</p>
+									</div>
+								)}
+								{hasBasedIn && (
+									<div className={styles.infoRow}>
+										<h3>Based in:</h3>
+										<p>{profile.based_in}</p>
+									</div>
+								)}
+								{hasMediums && (
+									<div className={styles.infoRow}>
+										<h3>Mediums:</h3>
+										<p>{profile.mediums}</p>
+									</div>
+								)}
+								{hasPastProjects && (
+									<div className={styles.infoRow}>
+										<h3>Past Projects:</h3>
+										<p>{profile.past_projects}</p>
+									</div>
+								)}
+							</div>
+						)}
 
-					<div className={styles.rightColumn}>
-						<div className={styles.infoRow}>
-							<h3>Ethnic background:</h3>
-							<p>{profile.ethnic_background || "Not provided"}</p>
-						</div>
-						<div className={styles.infoRow}>
-							<h3>Contact:</h3>
-							<p>{profile.contact || "Not provided"}</p>
-						</div>
-						<div className={styles.infoRow}>
-							<h3>Status:</h3>
-							<p>{profile.status || "Not provided"}</p>
-						</div>
-						<div className={styles.infoRow}>
-							<h3>Member since:</h3>
-							<p>{profile.member_since || "Not provided"}</p>
-						</div>
+						{hasRightColumn && (
+							<div className={styles.rightColumn}>
+								{hasEthnicBackground && (
+									<div className={styles.infoRow}>
+										<h3>Ethnic background:</h3>
+										<p>{profile.ethnic_background}</p>
+									</div>
+								)}
+								{hasContact && (
+									<div className={styles.infoRow}>
+										<h3>Contact:</h3>
+										<p>{profile.contact}</p>
+									</div>
+								)}
+								{hasStatus && (
+									<div className={styles.infoRow}>
+										<h3>Status:</h3>
+										<p>{profile.status}</p>
+									</div>
+								)}
+								{hasMemberSince && (
+									<div className={styles.infoRow}>
+										<h3>Member since:</h3>
+										<p>{profile.member_since}</p>
+									</div>
+								)}
+							</div>
+						)}
 					</div>
-				</div>
-				{/* Bio section */}
-				<div className={styles.bioContainer}>
-					<h3>Bio:</h3>
-					{profile.bio && <p>{profile.bio}</p>}
-				</div>
+				)}
+				{/* Bio section
+				    - Bio is optional content.
+				    - Hidden entirely when empty so artist pages never show "Not provided" text.
+				*/}
+				{hasText(profile.bio) && (
+					<div className={styles.bioContainer}>
+						<h3>Bio:</h3>
+						<p>{profile.bio}</p>
+					</div>
+				)}
 			</div>
-			{/* Social links section */}
+			{/* Social links section
+			    - Every icon is conditional.
+			    - We normalize URLs so artists can paste either full links or handle-like values.
+			*/}
 			<div className={styles.linksContainer}>
 				{profile.instagram && (
 					<a
@@ -126,7 +207,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faInstagram} size="6x" />
+						<FontAwesomeIcon icon={faInstagram} size="4x" />
 					</a>
 				)}
 				{profile.youtube && (
@@ -140,7 +221,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faYoutube} size="6x" />
+						<FontAwesomeIcon icon={faYoutube} size="4x" />
 					</a>
 				)}
 				{profile.patreon && (
@@ -154,7 +235,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faPatreon} size="6x" />
+						<FontAwesomeIcon icon={faPatreon} size="4x" />
 					</a>
 				)}
 				{profile.facebook && (
@@ -168,7 +249,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faFacebook} size="6x" />
+						<FontAwesomeIcon icon={faFacebook} size="4x" />
 					</a>
 				)}
 				{profile.tik_tok && (
@@ -178,7 +259,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faTiktok} size="6x" />
+						<FontAwesomeIcon icon={faTiktok} size="4x" />
 					</a>
 				)}
 				{profile.etsy && (
@@ -192,7 +273,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faEtsy} size="6x" />
+						<FontAwesomeIcon icon={faEtsy} size="4x" />
 					</a>
 				)}
 				{profile.personal_website && (
@@ -206,7 +287,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faGlobe} size="6x" />
+						<FontAwesomeIcon icon={faGlobe} size="4x" />
 					</a>
 				)}
 				{profile.soundcloud && (
@@ -220,7 +301,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faSoundcloud} size="6x" />
+						<FontAwesomeIcon icon={faSoundcloud} size="4x" />
 					</a>
 				)}
 				{profile.bandcamp && (
@@ -234,7 +315,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 						rel="noopener noreferrer"
 						className={styles.socialLink}
 					>
-						<FontAwesomeIcon icon={faBandcamp} size="6x" />
+						<FontAwesomeIcon icon={faBandcamp} size="4x" />
 					</a>
 				)}
 			</div>

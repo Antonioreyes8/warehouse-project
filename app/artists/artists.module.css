@@ -53,6 +53,11 @@
 	min-width: 150px;
 }
 
+.singleColumn {
+	border-right: none;
+	padding-right: 0;
+}
+
 /* RIGHT COLUMN */
 .rightColumn {
 	flex: 1;

@@ -3,15 +3,13 @@
  * Purpose: Renders the site header with the main title and navigation.
  * Responsibilities:
  *   - Display the application title
- *   - Provide login link for artists
- *   - Apply header styling
+ *   - Provide persistent global branding at the top of every route
+ *   - Apply shared header styling
  * Key Concepts:
  *   - React functional component
- *   - Next.js Link for navigation
  *   - CSS className for styling
  * Dependencies:
  *   - Global CSS for header styles
- *   - Next.js Link component
  * How It Fits:
  *   - Used in layout.tsx to provide consistent navigation/branding across all pages
  */
@@ -19,7 +17,8 @@
 "use client";
 
 // Header component
-// Displays the main site title in the header with artist login link
+// Displays a consistent title bar across the full application shell.
+// Keeping this component intentionally simple avoids route-specific logic in global chrome.
 export default function Header() {
 	return (
 		<header>

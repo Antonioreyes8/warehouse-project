@@ -1,18 +1,21 @@
 /**
- * File: lib/getArtists.ts
+ * File: lib/artists/queries.ts
  * Purpose: Defines the Artist type and provides functions to fetch artist data from Supabase.
  * Responsibilities:
  *   - Define Artist data structure
- *   - Fetch artist profile by username from database
+ *   - Fetch artist profiles through multiple lookup strategies (username, id, email)
+ *   - Provide allowlist lookup helper for dashboard access control
  * Key Concepts:
  *   - TypeScript type definitions for data models
  *   - Asynchronous data fetching from Supabase
  *   - Error handling in database queries
+ *   - Input normalization for stable lookups
  * Dependencies:
- *   - supabaseClient.ts for database connection
+ *   - lib/supabase/client.ts for database connection
  *   - Supabase profiles table
+ *   - Supabase allowed_users table
  * How It Fits:
- *   - Used by artist profile pages in app/artists/ to retrieve and display artist information
+ *   - Central read layer for public artist pages and authenticated dashboard profile loading
  */
 
 import { supabase } from "../supabase/client";
@@ -20,6 +23,8 @@ import { supabase } from "../supabase/client";
 // Type definitions section
 // Defines the structure of artist data as stored in Supabase
 export type Artist = {
+	// NOTE: id is currently typed as string for runtime compatibility even though
+	// some database rows may be numeric ids depending on migration history.
 	id: string;
 	name: string;
 	username: string;
@@ -59,6 +64,8 @@ export type Artist = {
 export async function getArtistByUsername(
 	username: string,
 ): Promise<Artist | null> {
+	// Username lookup
+	// Used by public route /artists/[slug] where slug maps directly to username.
 	const { data, error } = await supabase
 		.from("profiles")
 		.select("*")
@@ -87,6 +94,9 @@ export async function getArtistByUsername(
 export async function getArtistByUserId(
 	userId: string,
 ): Promise<Artist | null> {
+	// Direct id lookup
+	// Retained for compatibility, though dashboard path currently prefers email lookup
+	// because auth id and profile id formats may differ in this project.
 	const { data, error } = await supabase
 		.from("profiles")
 		.select("*")
@@ -109,6 +119,8 @@ export async function getArtistByUserId(
  *   - Promise<Artist | null> - The artist data if found, null if not found or error
  */
 export async function getArtistByEmail(email: string): Promise<Artist | null> {
+	// Email normalization strategy
+	// trim + lowercase avoids case/whitespace mismatches during profile retrieval.
 	const normalizedEmail = email.trim().toLowerCase();
 
 	const { data, error } = await supabase
@@ -137,6 +149,8 @@ export async function getArtistByEmail(email: string): Promise<Artist | null> {
  *   - Supabase query to check authorization status
  */
 export async function isEmailAuthorized(email: string): Promise<boolean> {
+	// Allowlist gate helper
+	// Dashboard access depends on this query resolving to an allowed_users match.
 	const normalizedEmail = email.trim().toLowerCase();
 
 	const { data, error } = await supabase

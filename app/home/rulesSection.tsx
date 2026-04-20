@@ -17,12 +17,17 @@ import Image from "next/image";
 import styles from "./home.module.css";
 
 // RulesSection component
-// Shows event rules overlaid on a background image
+// Shows pre-event participation expectations over a media background.
+// The overlay pattern communicates values immediately without forcing a route change.
 export default function RulesSection() {
 	return (
 		<section className={styles.rules_section}>
 			{/* Media container with background image */}
 			<div className={styles.rules_media}>
+				{/* Hero media
+				    Uses unoptimized because this asset is hosted externally in Supabase Storage
+				    and may be animated (gif), where exact playback is preferred.
+				*/}
 				<Image
 					src="https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/party.gif"
 					alt="Party"
@@ -31,7 +36,10 @@ export default function RulesSection() {
 					style={{ height: "auto", width: "100%" }}
 					unoptimized
 				/>
-				{/* Overlay with rules list */}
+				{/* Rules overlay
+				    Keeps core etiquette visible at first glance, framing the cultural expectations
+				    before users browse projects or profiles.
+				*/}
 				<div className={styles.rules_overlay}>
 					<h3>BEFORE YOU COME</h3>
 					<ol className={styles.rules_list}>

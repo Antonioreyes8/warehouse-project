@@ -1,3 +1,20 @@
+/**
+ * File: app/FAQ/faqSection.tsx
+ * Purpose: Provides quick answers to recurring community questions.
+ * Responsibilities:
+ *   - Reduce repeated support/explainer conversations
+ *   - Clarify expectations around privacy, conduct, leadership, and enforcement
+ * Key Concepts:
+ *   - FAQ-style information architecture
+ *   - Static Q&A content optimized for scanning
+ * Dependencies:
+ *   - Global utility classes (basic_section, basic_content, indented)
+ * How It Fits:
+ *   - Complements detailed guidelines with concise user-facing summaries
+ */
+
+// FAQSection component
+// Designed for short, direct answers so new members can self-serve common onboarding questions.
 export default function FAQSection() {
 	return (
 		<section className="basic_section">

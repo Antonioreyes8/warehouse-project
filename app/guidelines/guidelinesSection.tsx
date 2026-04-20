@@ -1,7 +1,28 @@
+/**
+ * File: app/guidelines/guidelinesSection.tsx
+ * Purpose: Renders the complete governance and conduct framework for the community.
+ * Responsibilities:
+ *   - Present policy-like guidance in a readable article format
+ *   - Define participation expectations, safety standards, and enforcement language
+ * Key Concepts:
+ *   - Structured static content rendering
+ *   - Heading/subheading hierarchy for policy scanning
+ * Dependencies:
+ *   - Global utility classes (basic_section, basic_content, indented)
+ * How It Fits:
+ *   - Serves as the authoritative behavioral contract linked across public routes
+ */
+
+// GuidelinesSection component
+// Content is organized as articles so users can reference rules quickly and unambiguously.
 export default function GuidelinesSection() {
 	return (
 		<section className="basic_section">
 			<div className="basic_content">
+				{/* Guidelines document body
+				    The article structure is intentional: it mirrors policy docs and makes
+				    enforcement expectations easier to understand for members and organizers.
+				*/}
 				<div>
 					<h2>Community Guidelines</h2>
 					<h3>Article I. Our Mission & Shared Responsibility</h3>

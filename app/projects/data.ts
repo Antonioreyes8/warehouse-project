@@ -3,14 +3,17 @@
  * Purpose: Defines data types and static project data for the application.
  * Responsibilities:
  *   - Define TypeScript types for Media, Collaborator, Project
- *   - Export static project array with metadata
+ *   - Export the baseline static project catalog used across routes
+ *   - Provide strongly typed content contracts for project sub-sections
  * Key Concepts:
  *   - TypeScript type definitions
  *   - Static data storage for projects
+ *   - Hybrid data model (static metadata + dynamic recap media)
  * Dependencies:
  *   - CauseSectionType from causeSection.tsx
  * How It Fits:
- *   - Provides data models and sample data used by project pages and components
+ *   - Acts as the source of truth for project routing metadata, titles, dates, collaborators,
+ *     and cause narratives while recap media is fetched dynamically from Supabase Storage
  */
 
 // Reuse the CauseSectionType we defined earlier
@@ -48,12 +51,14 @@ export type Project = {
 	description: string;
 	causeSection?: CauseSectionType; // Now includes optional sources
 	collaboratorsSection?: Collaborator[];
-	recapSection?: Media[]; // Can stay empty if using dynamic fetch
+	recapSection?: Media[]; // Optional local fallback; generally populated by dynamic storage fetch
 	sources?: { title: string; url: string }[]; // Optional legacy field if needed
 };
 
 // Static project data section
-// Contains sample project data with collaborators and metadata
+// Contains project metadata and narrative content used to build project pages.
+// Recap media arrays are intentionally left empty because recap assets are loaded
+// at runtime from Supabase Storage via project slug folders.
 export const projects: Project[] = [
 	{
 		slug: "project-I",
@@ -90,46 +95,22 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 		},
 		collaboratorsSection: [
 			// Performers
-			{ name: "Ethan Carter", role: "Performers" },
-			{ name: "Sophia Martinez", role: "Performers" },
-			{ name: "Isabella Rodriguez", role: "Performers" },
-			{ name: "Amelia Walker", role: "Performers" },
-			{ name: "Harper King", role: "Performers" },
-			{ name: "Abigail Nguyen", role: "Performers" },
 			{ name: "Aiden Perez", role: "Performers" },
 			{ name: "Ella Roberts", role: "Performers" },
 			{ name: "Scarlett Parker", role: "Performers" },
 
 			// Organizers
-			{ name: "Liam Anderson", role: "Organizers" },
-			{ name: "Mason Hernandez", role: "Organizers" },
-			{ name: "Benjamin Hall", role: "Organizers" },
-			{ name: "Elijah Wright", role: "Organizers" },
-			{ name: "Daniel Hill", role: "Organizers" },
-			{ name: "Logan Turner", role: "Organizers" },
-			{ name: "Sebastian Evans", role: "Organizers" },
 			{ name: "Wyatt Sanchez", role: "Organizers" },
 			{ name: "Gabriel Cook", role: "Organizers" },
 			{ name: "Antonio Reyes", role: "Organizers", username: "antonioreyes" },
 			{ name: "Julian Cox", role: "Organizers" },
 
 			// Preparation
-			{ name: "Olivia Thompson", role: "Preparation" },
-			{ name: "Mia Clark", role: "Preparation" },
-			{ name: "Charlotte Allen", role: "Preparation" },
-			{ name: "Evelyn Scott", role: "Preparation" },
-			{ name: "Emily Flores", role: "Preparation" },
-			{ name: "Avery Phillips", role: "Preparation" },
 			{ name: "Grace Edwards", role: "Preparation" },
 			{ name: "Victoria Morris", role: "Preparation" },
 			{ name: "Hannah Morgan", role: "Preparation" },
 
 			// Media
-			{ name: "Noah Garcia", role: "Media" },
-			{ name: "James Lewis", role: "Media" },
-			{ name: "Lucas Young", role: "Media" },
-			{ name: "Alexander Torres", role: "Media" },
-			{ name: "Jackson Campbell", role: "Media" },
 			{ name: "Carter Collins", role: "Media" },
 			{ name: "Jayden Rogers", role: "Media" },
 
@@ -137,12 +118,9 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 			{ name: "Tyler Brooks", role: "Technical Production" },
 			{ name: "Jordan Kim", role: "Technical Production" },
 			{ name: "Alex Rivera", role: "Technical Production" },
-			{ name: "Cameron Diaz", role: "Technical Production" },
-			{ name: "Riley Foster", role: "Technical Production" },
 
 			// Non-Performative Artists
-			{ name: "Avery Stone", role: "Non-Performative Artists" },
-			{ name: "Jamie Cruz", role: "Non-Performative Artists" },
+
 			{ name: "Taylor Brooks", role: "Non-Performative Artists" },
 			{ name: "Rowan Blake", role: "Non-Performative Artists" },
 		],
@@ -183,54 +161,30 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 		},
 		collaboratorsSection: [
 			// Performers
-			{ name: "Ethan Carter", role: "Performers" },
-			{ name: "Sophia Martinez", role: "Performers" },
-			{ name: "Isabella Rodriguez", role: "Performers" },
+
 			{ name: "Amelia Walker", role: "Performers" },
 			{ name: "Harper King", role: "Performers" },
 			{ name: "Abigail Nguyen", role: "Performers" },
 
 			// Organizers
-			{ name: "Liam Anderson", role: "Organizers" },
-			{ name: "Mason Hernandez", role: "Organizers" },
-			{ name: "Benjamin Hall", role: "Organizers" },
-			{ name: "Elijah Wright", role: "Organizers" },
-			{ name: "Daniel Hill", role: "Organizers" },
-			{ name: "Logan Turner", role: "Organizers" },
-			{ name: "Sebastian Evans", role: "Organizers" },
-			{ name: "Wyatt Sanchez", role: "Organizers" },
 			{ name: "Gabriel Cook", role: "Organizers" },
 			{ name: "Anthony Bailey", role: "Organizers" },
 
 			// Preparation
-			{ name: "Olivia Thompson", role: "Preparation" },
-			{ name: "Mia Clark", role: "Preparation" },
-			{ name: "Charlotte Allen", role: "Preparation" },
-			{ name: "Evelyn Scott", role: "Preparation" },
-			{ name: "Emily Flores", role: "Preparation" },
 			{ name: "Avery Phillips", role: "Preparation" },
 			{ name: "Grace Edwards", role: "Preparation" },
 			{ name: "Victoria Morris", role: "Preparation" },
 
 			// Media
-			{ name: "Noah Garcia", role: "Media" },
-			{ name: "James Lewis", role: "Media" },
-			{ name: "Lucas Young", role: "Media" },
-			{ name: "Alexander Torres", role: "Media" },
-			{ name: "Jackson Campbell", role: "Media" },
-			{ name: "Carter Collins", role: "Media" },
 			{ name: "Jayden Rogers", role: "Media" },
 			{ name: "Isaac Bell", role: "Media" },
 
 			// Technical Production
-			{ name: "Tyler Brooks", role: "Technical Production" },
-			{ name: "Jordan Kim", role: "Technical Production" },
 			{ name: "Alex Rivera", role: "Technical Production" },
 			{ name: "Cameron Diaz", role: "Technical Production" },
 			{ name: "Riley Foster", role: "Technical Production" },
 
 			// Non-Performative Artists
-			{ name: "Avery Stone", role: "Non-Performative Artists" },
 			{ name: "Jamie Cruz", role: "Non-Performative Artists" },
 			{ name: "Taylor Brooks", role: "Non-Performative Artists" },
 			{ name: "Rowan Blake", role: "Non-Performative Artists" },
@@ -274,29 +228,15 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 		},
 		collaboratorsSection: [
 			// Performers
-			{ name: "Ethan Carter", role: "Performers" },
-			{ name: "Sophia Martinez", role: "Performers" },
-			{ name: "Isabella Rodriguez", role: "Performers" },
-			{ name: "Amelia Walker", role: "Performers" },
 			{ name: "Harper King", role: "Performers" },
 			{ name: "Abigail Nguyen", role: "Performers" },
 
 			// Organizers
-			{ name: "Liam Anderson", role: "Organizers" },
-			{ name: "Mason Hernandez", role: "Organizers" },
-			{ name: "Benjamin Hall", role: "Organizers" },
-			{ name: "Elijah Wright", role: "Organizers" },
-			{ name: "Daniel Hill", role: "Organizers" },
-			{ name: "Logan Turner", role: "Organizers" },
-			{ name: "Sebastian Evans", role: "Organizers" },
 			{ name: "Wyatt Sanchez", role: "Organizers" },
 			{ name: "Gabriel Cook", role: "Organizers" },
 			{ name: "Anthony Bailey", role: "Organizers" },
 
 			// Preparation
-			{ name: "Olivia Thompson", role: "Preparation" },
-			{ name: "Mia Clark", role: "Preparation" },
-			{ name: "Charlotte Allen", role: "Preparation" },
 			{ name: "Evelyn Scott", role: "Preparation" },
 			{ name: "Emily Flores", role: "Preparation" },
 			{ name: "Avery Phillips", role: "Preparation" },
@@ -304,26 +244,16 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 			{ name: "Victoria Morris", role: "Preparation" },
 
 			// Media
-			{ name: "Noah Garcia", role: "Media" },
-			{ name: "James Lewis", role: "Media" },
-			{ name: "Lucas Young", role: "Media" },
-			{ name: "Alexander Torres", role: "Media" },
 			{ name: "Jackson Campbell", role: "Media" },
 			{ name: "Carter Collins", role: "Media" },
 			{ name: "Jayden Rogers", role: "Media" },
 			{ name: "Isaac Bell", role: "Media" },
 
 			// Technical Production
-			{ name: "Tyler Brooks", role: "Technical Production" },
-			{ name: "Jordan Kim", role: "Technical Production" },
-			{ name: "Alex Rivera", role: "Technical Production" },
 			{ name: "Cameron Diaz", role: "Technical Production" },
 			{ name: "Riley Foster", role: "Technical Production" },
 
 			// Non-Performative Artists
-			{ name: "Avery Stone", role: "Non-Performative Artists" },
-			{ name: "Jamie Cruz", role: "Non-Performative Artists" },
-			{ name: "Taylor Brooks", role: "Non-Performative Artists" },
 			{ name: "Rowan Blake", role: "Non-Performative Artists" },
 			{ name: "Dakota Hayes", role: "Non-Performative Artists" },
 		],

@@ -1,217 +1,223 @@
-<!--
-File: README.md
-Purpose: Project documentation and overview.
-Responsibilities:
-  - Describe project vision and purpose
-  - Document tech stack and architecture
-  - Provide setup and usage instructions
-Key Concepts:
-  - Markdown documentation
-  - Project description and guidelines
-Dependencies:
-  - None
-How It Fits:
-  - Serves as the main documentation for developers and users
--->
+# The Creative Incubator and Portfolio
 
-# The Creative Incubator & Portfolio 🎨💻
+Community-first artist platform built with Next.js and Supabase.
 
-### _Changing the world, one byte at a time._
+## Table of Contents
 
-## Overview
+1. Project Goals
+2. Current Features
+3. Architecture
+4. Data Model and Storage
+5. Authentication and Authorization
+6. Profile Image Upload Flow
+7. Local Setup
+8. Environment Variables
+9. Supabase Storage Policies
+10. Scripts and Testing
+11. Folder Map
+12. Coding and Documentation Conventions
+13. Deployment Notes
 
-**What it does:** A digital portfolio and creative incubator platform that provides a community-funded space for marginalized artists to showcase their work, share projects, and connect with collaborators.
+## Project Goals
 
-**Problem it solves:** Traditional tech platforms often prioritize profit over art, leading to gentrification of digital spaces. This project creates an inclusive "digital garden" where art is valued over monetization, combating technofeudalism by giving voice to artists often silenced by mainstream structures.
+This app creates a digital home for artists to:
 
-**Key Pages & Content:**
+1. Publish a public profile page.
+2. Share project/media recaps.
+3. Update profile details from a protected dashboard.
+4. Keep access restricted to allowlisted users.
 
-- **Home Page:** Features event rules ("BEFORE YOU COME" - be open to unfamiliar art, respect everybody, dress to express yourself, you may be recorded, dance your heart out) overlaid on a party image, plus a grid of project cards showing titles, posters, and dates
-- **Projects:** Dynamic pages for each project (like "I.", "II.") with descriptions, collaborators, cause sections, and media recaps
-- **Artists:** Dynamic profile pages with bio, contact info, mediums, past projects, and social links
-- **Contact:** Form with name, email, and message fields for inquiries and collaboration requests
-- **Manifesto:** Three-part statement about revolution, artistic liberation, and support for marginalized voices
-- **Guidelines:** Community rules covering mission, media/privacy policies, and shared responsibilities
-- **FAQ:** Frequently asked questions (content to be determined)
+## Current Features
+
+1. Home route composed from modular sections.
+2. Dynamic artist pages via `/artists/[slug]`.
+3. Dynamic project pages via `/projects/[slug]`.
+4. Google OAuth login via Supabase.
+5. Dashboard profile editor for allowlisted users.
+6. Avatar upload to Supabase Storage bucket `avatars`.
+7. Social link fields and birthday-driven age display.
+8. Organized test suites for API and form behavior.
 
 ## Architecture
 
-**High-level design:** Built as a full-stack web application using Next.js App Router for server-side rendering and client-side navigation. The backend relies on Supabase (PostgreSQL-based BaaS) for data storage and file hosting.
+High-level architecture:
 
-**Component relationships:**
+1. Next.js App Router for route-based composition.
+2. Supabase for auth, Postgres data, and Storage objects.
+3. CSS Modules for scoped per-page styles.
 
-- **Frontend:** React components organized by feature (pages, sections, shared components)
-- **Data Layer:** Supabase client handles database queries and storage operations
-- **Routing:** Dynamic routes for projects (`/projects/[slug]`) and artists (`/artists/[slug]`)
-- **Styling:** CSS Modules for component-scoped styles, global typography in `globals.css`
+Core runtime split:
 
-## Tech Stack
+1. Server-rendered routes for public content pages.
+2. Client-rendered dashboard/login routes for auth interactions.
+3. Data access utilities in `lib/` for query/mutation isolation.
 
-### Languages
+## Data Model and Storage
 
-- **TypeScript:** Primary language for type-safe development
-- **JavaScript:** Via Next.js/React ecosystem
+Primary table used in profile flows:
 
-### Frameworks
+1. `public.profiles`
+2. Key fields used by dashboard/public pages:
+   - `id`
+   - `email`
+   - `name`
+   - `username`
+   - `bio`
+   - `avatar_url`
+   - `birthday`
+   - `based_in`
+   - `mediums`
+   - `past_projects`
+   - `ethnic_background`
+   - `contact`
+   - `status`
+   - `member_since`
+   - social link fields
 
-- **Next.js 16.1.6:** React framework with App Router for routing, SSR, and optimization
-- **React 19.2.3:** Component library for building user interfaces
+Authorization table:
 
-### Tools & Libraries
+1. `public.allowed_users`
+2. Used to gate dashboard access by normalized email.
 
-- **Supabase:** Backend-as-a-Service for database (PostgreSQL) and file storage
-- **Tailwind CSS:** Utility-first CSS framework for responsive design
-- **ESLint:** Code linting and formatting
-- **PostCSS:** CSS processing with Autoprefixer
+Storage buckets:
 
-## Folder Structure
+1. `projects` for project recap media.
+2. `avatars` for artist profile pictures.
 
+## Authentication and Authorization
+
+Current auth flow:
+
+1. User signs in with Google OAuth on `/login`.
+2. App redirects to `/dashboard/profile`.
+3. Dashboard checks session and email allowlist.
+4. If authorized, profile is loaded by email and editable.
+
+If session is missing, user is redirected to `/login`.
+If user is not allowlisted, an access denied message is shown.
+
+## Profile Image Upload Flow
+
+Dashboard avatar flow:
+
+1. User picks a file in dashboard profile editor.
+2. Client validates:
+   - max size 5MB
+   - allowed types: JPG, PNG, WEBP
+3. File uploads to bucket `avatars` at path:
+   - `auth.uid()/avatar-timestamp.ext`
+4. Public URL is generated.
+5. URL is stored in `profiles.avatar_url` on save.
+
+Important pattern:
+
+1. Bucket is not linked to `profiles` by a DB foreign key.
+2. The link is application-level via `avatar_url` (or path, if you later migrate).
+
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
 ```
-/app                    # Next.js App Router pages and layouts
-├── artists/[slug]/     # Dynamic artist profile pages
-├── components/         # Shared UI components (Header, Footer)
-├── contact/            # Contact page and form
-├── home/               # Home page sections (rules, projects)
-├── projects/           # Project pages and data
-│   ├── [slug]/         # Dynamic project detail pages
-│   └── data.ts         # Static project metadata
-└── layout.tsx          # Root layout with global header/footer
 
-/lib                    # Utility functions and external integrations
-├── getArtists.ts       # Artist data fetching from Supabase
-├── getProjectMedia.ts  # Media file retrieval from storage
-└── supabaseClient.ts   # Supabase client initialization
+2. Create `.env.local`:
 
-/public                 # Static assets
-└── fonts/              # Custom font files (Times New Roman, Helvetica Neue)
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ```
 
-## How It Works
+3. Start dev server:
 
-**Data Flow:**
+```bash
+npm run dev
+```
 
-1. **Static Data:** Project metadata loaded from local `data.ts` files
-2. **Dynamic Data:** Artist profiles and media fetched from Supabase on page load
-3. **Rendering:** Server components handle data fetching, client components manage interactions
-
-**Key Logic:**
-
-- **Dynamic Routing:** URLs like `/projects/project-I` map to data lookup and component rendering
-- **Media Loading:** Project recap images/videos loaded from Supabase Storage buckets
-- **Artist Profiles:** Username-based lookup with fallback for missing profiles
-- **Responsive Design:** CSS Modules and Tailwind handle mobile/desktop layouts
-
-## Setup Instructions
-
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-- Supabase account
-
-### Installation Steps
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone <repository-url>
-   cd my-next-app
-   ```
-
-2. **Install dependencies:**
-
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables:**
-   Create a `.env.local` file in the root directory:
-
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
-
-4. **Configure Supabase:**
-   - Create a new Supabase project
-   - Set up a `profiles` table with columns: id, name, username, bio, avatar_url, instagram
-   - Create a `projects` storage bucket for media files
-   - Enable public read access for the bucket
-
-5. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Build for Production
+4. Build and run production locally:
 
 ```bash
 npm run build
-npm start
+npm run start
 ```
 
-## Usage
+## Environment Variables
 
-### Viewing Projects
+Required:
 
-- Navigate to the home page to see project cards
-- Click any project card to view details, collaborators, and media
+1. `NEXT_PUBLIC_SUPABASE_URL`
+2. `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-### Artist Profiles
+## Supabase Storage Policies
 
-- Visit `/artists/[username]` to see artist information
-- If an artist hasn't set up their profile, a placeholder message appears
+For the `avatars` bucket, use policies that allow users to manage only their own folder.
 
-### Adding Content
+Example conditions:
 
-- Projects are added by updating `app/projects/data.ts`
-- Artist profiles are managed through Supabase database
-- Media files uploaded to Supabase Storage buckets
+1. Insert check:
+   - `bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text`
+2. Update using/check:
+   - `bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text`
+3. Delete using:
+   - `bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text`
+4. Select using (public avatars):
+   - `bucket_id = 'avatars'`
 
-### Customization
+If avatars should be viewable without auth, set the bucket to Public and keep read policy aligned.
 
-- Modify styles in CSS Modules files
-- Update global typography in `app/globals.css`
-- Add new sections by creating components in appropriate directories
+## Scripts and Testing
 
-## Key Concepts
+Main scripts:
 
-- **Colocation:** Related files (components, styles, data) kept together for maintainability
-- **Server Components:** Data fetching happens on the server for better performance
-- **Dynamic Routing:** URL-based content loading using Next.js `[slug]` patterns
-- **CSS Modules:** Scoped styling to prevent conflicts between components
-- **Supabase Integration:** Real-time database and storage for dynamic content
-- **Responsive Design:** Mobile-first approach with Tailwind utilities
+1. `npm run dev`
+2. `npm run build`
+3. `npm run start`
+4. `npm run lint`
+5. `npm test`
 
-## Future Improvements
+Organized test buckets include:
 
-- **CMS Integration:** Add admin panel for content management without code changes
-- **User Authentication:** Allow artists to manage their own profiles
-- **Search Functionality:** Add search/filter for projects and artists
-- **Performance Optimization:** Implement image optimization and caching strategies
-- **Testing Suite:** Add unit and integration tests for reliability
-- **Multi-language Support:** Internationalization for broader accessibility
-- **API Endpoints:** Expose REST APIs for third-party integrations
-- **Analytics:** Track engagement metrics for community insights
+1. API black-box tests.
+2. API white-box tests.
+3. API edge-case tests.
+4. Dashboard form black-box tests.
+5. Dashboard form edge-case tests.
 
----
+## Folder Map
 
-## 📜 Manifesto Snippet
+```text
+app/
+  dashboard/profile/    Protected profile editor and dashboard view
+  artists/[slug]/       Public artist pages
+  projects/[slug]/      Public project pages
+  login/                OAuth sign-in page
+  manifesto/            Mission and values page
+  guidelines/           Community rules page
+  FAQ/                  FAQ page
+  linktree/             Link hub page
 
-> _"In an age of digital gentrification, we reclaim the web as a space for art. We move beyond bits and bytes to create something that breathes."_
+lib/
+  artists/              Artist queries and mutations
+  auth/                 Authorization helpers
+  projects/             Storage media helpers
+  supabase/             Client and server Supabase setup
+```
 
-## 🤝 Contributing
+## Coding and Documentation Conventions
 
-This project is developed by a Computer Science student to support marginalized artists in Denton County and beyond. If you're interested in the intersection of tech and social justice, feel free to:
+This project uses verbose file headers and section comments in route files to explain:
 
-- Open a PR with improvements
-- Report issues or bugs
-- Suggest new features
-- Reach out via the Contact form
+1. Purpose of the file.
+2. Responsibilities.
+3. Dependencies.
+4. How each file fits the full system.
 
-For major changes, please open an issue first to discuss the proposed changes.
+When adding new pages/components, follow the same style so onboarding remains fast.
 
-## 📄 License
+## Deployment Notes
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+1. Add production domain in Supabase Auth URL settings.
+2. Add redirect URL for OAuth callback target.
+3. Ensure Supabase env vars are configured in deployment platform.
+4. Verify Storage policies in production project.

@@ -19,19 +19,24 @@ import styles from "./home.module.css";
 import { projects } from "../projects/data";
 
 // ProjectsSection component
-// Displays a grid of project cards linking to detailed project pages
+// Displays the home-page project catalog from static project metadata.
+// This section is data-driven: adding/removing entries in projects data updates this grid automatically.
 export default function ProjectsSection() {
 	return (
 		<section id="projects" className={styles.projects_section}>
 			<div className={styles.projects_container}>
 				<h2>PROJECTS</h2>
-				{/* Projects grid section - Maps over project data to create clickable cards */}
+				{/* Project card mapping
+				    - Uses slug as the stable key and route target.
+				    - Keeps each card simple: title, visual, date.
+				    - Image-only link creates a clear visual click target while preserving text readability.
+				*/}
 				<div className={styles.projects_grid}>
 					{projects.map((project) => (
 						<div className={styles.project_card} key={project.slug}>
 							<h3>{project.title}</h3>
 
-							{/* Only the image is wrapped in the Link now */}
+							{/* Visual navigation target */}
 							<Link href={`/projects/${project.slug}`}>
 								<Image
 									src={project.img}

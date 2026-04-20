@@ -1,5 +1,5 @@
 /**
- * File: lib/getProjectMedia.ts
+ * File: lib/projects/media.ts
  * Purpose: Fetches media files (images/videos) for project recaps from Supabase Storage.
  * Responsibilities:
  *   - Query Supabase Storage for files in project folders
@@ -10,11 +10,11 @@
  *   - File type detection via regex
  *   - URL construction for public access
  * Dependencies:
- *   - supabaseClient.ts
+ *   - lib/supabase/client.ts
  *   - Media type from app/projects/data.ts
  *   - Supabase projects storage bucket
  * How It Fits:
- *   - Used by project recap sections to dynamically load media from storage
+ *   - Used by project dynamic pages to hydrate recap sections at request time
  */
 
 import { supabase } from "@/lib/supabase/client";
@@ -32,6 +32,8 @@ import { Media } from "@/app/projects/data";
  *   - Supabase Storage list operation, regex pattern matching for file types
  */
 export async function getProjectMedia(slug: string): Promise<Media[]> {
+	// Storage folder convention
+	// Each project's recap files live under bucket "projects" in a folder named by slug.
 	const { data, error } = await supabase.storage
 		.from("projects") // bucket name
 		.list(slug, {
@@ -45,8 +47,9 @@ export async function getProjectMedia(slug: string): Promise<Media[]> {
 		return [];
 	}
 
-	// Transform storage files into Media objects
-	// Detects video files by extension and constructs public URLs
+	// Transformation phase
+	// Convert storage objects into UI-ready media descriptors with a best-effort
+	// type check based on common video extensions.
 	return data.map((file) => ({
 		type: file.name.match(/\.(mp4|webm|mov)$/i) ? "video" : "image",
 		src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${slug}/${file.name}`,

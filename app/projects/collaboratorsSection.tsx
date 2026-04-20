@@ -1,3 +1,20 @@
+/**
+ * File: app/projects/collaboratorsSection.tsx
+ * Purpose: Renders project collaborators grouped by role with links to artist profiles.
+ * Responsibilities:
+ *   - Display collaborators in role-based categories
+ *   - Keep output deterministic through custom role ordering
+ *   - Provide links to each collaborator's public artist page
+ * Key Concepts:
+ *   - Grouping arrays into keyed records
+ *   - Stable role ordering and alphabetical sorting inside each group
+ * Dependencies:
+ *   - Collaborator type from project data
+ *   - project.module.css and Next.js Link
+ * How It Fits:
+ *   - Connects projects to people and drives cross-navigation to artist profiles
+ */
+
 import { Collaborator } from "./data";
 import styles from "./project.module.css";
 import Link from "next/link";
@@ -7,6 +24,8 @@ export default function CollaboratorsSection({
 }: {
 	collaboratorsSection?: Collaborator[];
 }) {
+	// Empty-state behavior
+	// Projects can be published before collaborator metadata is finalized.
 	if (!collaboratorsSection || collaboratorsSection.length === 0) {
 		return (
 			<section className={styles.collaboratorsSection}>
@@ -16,7 +35,8 @@ export default function CollaboratorsSection({
 		);
 	}
 
-	// Group by role
+	// Grouping phase
+	// Transform flat collaborator list into role buckets for sectional rendering.
 	const grouped: Record<string, Collaborator[]> = {};
 	collaboratorsSection.forEach((collab) => {
 		const role = collab.role || "Other";
@@ -24,7 +44,8 @@ export default function CollaboratorsSection({
 		grouped[role].push(collab);
 	});
 
-	// Custom order (better than alphabetical)
+	// Role display order
+	// Explicit ordering keeps presentation consistent with program priorities.
 	const roleOrder = [
 		"Performers",
 		"Organizers",
@@ -36,6 +57,8 @@ export default function CollaboratorsSection({
 
 	const sortedRoles = roleOrder.filter((role) => grouped[role]);
 
+	// Render grouped collaborator cards
+	// Names are sorted alphabetically within each role for scanability.
 	return (
 		<section className={styles.collaboratorsSection}>
 			<h2>Collaborators</h2>

@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
+import Image from "next/image";
 import styles from "./profile.module.css";
 
 const STATUS_OPTIONS = [
@@ -42,7 +43,21 @@ const STATUS_OPTIONS = [
 	"Other",
 ];
 
+const AVATAR_BUCKET = "avatars";
+const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_AVATAR_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+function getFileExtension(fileName: string): string {
+	// Filename helper
+	// Preserves extension when available for easier debugging/storage inspection.
+	const parts = fileName.split(".");
+	if (parts.length < 2) return "jpg";
+	return parts[parts.length - 1].toLowerCase();
+}
+
 function calculateAgeFromBirthDate(birthDate: string): string {
+	// Display-only age helper
+	// Age is derived from birthday at render time and not stored as a source-of-truth field.
 	if (!birthDate) return "";
 
 	const birth = new Date(birthDate);
@@ -60,6 +75,10 @@ function calculateAgeFromBirthDate(birthDate: string): string {
 }
 
 export default function ArtistProfilePage() {
+	// Component state section
+	// - user/artist/authorized/loading control route protection and data readiness.
+	// - editing/saving/avatarUploading drive UI modes and button disable states.
+	// - message provides user feedback for save/upload outcomes.
 	const router = useRouter();
 	const [user, setUser] = useState<User | null>(null);
 	const [artist, setArtist] = useState<Artist | null>(null);
@@ -67,12 +86,16 @@ export default function ArtistProfilePage() {
 	const [loading, setLoading] = useState(true);
 	const [editing, setEditing] = useState(false);
 	const [saving, setSaving] = useState(false);
+	const [avatarUploading, setAvatarUploading] = useState(false);
 	const [message, setMessage] = useState("");
 
 	const [formData, setFormData] = useState({
+		// Form state mirrors editable profile columns.
+		// avatar_url is included so uploaded image URL can be previewed before final save.
 		name: "",
 		username: "",
 		bio: "",
+		avatar_url: "",
 		birthday: "",
 		based_in: "",
 		mediums: "",
@@ -93,12 +116,18 @@ export default function ArtistProfilePage() {
 	});
 
 	useEffect(() => {
+		// Auth + profile bootstrap section
+		// This establishes three layers before rendering editable UI:
+		// 1) Auth session exists
+		// 2) Email is allowlisted
+		// 3) Profile row exists
 		const checkAuth = async () => {
 			const {
 				data: { session },
 			} = await supabase.auth.getSession();
 
 			if (!session) {
+				// No active session: this is a protected route, so redirect to login.
 				router.push("/login");
 				return;
 			}
@@ -106,24 +135,30 @@ export default function ArtistProfilePage() {
 			setUser(session.user);
 
 			if (!session.user.email) {
+				// Session without email cannot be allowlist-checked safely.
 				setAuthorized(false);
 				setLoading(false);
 				return;
 			}
 
-			// Check if email is authorized
+			// Allowlist check
+			// Uses normalized email query to gate dashboard access.
 			const emailAuth = await isEmailAuthorized(session.user.email);
 			setAuthorized(emailAuth);
 
 			if (emailAuth) {
-				// profiles.id is bigint so UUID lookup won't work — match by email instead
+				// Profile lookup strategy
+				// profiles.id is bigint in this project, while auth user id is UUID.
+				// We fetch by email to avoid id-type mismatch issues.
 				const profile = await getArtistByEmail(session.user.email);
 				if (profile) {
 					setArtist(profile);
+					// Hydrate form with existing values so edit mode starts with current data.
 					setFormData({
 						name: profile.name || "",
 						username: profile.username || "",
 						bio: profile.bio || "",
+						avatar_url: profile.avatar_url || "",
 						birthday: profile.birthday || "",
 						based_in: profile.based_in || "",
 						mediums: profile.mediums || "",
@@ -156,6 +191,8 @@ export default function ArtistProfilePage() {
 			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 		>,
 	) => {
+		// Generic form input handler
+		// Keeps all text/select/textarea fields synchronized with local form state.
 		const { name, value } = e.target;
 
 		if (name === "birthday") {
@@ -170,6 +207,8 @@ export default function ArtistProfilePage() {
 	};
 
 	const handleSave = async () => {
+		// Save lifecycle section
+		// Persists the entire editable profile payload and then re-reads profile for consistency.
 		if (!artist) return;
 
 		setSaving(true);
@@ -188,7 +227,8 @@ export default function ArtistProfilePage() {
 		if (result.success) {
 			setMessage("Profile updated successfully!");
 			setEditing(false);
-			// Refresh the artist data by email
+			// Refresh profile after write
+			// Re-fetch ensures UI reflects canonical DB values after triggers/defaults.
 			if (user?.email) {
 				const updatedProfile = await getArtistByEmail(user.email);
 				if (updatedProfile) {
@@ -202,12 +242,81 @@ export default function ArtistProfilePage() {
 		setSaving(false);
 	};
 
+	const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		// Avatar upload lifecycle
+		// 1) validate type/size
+		// 2) upload to storage path scoped by auth user id
+		// 3) generate public URL
+		// 4) stage URL in formData (final persistence occurs on Save Changes)
+		const file = e.target.files?.[0];
+
+		if (!file || !user) {
+			return;
+		}
+
+		if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+			// File type guard keeps accepted media predictable and compatible with image components.
+			setMessage("Please upload a JPG, PNG, or WEBP image.");
+			e.target.value = "";
+			return;
+		}
+
+		if (file.size > MAX_AVATAR_SIZE_BYTES) {
+			// Size guard prevents oversized uploads and improves storage/network behavior.
+			setMessage("Please upload an image smaller than 5MB.");
+			e.target.value = "";
+			return;
+		}
+
+		setAvatarUploading(true);
+		setMessage("Uploading profile picture...");
+
+		const extension = getFileExtension(file.name);
+		// Per-user storage path strategy
+		// Folder prefix by auth uid supports clean ownership policies in Supabase Storage RLS.
+		const filePath = `${user.id}/avatar-${Date.now()}.${extension}`;
+
+		const { error: uploadError } = await supabase.storage
+			.from(AVATAR_BUCKET)
+			.upload(filePath, file, {
+				cacheControl: "3600",
+				upsert: true,
+				contentType: file.type,
+			});
+
+		if (uploadError) {
+			// Upload failure is surfaced directly so policy/config errors are visible to the user.
+			setMessage(`Failed to upload image: ${uploadError.message}`);
+			setAvatarUploading(false);
+			e.target.value = "";
+			return;
+		}
+
+		const {
+			data: { publicUrl },
+		} = supabase.storage.from(AVATAR_BUCKET).getPublicUrl(filePath);
+
+		// Stage uploaded URL into form state.
+		// User still controls final commit by clicking Save Changes.
+		setFormData((prev) => ({
+			...prev,
+			avatar_url: publicUrl,
+		}));
+
+		setMessage("Profile picture uploaded. Click Save Changes to keep it.");
+		setAvatarUploading(false);
+		e.target.value = "";
+	};
+
 	const handleCancel = () => {
+		// Cancel behavior
+		// Restores form to current profile snapshot and exits edit mode without persisting changes.
 		if (artist) {
 			setFormData({
 				name: artist.name || "",
 				username: artist.username || "",
 				bio: artist.bio || "",
+				avatar_url: artist.avatar_url || "",
 				birthday: artist.birthday || "",
 				based_in: artist.based_in || "",
 				mediums: artist.mediums || "",
@@ -232,15 +341,21 @@ export default function ArtistProfilePage() {
 	};
 
 	const handleSignOut = async () => {
+		// Sign-out section
+		// Ends Supabase session and returns user to public home page.
 		await supabase.auth.signOut();
 		router.push("/");
 	};
 
 	if (loading) {
+		// Loading gate
+		// Prevents unauthorized/profile checks from flashing intermediate UI states.
 		return <div className={styles.loading}>Loading...</div>;
 	}
 
 	if (!authorized) {
+		// Authorization gate
+		// User has a session but does not pass allowlist rules.
 		return (
 			<div className={styles.unauthorized}>
 				<h2>Access Denied</h2>
@@ -254,6 +369,8 @@ export default function ArtistProfilePage() {
 	}
 
 	if (!artist) {
+		// Profile existence gate
+		// Allowlisted users still need a profile row before they can edit dashboard data.
 		return (
 			<div className={styles.unauthorized}>
 				<h2>Profile Not Found</h2>
@@ -269,6 +386,10 @@ export default function ArtistProfilePage() {
 	const greetingName =
 		artist.name?.trim().split(" ")[0] || user?.email?.split("@")[0] || "Artist";
 
+	// Main render section
+	// - editing=true shows form controls
+	// - editing=false shows read-only preview and public page link
+	// - message feedback appears at bottom after actions
 	return (
 		<div className={styles.profileContainer}>
 			<header className={styles.profileHeader}>
@@ -298,6 +419,39 @@ export default function ArtistProfilePage() {
 						<div className={styles.profileSection}>
 							<h2 className={styles.sectionTitle}>Basic Information</h2>
 							<div className={styles.formGrid}>
+								<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+									<label className={styles.formLabel} htmlFor="avatar_upload">
+										Profile Picture
+									</label>
+									<div className={styles.avatarField}>
+										{formData.avatar_url ? (
+											<Image
+												src={formData.avatar_url}
+												alt={`${artist.name || "Artist"} profile picture`}
+												width={120}
+												height={120}
+												className={styles.avatarImage}
+											/>
+										) : (
+											<div className={styles.avatarPlaceholder}>
+												No image uploaded
+											</div>
+										)}
+										<div className={styles.avatarControls}>
+											<input
+												type="file"
+												id="avatar_upload"
+												accept="image/png,image/jpeg,image/webp"
+												onChange={handleAvatarUpload}
+												disabled={avatarUploading || saving}
+												className={styles.formInput}
+											/>
+											<p className={styles.avatarHelpText}>
+												Max 5MB. Supported formats: JPG, PNG, WEBP.
+											</p>
+										</div>
+									</div>
+								</div>
 								<div className={styles.formGroup}>
 									<label className={styles.formLabel} htmlFor="name">
 										Name *
@@ -369,7 +523,7 @@ export default function ArtistProfilePage() {
 										className={styles.formInput}
 									/>
 								</div>
-								<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+								<div className={styles.formGroup}>
 									<label className={styles.formLabel} htmlFor="mediums">
 										Mediums
 									</label>
@@ -383,7 +537,7 @@ export default function ArtistProfilePage() {
 										rows={2}
 									/>
 								</div>
-								<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+								<div className={styles.formGroup}>
 									<label className={styles.formLabel} htmlFor="past_projects">
 										Past Projects
 									</label>
@@ -610,9 +764,13 @@ export default function ArtistProfilePage() {
 							<button
 								onClick={handleSave}
 								className={styles.saveButton}
-								disabled={saving}
+								disabled={saving || avatarUploading}
 							>
-								{saving ? "Saving..." : "Save Changes"}
+								{avatarUploading
+									? "Uploading..."
+									: saving
+										? "Saving..."
+										: "Save Changes"}
 							</button>
 						</div>
 					</>
@@ -621,6 +779,22 @@ export default function ArtistProfilePage() {
 						<div className={styles.profileSection}>
 							<h2 className={styles.sectionTitle}>Basic Information</h2>
 							<div className={styles.formGrid}>
+								<div className={styles.fullWidth}>
+									<div className={styles.avatarDisplayRow}>
+										<strong>Profile Picture:</strong>
+										{artist.avatar_url ? (
+											<Image
+												src={artist.avatar_url}
+												alt={`${artist.name || "Artist"} profile picture`}
+												width={120}
+												height={120}
+												className={styles.avatarImage}
+											/>
+										) : (
+											"Not set"
+										)}
+									</div>
+								</div>
 								<div>
 									<strong>Name:</strong> {artist.name}
 								</div>
@@ -638,10 +812,10 @@ export default function ArtistProfilePage() {
 								<div>
 									<strong>Based In:</strong> {artist.based_in || "Not set"}
 								</div>
-								<div className={styles.fullWidth}>
+								<div>
 									<strong>Mediums:</strong> {artist.mediums || "Not set"}
 								</div>
-								<div className={styles.fullWidth}>
+								<div>
 									<strong>Past Projects:</strong>{" "}
 									{artist.past_projects || "Not set"}
 								</div>

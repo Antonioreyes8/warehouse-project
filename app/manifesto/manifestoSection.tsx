@@ -1,7 +1,28 @@
+/**
+ * File: app/manifesto/manifestoSection.tsx
+ * Purpose: Renders the long-form manifesto content for the movement.
+ * Responsibilities:
+ *   - Present guiding principles and political/creative framing
+ *   - Keep manifesto text centralized in one reusable section component
+ * Key Concepts:
+ *   - Static content composition in React
+ *   - Semantic heading hierarchy for long-form reading
+ * Dependencies:
+ *   - Global utility classes (basic_section, basic_content)
+ * How It Fits:
+ *   - Consumed by the manifesto page route as the canonical source of mission text
+ */
+
+// ManifestoSection component
+// The content is intentionally written directly in JSX so edits stay explicit and traceable.
 export default function ManifestoSection() {
 	return (
 		<section className="basic_section">
 			<div className="basic_content">
+				{/* Manifesto document body
+				    Organized by Roman-numeral sections to reinforce narrative progression:
+				    mission -> critique -> values -> institutional stance.
+				*/}
 				<div>
 					<h2>Our Manifesto</h2>
 					<h3>I. The Revolution starts here</h3>

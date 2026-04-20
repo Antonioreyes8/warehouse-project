@@ -43,7 +43,13 @@ export const mockSupabase = {
 
 /** Call this in beforeEach to reset all mocks between tests. */
 export function resetSupabaseMocks() {
-	vi.clearAllMocks();
+	mockMaybeSingle.mockReset();
+	mockUpdate.mockReset();
+	mockDelete.mockReset();
+	mockSelect.mockReset();
+	mockEq.mockReset();
+	mockIlike.mockReset();
+	mockFrom.mockReset();
 
 	mockIlike.mockReturnValue({
 		maybeSingle: mockMaybeSingle,

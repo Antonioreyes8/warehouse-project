@@ -1,17 +1,19 @@
 /**
- * File: lib/artistApi.ts
+ * File: lib/artists/mutations.ts
  * Purpose: API functions for artist profile operations.
  * Responsibilities:
- *   - Update artist profiles
- *   - Handle database operations for artists
+ *   - Update profile rows with resilient id/email matching
+ *   - Delete profile rows for administrative workflows
+ *   - Return explicit success/error results for UI feedback
  * Key Concepts:
  *   - Database CRUD operations
- *   - Error handling for API calls
+ *   - Fallback query strategies for mixed id schemas
+ *   - Structured error handling for API calls
  * Dependencies:
- *   - supabaseClient for database connection
- *   - Artist type from getArtists.ts
+ *   - lib/supabase/client.ts for database connection
+ *   - Artist type from lib/artists/queries.ts
  * How It Fits:
- *   - Provides backend API functions for artist profile management
+ *   - Central write layer used by dashboard edit/save actions
  */
 
 import { supabase } from "../supabase/client";
@@ -29,6 +31,8 @@ export async function updateArtistProfile(
 	updates: Partial<Omit<Artist, "id" | "email">>,
 ): Promise<{ success: boolean; error?: string }> {
 	try {
+		// Primary update strategy
+		// Try numeric id first for environments where profiles.id is bigint/integer.
 		const numericId = Number(artistId);
 
 		if (Number.isFinite(numericId)) {
@@ -48,6 +52,8 @@ export async function updateArtistProfile(
 			}
 		}
 
+		// Fallback update strategy
+		// If id path does not update any rows, fallback to case-insensitive email match.
 		if (artistEmail?.trim()) {
 			const { data, error } = await supabase
 				.from("profiles")
@@ -65,11 +71,15 @@ export async function updateArtistProfile(
 			}
 		}
 
+		// Explicit not-found outcome
+		// Returning a clear message prevents false-positive "saved" UX states.
 		return {
 			success: false,
 			error: "No matching profile row found to update",
 		};
 	} catch (error) {
+		// Unexpected runtime catch
+		// Keeps UI response consistent for unhandled exceptions.
 		console.error("Unexpected error updating profile:", error);
 		return { success: false, error: "Unexpected error occurred" };
 	}
@@ -84,6 +94,8 @@ export async function deleteArtistProfile(
 	artistId: string,
 ): Promise<{ success: boolean; error?: string }> {
 	try {
+		// Delete by id
+		// Intended for admin-level flows where profile removal is required.
 		const { error } = await supabase
 			.from("profiles")
 			.delete()

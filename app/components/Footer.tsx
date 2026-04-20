@@ -17,10 +17,14 @@
 import Link from "next/link";
 
 // Footer component
-// Provides navigation and site information in the footer
+// Provides persistent navigation, external community links, and location metadata.
+// This footer is intentionally content-heavy so users can access key routes from any page.
 export default function Footer() {
 	return (
 		<footer className="footer">
+			{/* Left column
+			    Contains internal navigation plus program/action links used frequently by visitors.
+			*/}
 			<div className="footer_left">
 				<div>
 					<p>
@@ -68,6 +72,9 @@ export default function Footer() {
 					<p>The Warehouse Project © 2026</p>
 				</div>
 			</div>
+			{/* Right column
+			    Reserved for future content blocks (newsletter, social, legal, etc.).
+			*/}
 			<div className="footer_right"></div>
 		</footer>
 	);

@@ -26,7 +26,9 @@ export default function LoginPage() {
 	const [message, setMessage] = useState("");
 
 	useEffect(() => {
-		// Check if user is already logged in
+		// Session pre-check section
+		// If a valid session already exists, skip login UI and move user directly to dashboard.
+		// This prevents "login page flash" for already authenticated users.
 		const checkUser = async () => {
 			const {
 				data: { session },
@@ -37,7 +39,9 @@ export default function LoginPage() {
 		};
 		checkUser();
 
-		// Listen for auth state changes
+		// Realtime auth listener section
+		// OAuth can complete outside this component's initial render cycle.
+		// Listening ensures the UI responds instantly when Supabase emits SIGNED_IN.
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((event, session) => {
@@ -46,14 +50,20 @@ export default function LoginPage() {
 			}
 		});
 
+		// Cleanup section
+		// Prevents duplicate listeners and memory leaks during Fast Refresh/unmounts.
 		return () => subscription.unsubscribe();
 	}, [router]);
 
 	const handleGoogleSignIn = async () => {
+		// Submit lifecycle section
+		// Reset message, lock button, and start OAuth flow.
 		setLoading(true);
 		setMessage("");
 
 		try {
+			// OAuth initiation section
+			// redirectTo points back to the dashboard route after provider authentication.
 			const { error } = await supabase.auth.signInWithOAuth({
 				provider: "google",
 				options: {
@@ -62,11 +72,17 @@ export default function LoginPage() {
 			});
 
 			if (error) {
+				// User-facing error handling
+				// Keep the message explicit so auth configuration issues are easier to diagnose.
 				setMessage("Error signing in: " + error.message);
 			}
 		} catch {
+			// Catch-all safety
+			// Handles unexpected runtime/network exceptions outside Supabase's returned error object.
 			setMessage("Unexpected error occurred");
 		} finally {
+			// UI unlock
+			// Re-enables button regardless of success/failure.
 			setLoading(false);
 		}
 	};
