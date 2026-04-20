@@ -96,7 +96,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 1. Start your development server: `npm run dev`
 2. Go to `/login`
 3. Sign in with an authorized Google account
-4. You should be redirected to `/artists/profile`
+4. You should be redirected to `/dashboard/profile`
 5. You should see your profile and be able to edit it
 6. Changes should save to the database
 
@@ -105,7 +105,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 When deploying to production:
 
 1. In Supabase Auth settings, add production redirect URLs:
-   - `https://yourdomain.com/artists/profile`
+   - `https://yourdomain.com/dashboard/profile`
 2. Update Google OAuth credentials with production domain if needed
 
 ## Troubleshooting
@@ -118,7 +118,8 @@ When deploying to production:
 ### "Profile not found"
 
 - Ensure the profile exists in the `profiles` table
-- Verify the `id` matches the `auth.users.id` exactly
+- Prefer setting `profiles.id` to `auth.users.id` for clean ownership policies
+- If your setup links by email, ensure `profiles.email` matches the signed-in Google email
 
 ### OAuth redirect issues
 

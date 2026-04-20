@@ -15,7 +15,7 @@
  *   - Used by artist profile pages in app/artists/ to retrieve and display artist information
  */
 
-import { supabase } from "./supabaseClient";
+import { supabase } from "../supabase/client";
 
 // Type definitions section
 // Defines the structure of artist data as stored in Supabase
@@ -25,6 +25,14 @@ export type Artist = {
 	username: string;
 	bio: string | null;
 	avatar_url: string | null;
+	age?: string | null;
+	based_in?: string | null;
+	mediums?: string | null;
+	past_projects?: string | null;
+	ethnic_background?: string | null;
+	contact?: string | null;
+	status?: string | null;
+	member_since?: string | null;
 	instagram?: string | null;
 	youtube?: string | null;
 	patreon?: string | null;
@@ -94,6 +102,30 @@ export async function getArtistByUserId(
 }
 
 /**
+ * Description: Fetches an artist profile by email.
+ * Parameters:
+ *   - email: string - The artist's email
+ * Returns:
+ *   - Promise<Artist | null> - The artist data if found, null if not found or error
+ */
+export async function getArtistByEmail(email: string): Promise<Artist | null> {
+	const normalizedEmail = email.trim().toLowerCase();
+
+	const { data, error } = await supabase
+		.from("profiles")
+		.select("*")
+		.ilike("email", normalizedEmail)
+		.maybeSingle();
+
+	if (error) {
+		console.error("Error fetching artist by email:", error);
+		return null;
+	}
+
+	return data;
+}
+
+/**
  * Description: Checks if an email is authorized for artist access.
  * Parameters:
  *   - email: string - The email to check
@@ -105,10 +137,12 @@ export async function getArtistByUserId(
  *   - Supabase query to check authorization status
  */
 export async function isEmailAuthorized(email: string): Promise<boolean> {
+	const normalizedEmail = email.trim().toLowerCase();
+
 	const { data, error } = await supabase
-		.from("authorized_artists")
+		.from("allowed_users")
 		.select("email")
-		.eq("email", email)
+		.ilike("email", normalizedEmail)
 		.maybeSingle();
 
 	if (error) {

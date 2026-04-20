@@ -19,7 +19,7 @@
 // app/projects/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { projects, Project } from "../data";
-import { getProjectMedia } from "@/lib/getProjectMedia";
+import { getProjectMedia } from "@/lib/projects/media";
 
 import CauseSection from "./../causeSection";
 import CollaboratorsSection from "./../collaboratorsSection";

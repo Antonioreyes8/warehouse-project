@@ -19,13 +19,13 @@
 
 "use client";
 
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import {
-	getArtistByUserId,
+	getArtistByEmail,
 	isEmailAuthorized,
 	type Artist,
-} from "@/lib/getArtists";
-import { updateArtistProfile } from "@/lib/artistApi";
+} from "@/lib/artists/queries";
+import { updateArtistProfile } from "@/lib/artists/mutations";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -46,6 +46,14 @@ export default function ArtistProfilePage() {
 		name: "",
 		username: "",
 		bio: "",
+		age: "",
+		based_in: "",
+		mediums: "",
+		past_projects: "",
+		ethnic_background: "",
+		contact: "",
+		status: "",
+		member_since: "",
 		instagram: "",
 		youtube: "",
 		patreon: "",
@@ -70,19 +78,33 @@ export default function ArtistProfilePage() {
 
 			setUser(session.user);
 
+			if (!session.user.email) {
+				setAuthorized(false);
+				setLoading(false);
+				return;
+			}
+
 			// Check if email is authorized
-			const emailAuth = await isEmailAuthorized(session.user.email!);
+			const emailAuth = await isEmailAuthorized(session.user.email);
 			setAuthorized(emailAuth);
 
 			if (emailAuth) {
-				// Get artist profile
-				const profile = await getArtistByUserId(session.user.id);
+				// profiles.id is bigint so UUID lookup won't work — match by email instead
+				const profile = await getArtistByEmail(session.user.email);
 				if (profile) {
 					setArtist(profile);
 					setFormData({
 						name: profile.name || "",
 						username: profile.username || "",
 						bio: profile.bio || "",
+						age: profile.age || "",
+						based_in: profile.based_in || "",
+						mediums: profile.mediums || "",
+						past_projects: profile.past_projects || "",
+						ethnic_background: profile.ethnic_background || "",
+						contact: profile.contact || "",
+						status: profile.status || "",
+						member_since: profile.member_since || "",
 						instagram: profile.instagram || "",
 						youtube: profile.youtube || "",
 						patreon: profile.patreon || "",
@@ -115,15 +137,21 @@ export default function ArtistProfilePage() {
 		setSaving(true);
 		setMessage("");
 
-		const result = await updateArtistProfile(artist.id, formData);
+		const result = await updateArtistProfile(
+			artist.id,
+			artist.email ?? null,
+			formData,
+		);
 
 		if (result.success) {
 			setMessage("Profile updated successfully!");
 			setEditing(false);
-			// Refresh the artist data
-			const updatedProfile = await getArtistByUserId(artist.id);
-			if (updatedProfile) {
-				setArtist(updatedProfile);
+			// Refresh the artist data by email
+			if (user?.email) {
+				const updatedProfile = await getArtistByEmail(user.email);
+				if (updatedProfile) {
+					setArtist(updatedProfile);
+				}
 			}
 		} else {
 			setMessage(result.error || "Failed to update profile");
@@ -138,6 +166,14 @@ export default function ArtistProfilePage() {
 				name: artist.name || "",
 				username: artist.username || "",
 				bio: artist.bio || "",
+				age: artist.age || "",
+				based_in: artist.based_in || "",
+				mediums: artist.mediums || "",
+				past_projects: artist.past_projects || "",
+				ethnic_background: artist.ethnic_background || "",
+				contact: artist.contact || "",
+				status: artist.status || "",
+				member_since: artist.member_since || "",
 				instagram: artist.instagram || "",
 				youtube: artist.youtube || "",
 				patreon: artist.patreon || "",
@@ -223,6 +259,7 @@ export default function ArtistProfilePage() {
 										id="name"
 										name="name"
 										value={formData.name}
+										placeholder={artist.name || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 										required
@@ -237,6 +274,7 @@ export default function ArtistProfilePage() {
 										id="username"
 										name="username"
 										value={formData.username}
+										placeholder={artist.username || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 										required
@@ -250,9 +288,125 @@ export default function ArtistProfilePage() {
 										id="bio"
 										name="bio"
 										value={formData.bio}
+										placeholder={artist.bio || ""}
 										onChange={handleInputChange}
 										className={styles.formTextarea}
 										rows={4}
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label className={styles.formLabel} htmlFor="age">
+										Age
+									</label>
+									<input
+										type="text"
+										id="age"
+										name="age"
+										value={formData.age}
+										placeholder={artist.age || ""}
+										onChange={handleInputChange}
+										className={styles.formInput}
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label className={styles.formLabel} htmlFor="based_in">
+										Based In
+									</label>
+									<input
+										type="text"
+										id="based_in"
+										name="based_in"
+										value={formData.based_in}
+										placeholder={artist.based_in || ""}
+										onChange={handleInputChange}
+										className={styles.formInput}
+									/>
+								</div>
+								<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+									<label className={styles.formLabel} htmlFor="mediums">
+										Mediums
+									</label>
+									<textarea
+										id="mediums"
+										name="mediums"
+										value={formData.mediums}
+										placeholder={artist.mediums || ""}
+										onChange={handleInputChange}
+										className={styles.formTextarea}
+										rows={2}
+									/>
+								</div>
+								<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+									<label className={styles.formLabel} htmlFor="past_projects">
+										Past Projects
+									</label>
+									<textarea
+										id="past_projects"
+										name="past_projects"
+										value={formData.past_projects}
+										placeholder={artist.past_projects || ""}
+										onChange={handleInputChange}
+										className={styles.formTextarea}
+										rows={2}
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label
+										className={styles.formLabel}
+										htmlFor="ethnic_background"
+									>
+										Ethnic Background
+									</label>
+									<input
+										type="text"
+										id="ethnic_background"
+										name="ethnic_background"
+										value={formData.ethnic_background}
+										placeholder={artist.ethnic_background || ""}
+										onChange={handleInputChange}
+										className={styles.formInput}
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label className={styles.formLabel} htmlFor="contact">
+										Contact
+									</label>
+									<input
+										type="text"
+										id="contact"
+										name="contact"
+										value={formData.contact}
+										placeholder={artist.contact || ""}
+										onChange={handleInputChange}
+										className={styles.formInput}
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label className={styles.formLabel} htmlFor="status">
+										Status
+									</label>
+									<input
+										type="text"
+										id="status"
+										name="status"
+										value={formData.status}
+										placeholder={artist.status || ""}
+										onChange={handleInputChange}
+										className={styles.formInput}
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label className={styles.formLabel} htmlFor="member_since">
+										Member Since
+									</label>
+									<input
+										type="text"
+										id="member_since"
+										name="member_since"
+										value={formData.member_since}
+										placeholder={artist.member_since || ""}
+										onChange={handleInputChange}
+										className={styles.formInput}
 									/>
 								</div>
 							</div>
@@ -270,6 +424,7 @@ export default function ArtistProfilePage() {
 										id="instagram"
 										name="instagram"
 										value={formData.instagram}
+										placeholder={artist.instagram || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -283,6 +438,7 @@ export default function ArtistProfilePage() {
 										id="youtube"
 										name="youtube"
 										value={formData.youtube}
+										placeholder={artist.youtube || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -296,6 +452,7 @@ export default function ArtistProfilePage() {
 										id="patreon"
 										name="patreon"
 										value={formData.patreon}
+										placeholder={artist.patreon || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -309,6 +466,7 @@ export default function ArtistProfilePage() {
 										id="facebook"
 										name="facebook"
 										value={formData.facebook}
+										placeholder={artist.facebook || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -322,6 +480,7 @@ export default function ArtistProfilePage() {
 										id="tik_tok"
 										name="tik_tok"
 										value={formData.tik_tok}
+										placeholder={artist.tik_tok || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -335,6 +494,7 @@ export default function ArtistProfilePage() {
 										id="etsy"
 										name="etsy"
 										value={formData.etsy}
+										placeholder={artist.etsy || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -351,6 +511,7 @@ export default function ArtistProfilePage() {
 										id="personal_website"
 										name="personal_website"
 										value={formData.personal_website}
+										placeholder={artist.personal_website || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -364,6 +525,7 @@ export default function ArtistProfilePage() {
 										id="soundcloud"
 										name="soundcloud"
 										value={formData.soundcloud}
+										placeholder={artist.soundcloud || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -377,6 +539,7 @@ export default function ArtistProfilePage() {
 										id="bandcamp"
 										name="bandcamp"
 										value={formData.bandcamp}
+										placeholder={artist.bandcamp || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -411,6 +574,33 @@ export default function ArtistProfilePage() {
 								</div>
 								<div>
 									<strong>Username:</strong> {artist.username}
+								</div>
+								<div>
+									<strong>Age:</strong> {artist.age || "Not set"}
+								</div>
+								<div>
+									<strong>Based In:</strong> {artist.based_in || "Not set"}
+								</div>
+								<div className={styles.fullWidth}>
+									<strong>Mediums:</strong> {artist.mediums || "Not set"}
+								</div>
+								<div className={styles.fullWidth}>
+									<strong>Past Projects:</strong>{" "}
+									{artist.past_projects || "Not set"}
+								</div>
+								<div>
+									<strong>Ethnic Background:</strong>{" "}
+									{artist.ethnic_background || "Not set"}
+								</div>
+								<div>
+									<strong>Contact:</strong> {artist.contact || "Not set"}
+								</div>
+								<div>
+									<strong>Status:</strong> {artist.status || "Not set"}
+								</div>
+								<div>
+									<strong>Member Since:</strong>{" "}
+									{artist.member_since || "Not set"}
 								</div>
 								<div className={styles.fullWidth}>
 									<strong>Bio:</strong> {artist.bio || "Not set"}

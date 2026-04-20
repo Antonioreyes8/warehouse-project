@@ -16,6 +16,7 @@
  *   - Used in layout.tsx to provide consistent navigation/branding across all pages
  */
 
+"use client";
 
 // Header component
 // Displays the main site title in the header with artist login link
@@ -23,9 +24,7 @@ export default function Header() {
 	return (
 		<header>
 			<div className="Header">
-				<h1 className="title">
-					The Warehouse Project
-				</h1>
+				<h1 className="title">The Warehouse Project</h1>
 			</div>
 		</header>
 	);

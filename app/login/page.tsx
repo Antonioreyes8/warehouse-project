@@ -15,7 +15,7 @@
 
 "use client";
 
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./login.module.css";
@@ -32,7 +32,7 @@ export default function LoginPage() {
 				data: { session },
 			} = await supabase.auth.getSession();
 			if (session) {
-				router.push("/artists/profile");
+				router.push("/dashboard/profile");
 			}
 		};
 		checkUser();
@@ -42,7 +42,7 @@ export default function LoginPage() {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((event, session) => {
 			if (event === "SIGNED_IN" && session) {
-				router.push("/artists/profile");
+				router.push("/dashboard/profile");
 			}
 		});
 
@@ -57,7 +57,7 @@ export default function LoginPage() {
 			const { error } = await supabase.auth.signInWithOAuth({
 				provider: "google",
 				options: {
-					redirectTo: `${window.location.origin}/artists/profile`,
+					redirectTo: `${window.location.origin}/dashboard/profile`,
 				},
 			});
 

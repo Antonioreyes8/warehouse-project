@@ -2,6 +2,7 @@
 
 import styles from "./linktree.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 import {
 	faPaperPlane,
@@ -12,7 +13,13 @@ import {
 	faCrown,
 } from "@fortawesome/free-solid-svg-icons";
 
-const aboutlinks = [
+type LinkItem = {
+	title: string;
+	url: string;
+	icon: IconProp;
+};
+
+const aboutlinks: LinkItem[] = [
 	{ title: "Manifesto", url: "/manifesto", icon: faHeart },
 	{
 		title: "Community Guidelines",
@@ -22,20 +29,20 @@ const aboutlinks = [
 	{ title: "FAQ", url: "/FAQ", icon: faQuestion },
 ];
 
-const contactlinks = [
+const contactlinks: LinkItem[] = [
 	{
 		title: "Application to join",
 		url: "https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=dialog",
 		icon: faStar,
 	},
 	{
-		title: "Make anonymous tip",
+		title: "Tip line",
 		url: "https://docs.google.com/forms/d/e/1FAIpQLSfTwTgewINwYUD3gcaODLd3x_MQkMU30CfUNmlpeT9bvzZR5g/viewform?usp=dialog",
 		icon: faCircleExclamation,
 	},
 ];
 
-const sociallinks = [
+const sociallinks: LinkItem[] = [
 	{
 		title: "Instagram",
 		url: "https://www.instagram.com/diaspora.sound",
@@ -51,7 +58,7 @@ export default function LinksPage() {
 		alert("Link copied!");
 	};
 
-	const renderLinks = (links: any[]) =>
+	const renderLinks = (links: LinkItem[]) =>
 		links.map((link, i) => (
 			<div key={i} className={styles.linkRow}>
 				<a href={link.url} className={styles.link}>

@@ -85,9 +85,39 @@
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
+	.aboutSection {
+		padding: 20px;
+		gap: 20px;
+		flex-direction: column;
+	}
+
+	.headerContainer,
+	.infoandlinksContainer,
+	.bioContainer,
+	.infoContainer,
+	.linksContainer {
+		min-width: 0;
+		width: 100%;
+	}
+
+	.headerContainer,
+	.bioContainer,
+	.infoContainer,
+	.linksContainer {
+		padding: 20px;
+	}
+
+	.headerContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
 	.headerContainer img {
-		width: 160px;
-		height: 220px;
+		width: min(100%, 280px);
+		height: auto;
+		max-height: 360px;
 	}
 
 	.infoContainer {
@@ -104,5 +134,14 @@
 	.rightColumn {
 		padding-left: 0;
 		padding-top: 8px;
+	}
+
+	.linksContainer {
+		justify-content: flex-start;
+	}
+
+	.socialLink svg {
+		width: 2.25rem;
+		height: 2.25rem;
 	}
 }

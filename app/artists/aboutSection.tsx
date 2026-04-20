@@ -15,7 +15,7 @@
  *   - Used in artist pages to display profile information
  */
 
-import { Artist } from "../../lib/getArtists";
+import { Artist } from "../../lib/artists/queries";
 import styles from "./artists.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -51,7 +51,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 					/>
 				)}
 				<h2>{profile.name}</h2>
-				<p>@{profile.username} (He/Him)</p>
+				<p>@{profile.username}</p>
 			</div>
 			{/* Main content area with info and bio */}
 			<div className={styles.infoandlinksContainer}>
@@ -59,37 +59,37 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 				<div className={styles.infoContainer}>
 					<div className={styles.leftColumn}>
 						<h3>Age:</h3>
-						<p>25</p>
+						<p>{profile.age || "Not provided"}</p>
 						<br></br>
 
 						<h3>Based in:</h3>
-						<p>Denton, Tx</p>
+						<p>{profile.based_in || "Not provided"}</p>
 						<br></br>
 
 						<h3>Mediums:</h3>
-						<p>Performance, Installation, Video</p>
+						<p>{profile.mediums || "Not provided"}</p>
 						<br></br>
 
 						<h3>Past Projects:</h3>
-						<p>Warehouse Project, Solo Show at XYZ Gallery</p>
+						<p>{profile.past_projects || "Not provided"}</p>
 						<br></br>
 					</div>
 
 					<div className={styles.rightColumn}>
 						<h3>Ethnic background:</h3>
-						<p>Hispanic/Latino</p>
+						<p>{profile.ethnic_background || "Not provided"}</p>
 						<br></br>
 
 						<h3>Contact:</h3>
-						<p>tony@surco.studio</p>
+						<p>{profile.contact || "Not provided"}</p>
 						<br></br>
 
 						<h3>Status:</h3>
-						<p>Open for work</p>
+						<p>{profile.status || "Not provided"}</p>
 						<br></br>
 
 						<h3>Member since:</h3>
-						<p>May 2025</p>
+						<p>{profile.member_since || "Not provided"}</p>
 					</div>
 				</div>
 				{/* Bio section */}

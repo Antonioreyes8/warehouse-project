@@ -4,15 +4,13 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f9f9f9;
+	background-color: #2a2a2a;
 	padding: 20px;
 }
 
 .loginCard {
-	background: white;
-	padding: 2rem;
-	border-radius: 8px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	background-color: #d3d3d3;
+	padding: 32px;
 	width: 100%;
 	max-width: 400px;
 }
@@ -20,57 +18,67 @@
 .loginTitle {
 	text-align: center;
 	margin-bottom: 1.5rem;
+	font-family: "HelveticaNeue", sans-serif;
 	font-size: 1.5rem;
-	font-weight: bold;
-	color: #333;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: #2a2a2a;
 }
 
 .loginDescription {
 	text-align: center;
 	margin-bottom: 2rem;
-	color: #666;
+	color: #444;
+	font-family: "HelveticaNeue", sans-serif;
 	font-size: 0.9rem;
+	font-weight: 300;
 }
 
 .loginButton {
 	width: 100%;
-	background-color: #4285f4;
-	color: white;
-	border: none;
+	background: transparent;
+	color: #2a2a2a;
+	border: 1px solid #2a2a2a;
 	padding: 12px 24px;
-	border-radius: 4px;
-	font-size: 1rem;
-	font-weight: 500;
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
 	cursor: pointer;
-	transition: background-color 0.2s;
+	transition:
+		background-color 0.2s,
+		color 0.2s;
 }
 
 .loginButton:hover:not(:disabled) {
-	background-color: #3367d6;
+	background-color: #2a2a2a;
+	color: #d3d3d3;
 }
 
 .loginButton:disabled {
-	background-color: #ccc;
+	opacity: 0.5;
 	cursor: not-allowed;
-	opacity: 0.7;
 }
 
 .loginMessage {
 	margin-top: 1rem;
 	padding: 0.75rem;
-	border-radius: 4px;
 	text-align: center;
+	font-family: "HelveticaNeue", sans-serif;
 	font-size: 0.9rem;
+	font-weight: 300;
 }
 
 .loginMessage.error {
-	background-color: #fee;
-	color: #c33;
-	border: 1px solid #fcc;
+	background-color: #3a1a1a;
+	color: #f5a5a5;
+	border-left: 3px solid #f5a5a5;
 }
 
 .loginMessage.success {
-	background-color: #efe;
-	color: #363;
-	border: 1px solid #cfc;
+	background-color: #1a3a1a;
+	color: #a5f5a5;
+	border-left: 3px solid #a5f5a5;
 }

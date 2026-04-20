@@ -1,0 +1,226 @@
+/* ── Page shell ────────────────────────────────────────────── */
+.profileContainer {
+	min-height: 100vh;
+	background-color: #2a2a2a;
+	font-family: "HelveticaNeue", sans-serif;
+	color: #d3d3d3;
+	padding: 32px;
+}
+
+/* ── Header bar ─────────────────────────────────────────────── */
+.profileHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 32px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid #444;
+}
+
+.profileTitle {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 2rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	color: #d3d3d3;
+	margin: 0;
+}
+
+/* ── Main content area ──────────────────────────────────────── */
+.profileContent {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+/* ── Section panels (match #d3d3d3 card from artists page) ─── */
+.profileSection {
+	background-color: #d3d3d3;
+	padding: 32px;
+	color: #2a2a2a;
+}
+
+.sectionTitle {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 1rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-bottom: 24px;
+	color: #2a2a2a;
+}
+
+.profileSection a {
+	color: #2a2a2a;
+	text-decoration: underline;
+}
+
+.profileSection a:hover {
+	color: #555;
+}
+
+/* ── Form layout ────────────────────────────────────────────── */
+.formGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+.fullWidth {
+	grid-column: 1 / -1;
+}
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.formLabel {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: #2a2a2a;
+}
+
+.formInput,
+.formTextarea {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.95rem;
+	font-weight: 300;
+	padding: 0.5rem 0.6rem;
+	border: 1px solid #2a2a2a;
+	background: #fff;
+	color: #2a2a2a;
+	outline: none;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+	border-color: #2a2a2a;
+	outline: 2px solid #2a2a2a;
+	outline-offset: 0;
+}
+
+.formTextarea {
+	min-height: 100px;
+	resize: vertical;
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.buttonGroup {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+
+.viewPublicButton,
+.saveButton,
+.cancelButton,
+.signOutButton,
+.backButton {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	padding: 0.55rem 1rem;
+	cursor: pointer;
+	border: 1px solid #d3d3d3;
+	background: transparent;
+	color: #d3d3d3;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.viewPublicButton:hover,
+.saveButton:hover,
+.cancelButton:hover,
+.signOutButton:hover,
+.backButton:hover {
+	background: #d3d3d3;
+	color: #2a2a2a;
+}
+
+/* ── Status messages ────────────────────────────────────────── */
+.message {
+	padding: 0.75rem 1rem;
+	font-size: 0.9rem;
+	font-weight: 300;
+}
+
+.success {
+	background-color: #444;
+	color: #d3d3d3;
+	border-left: 3px solid #d3d3d3;
+}
+
+.error {
+	background-color: #3a1a1a;
+	color: #f5a5a5;
+	border-left: 3px solid #f5a5a5;
+}
+
+/* ── Loading / access-denied states ────────────────────────── */
+.loading {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #2a2a2a;
+	color: #d3d3d3;
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 1rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.unauthorized {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	background-color: #2a2a2a;
+	color: #d3d3d3;
+	font-family: "HelveticaNeue", sans-serif;
+	padding: 2rem;
+	text-align: center;
+}
+
+.unauthorized h2 {
+	font-size: 1.5rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.unauthorized p {
+	font-weight: 300;
+	color: #aaa;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+	.profileContainer {
+		padding: 16px;
+	}
+
+	.profileHeader {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 16px;
+	}
+
+	.formGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.buttonGroup {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}

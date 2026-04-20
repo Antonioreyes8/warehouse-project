@@ -17,7 +17,7 @@
  */
 
 import AboutSection from "../aboutSection";
-import { getArtistByUsername } from "../../../lib/getArtists";
+import { getArtistByUsername } from "../../../lib/artists/queries";
 
 interface ArtistPageProps {
 	params: Promise<{ slug: string }> | { slug: string };

@@ -17,7 +17,7 @@
  *   - Used by project recap sections to dynamically load media from storage
  */
 
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import { Media } from "@/app/projects/data";
 
 /**

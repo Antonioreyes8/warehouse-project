@@ -14,8 +14,8 @@
  *   - Provides backend API functions for artist profile management
  */
 
-import { supabase } from "./supabaseClient";
-import type { Artist } from "./getArtists";
+import { supabase } from "../supabase/client";
+import type { Artist } from "./queries";
 
 /**
  * Updates an artist profile in the database.
@@ -24,50 +24,53 @@ import type { Artist } from "./getArtists";
  * @returns Promise<{ success: boolean; error?: string }>
  */
 export async function updateArtistProfile(
-	artistId: string,
+	artistId: string | number,
+	artistEmail: string | null,
 	updates: Partial<Omit<Artist, "id" | "email">>,
 ): Promise<{ success: boolean; error?: string }> {
 	try {
-		const { error } = await supabase
-			.from("profiles")
-			.update(updates)
-			.eq("id", artistId);
+		const numericId = Number(artistId);
 
-		if (error) {
-			console.error("Error updating artist profile:", error);
-			return { success: false, error: error.message };
+		if (Number.isFinite(numericId)) {
+			const { data, error } = await supabase
+				.from("profiles")
+				.update(updates)
+				.eq("id", numericId)
+				.select("id");
+
+			if (error) {
+				console.error("Error updating artist profile by id:", error);
+				return { success: false, error: error.message };
+			}
+
+			if (data && data.length > 0) {
+				return { success: true };
+			}
 		}
 
-		return { success: true };
+		if (artistEmail?.trim()) {
+			const { data, error } = await supabase
+				.from("profiles")
+				.update(updates)
+				.ilike("email", artistEmail.trim().toLowerCase())
+				.select("id");
+
+			if (error) {
+				console.error("Error updating artist profile by email:", error);
+				return { success: false, error: error.message };
+			}
+
+			if (data && data.length > 0) {
+				return { success: true };
+			}
+		}
+
+		return {
+			success: false,
+			error: "No matching profile row found to update",
+		};
 	} catch (error) {
 		console.error("Unexpected error updating profile:", error);
-		return { success: false, error: "Unexpected error occurred" };
-	}
-}
-
-/**
- * Creates a new artist profile (admin only).
- * @param profile - The profile data to create
- * @returns Promise<{ success: boolean; error?: string; data?: Artist }>
- */
-export async function createArtistProfile(
-	profile: Omit<Artist, "id">,
-): Promise<{ success: boolean; error?: string; data?: Artist }> {
-	try {
-		const { data, error } = await supabase
-			.from("profiles")
-			.insert(profile)
-			.select()
-			.single();
-
-		if (error) {
-			console.error("Error creating artist profile:", error);
-			return { success: false, error: error.message };
-		}
-
-		return { success: true, data };
-	} catch (error) {
-		console.error("Unexpected error creating profile:", error);
 		return { success: false, error: "Unexpected error occurred" };
 	}
 }
