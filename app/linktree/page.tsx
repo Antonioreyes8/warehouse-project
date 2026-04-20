@@ -1,53 +1,70 @@
 import styles from "./linktree.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+	faHome,
+	faFolder,
+	faLink,
+	faShareNodes,
+} from "@fortawesome/free-solid-svg-icons";
 
-const aboutlinks = [{ title: "Manifesto", url: "/manifesto" }];
+const aboutlinks = [
+	{ title: "Manifesto", url: "/manifesto", icon: faFolder },
+];
+
 const contactlinks = [
 	{
 		title: "Application",
-		url: "/https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=dialog",
+		url: "https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=dialog",
+		icon: faHome,
 	},
 ];
+
 const sociallinks = [
 	{
 		title: "Instagram",
-		url: "https://www.instagram.com/warehouseprojectdenton/",
+		url: "https://www.instagram.com/diaspora.sound",
+		icon: faLink,
 	},
 ];
 
 export default function LinksPage() {
+	const handleShare = (url: string) => {
+		navigator.clipboard.writeText(window.location.origin + url);
+		alert("Link copied!");
+	};
+
+	const renderLinks = (links: any[]) =>
+		links.map((link, i) => (
+			<div key={i} className={styles.linkRow}>
+				<a href={link.url} className={styles.link}>
+					<span className={styles.left}>
+						<FontAwesomeIcon icon={link.icon} />
+						{link.title}
+					</span>
+				</a>
+
+				<button
+					className={styles.share}
+					onClick={() => handleShare(link.url)}
+				>
+					<FontAwesomeIcon icon={faShareNodes} />
+				</button>
+			</div>
+		));
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.card}>
-				<h1 className={styles.title}>The Warehouse Project LinkTree</h1>
-				<p className={styles.subtitle}>About us</p>
+				<h1 className={styles.title}>LinkTree</h1>
 
-				<div className={styles.links}>
-					{aboutlinks.map((aboutlink, i) => (
-						<a key={i} href={aboutlink.url} className={styles.link}>
-							{aboutlink.title}
-						</a>
-					))}
-				</div>
+				<p className={styles.subtitle}>About</p>
+				<div className={styles.links}>{renderLinks(aboutlinks)}</div>
 
-				<p className={styles.subtitle}>Contact forms</p>
-
-				<div className={styles.links}>
-					{contactlinks.map((contactlink, i) => (
-						<a key={i} href={contactlink.url} className={styles.link}>
-							{contactlink.title}
-						</a>
-					))}
-				</div>
+				<p className={styles.subtitle}>Forms</p>
+				<div className={styles.links}>{renderLinks(contactlinks)}</div>
 
 				<p className={styles.subtitle}>Social</p>
-
-				<div className={styles.links}>
-					{sociallinks.map((sociallink, i) => (
-						<a key={i} href={sociallink.url} className={styles.link}>
-							{sociallink.title}
-						</a>
-					))}
-				</div>
+				<div className={styles.links}>{renderLinks(sociallinks)}</div>
 			</div>
 		</div>
 	);
