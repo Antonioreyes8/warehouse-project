@@ -26,6 +26,19 @@
 	margin: 0;
 }
 
+.profileIntro {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.profileGreeting {
+	font-size: 1rem;
+	font-weight: 300;
+	color: #d3d3d3;
+	margin: 0;
+}
+
 /* ── Main content area ──────────────────────────────────────── */
 .profileContent {
 	display: flex;
@@ -53,6 +66,10 @@
 .profileSection a {
 	color: #2a2a2a;
 	text-decoration: underline;
+	font-size: 0.95rem;
+	font-weight: 300;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 
 .profileSection a:hover {
@@ -64,6 +81,13 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
+}
+
+.formGrid > div {
+	font-size: 0.95rem;
+	font-weight: 300;
+	line-height: 1.45;
+	min-width: 0;
 }
 
 .fullWidth {
@@ -217,6 +241,11 @@
 
 	.formGrid {
 		grid-template-columns: 1fr;
+	}
+
+	.profileSection a {
+		display: inline;
+		max-width: 100%;
 	}
 
 	.buttonGroup {

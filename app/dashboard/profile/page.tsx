@@ -32,6 +32,33 @@ import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import styles from "./profile.module.css";
 
+const STATUS_OPTIONS = [
+	"Open for Work",
+	"Available for Commissions",
+	"Available for Collaborations",
+	"Not Currently Available",
+	"On Hiatus",
+	"Student",
+	"Other",
+];
+
+function calculateAgeFromBirthDate(birthDate: string): string {
+	if (!birthDate) return "";
+
+	const birth = new Date(birthDate);
+	if (Number.isNaN(birth.getTime())) return "";
+
+	const today = new Date();
+	let age = today.getFullYear() - birth.getFullYear();
+	const monthDiff = today.getMonth() - birth.getMonth();
+
+	if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+		age -= 1;
+	}
+
+	return age >= 0 ? String(age) : "";
+}
+
 export default function ArtistProfilePage() {
 	const router = useRouter();
 	const [user, setUser] = useState<User | null>(null);
@@ -46,7 +73,7 @@ export default function ArtistProfilePage() {
 		name: "",
 		username: "",
 		bio: "",
-		age: "",
+		birthday: "",
 		based_in: "",
 		mediums: "",
 		past_projects: "",
@@ -97,7 +124,7 @@ export default function ArtistProfilePage() {
 						name: profile.name || "",
 						username: profile.username || "",
 						bio: profile.bio || "",
-						age: profile.age || "",
+						birthday: profile.birthday || "",
 						based_in: profile.based_in || "",
 						mediums: profile.mediums || "",
 						past_projects: profile.past_projects || "",
@@ -125,9 +152,20 @@ export default function ArtistProfilePage() {
 	}, [router]);
 
 	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		>,
 	) => {
 		const { name, value } = e.target;
+
+		if (name === "birthday") {
+			setFormData((prev) => ({
+				...prev,
+				birthday: value,
+			}));
+			return;
+		}
+
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
@@ -137,10 +175,14 @@ export default function ArtistProfilePage() {
 		setSaving(true);
 		setMessage("");
 
+		const payload = {
+			...formData,
+		};
+
 		const result = await updateArtistProfile(
 			artist.id,
 			artist.email ?? null,
-			formData,
+			payload,
 		);
 
 		if (result.success) {
@@ -166,7 +208,7 @@ export default function ArtistProfilePage() {
 				name: artist.name || "",
 				username: artist.username || "",
 				bio: artist.bio || "",
-				age: artist.age || "",
+				birthday: artist.birthday || "",
 				based_in: artist.based_in || "",
 				mediums: artist.mediums || "",
 				past_projects: artist.past_projects || "",
@@ -224,10 +266,16 @@ export default function ArtistProfilePage() {
 		);
 	}
 
+	const greetingName =
+		artist.name?.trim().split(" ")[0] || user?.email?.split("@")[0] || "Artist";
+
 	return (
 		<div className={styles.profileContainer}>
 			<header className={styles.profileHeader}>
-				<h1 className={styles.profileTitle}>My Artist Profile</h1>
+				<div className={styles.profileIntro}>
+					<h1 className={styles.profileTitle}>My Artist Profile</h1>
+					<p className={styles.profileGreeting}>Hi {greetingName}!</p>
+				</div>
 				<div>
 					{!editing && (
 						<button
@@ -295,15 +343,14 @@ export default function ArtistProfilePage() {
 									/>
 								</div>
 								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="age">
-										Age
+									<label className={styles.formLabel} htmlFor="birthday">
+										Birth Date
 									</label>
 									<input
-										type="text"
-										id="age"
-										name="age"
-										value={formData.age}
-										placeholder={artist.age || ""}
+										type="date"
+										id="birthday"
+										name="birthday"
+										value={formData.birthday}
 										onChange={handleInputChange}
 										className={styles.formInput}
 									/>
@@ -385,15 +432,20 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="status">
 										Status
 									</label>
-									<input
-										type="text"
+									<select
 										id="status"
 										name="status"
 										value={formData.status}
-										placeholder={artist.status || ""}
 										onChange={handleInputChange}
 										className={styles.formInput}
-									/>
+									>
+										<option value="">Select status</option>
+										{STATUS_OPTIONS.map((option) => (
+											<option key={option} value={option}>
+												{option}
+											</option>
+										))}
+									</select>
 								</div>
 								<div className={styles.formGroup}>
 									<label className={styles.formLabel} htmlFor="member_since">
@@ -576,7 +628,12 @@ export default function ArtistProfilePage() {
 									<strong>Username:</strong> {artist.username}
 								</div>
 								<div>
-									<strong>Age:</strong> {artist.age || "Not set"}
+									<strong>Age:</strong>{" "}
+									{calculateAgeFromBirthDate(artist.birthday || "") ||
+										"Not set"}
+								</div>
+								<div>
+									<strong>Birth Date:</strong> {artist.birthday || "Not set"}
 								</div>
 								<div>
 									<strong>Based In:</strong> {artist.based_in || "Not set"}

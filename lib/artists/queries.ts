@@ -25,7 +25,7 @@ export type Artist = {
 	username: string;
 	bio: string | null;
 	avatar_url: string | null;
-	age?: string | null;
+	birthday?: string | null;
 	based_in?: string | null;
 	mediums?: string | null;
 	past_projects?: string | null;

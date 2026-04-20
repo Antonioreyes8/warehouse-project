@@ -38,6 +38,22 @@ interface AboutSectionProps {
 	profile: Artist;
 }
 
+function calculateAgeFromBirthday(birthday: string | null | undefined): string {
+	if (!birthday) return "Not provided";
+	const birth = new Date(birthday);
+	if (Number.isNaN(birth.getTime())) return "Not provided";
+
+	const today = new Date();
+	let age = today.getFullYear() - birth.getFullYear();
+	const monthDiff = today.getMonth() - birth.getMonth();
+
+	if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+		age -= 1;
+	}
+
+	return age >= 0 ? String(age) : "Not provided";
+}
+
 export default function AboutSection({ profile }: AboutSectionProps) {
 	return (
 		<section className={styles.aboutSection}>
@@ -58,38 +74,41 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 				{/* Personal information in two columns */}
 				<div className={styles.infoContainer}>
 					<div className={styles.leftColumn}>
-						<h3>Age:</h3>
-						<p>{profile.age || "Not provided"}</p>
-						<br></br>
-
-						<h3>Based in:</h3>
-						<p>{profile.based_in || "Not provided"}</p>
-						<br></br>
-
-						<h3>Mediums:</h3>
-						<p>{profile.mediums || "Not provided"}</p>
-						<br></br>
-
-						<h3>Past Projects:</h3>
-						<p>{profile.past_projects || "Not provided"}</p>
-						<br></br>
+						<div className={styles.infoRow}>
+							<h3>Age:</h3>
+							<p>{calculateAgeFromBirthday(profile.birthday)}</p>
+						</div>
+						<div className={styles.infoRow}>
+							<h3>Based in:</h3>
+							<p>{profile.based_in || "Not provided"}</p>
+						</div>
+						<div className={styles.infoRow}>
+							<h3>Mediums:</h3>
+							<p>{profile.mediums || "Not provided"}</p>
+						</div>
+						<div className={styles.infoRow}>
+							<h3>Past Projects:</h3>
+							<p>{profile.past_projects || "Not provided"}</p>
+						</div>
 					</div>
 
 					<div className={styles.rightColumn}>
-						<h3>Ethnic background:</h3>
-						<p>{profile.ethnic_background || "Not provided"}</p>
-						<br></br>
-
-						<h3>Contact:</h3>
-						<p>{profile.contact || "Not provided"}</p>
-						<br></br>
-
-						<h3>Status:</h3>
-						<p>{profile.status || "Not provided"}</p>
-						<br></br>
-
-						<h3>Member since:</h3>
-						<p>{profile.member_since || "Not provided"}</p>
+						<div className={styles.infoRow}>
+							<h3>Ethnic background:</h3>
+							<p>{profile.ethnic_background || "Not provided"}</p>
+						</div>
+						<div className={styles.infoRow}>
+							<h3>Contact:</h3>
+							<p>{profile.contact || "Not provided"}</p>
+						</div>
+						<div className={styles.infoRow}>
+							<h3>Status:</h3>
+							<p>{profile.status || "Not provided"}</p>
+						</div>
+						<div className={styles.infoRow}>
+							<h3>Member since:</h3>
+							<p>{profile.member_since || "Not provided"}</p>
+						</div>
 					</div>
 				</div>
 				{/* Bio section */}
