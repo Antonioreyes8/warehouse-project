@@ -30,6 +30,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+	flex: 1;
+	min-width: 0;
 }
 
 .profileGreeting {
@@ -37,6 +39,18 @@
 	font-weight: 300;
 	color: #d3d3d3;
 	margin: 0;
+	max-width: 62ch;
+	line-height: 1.5;
+}
+
+.headerActions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-items: flex-start;
+	gap: 12px;
+	margin-left: 24px;
+	flex-shrink: 0;
 }
 
 /* ── Main content area ──────────────────────────────────────── */
@@ -290,6 +304,11 @@
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 16px;
+	}
+
+	.headerActions {
+		margin-left: 0;
+		justify-content: flex-start;
 	}
 
 	.formGrid {

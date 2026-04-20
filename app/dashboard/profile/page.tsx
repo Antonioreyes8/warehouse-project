@@ -402,12 +402,11 @@ export default function ArtistProfilePage() {
 						work !
 					</p>
 				</div>
-				<div>
+				<div className={styles.headerActions}>
 					{!editing && (
 						<button
 							onClick={() => setEditing(true)}
 							className={styles.viewPublicButton}
-							style={{ marginRight: "1rem" }}
 						>
 							Edit Profile
 						</button>
