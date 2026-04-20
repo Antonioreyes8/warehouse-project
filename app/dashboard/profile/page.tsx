@@ -395,7 +395,12 @@ export default function ArtistProfilePage() {
 			<header className={styles.profileHeader}>
 				<div className={styles.profileIntro}>
 					<h1 className={styles.profileTitle}>My Artist Profile</h1>
-					<p className={styles.profileGreeting}>Hi {greetingName}!</p>
+					<p className={styles.profileGreeting}>
+						Hi {greetingName}! Welcome to your artist dashboard, here you can
+						see all the info publicly displayed. Thank you for being part of our
+						community! Please use take advantage of this space and share your
+						work !
+					</p>
 				</div>
 				<div>
 					{!editing && (
