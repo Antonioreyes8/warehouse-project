@@ -25,7 +25,7 @@
 
 .subtitle {
 	margin-bottom: 28px;
-    margin-top: 28px;
+	margin-top: 28px;
 }
 
 .links {
@@ -34,28 +34,60 @@
 	gap: 14px;
 }
 
-.link {
-	display: block;
-	padding: 16px;
-	border-radius: 12px;
+/* 🔥 KEY LAYOUT */
+.linkRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	background-color: #2a2a2a;
+	border-radius: 12px;
+	padding: 0;
+	overflow: hidden;
+}
+
+.link {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	padding: 16px;
 	text-decoration: none;
 	color: white;
 	font-weight: 500;
 	font-size: 16px;
-	transition: all 0.2s ease;
+	gap: 12px;
 }
 
-.link:hover {
-    background-color: #444;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+/* LEFT ICON */
+.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
 }
 
-/* ----------------------------- */
-/* 📱 Tablet + Mobile breakpoint */
-/* ----------------------------- */
+/* CENTER TEXT */
+.text {
+	flex: 1;
+	text-align: left;
+}
 
+/* RIGHT SHARE BUTTON */
+.share {
+	background: none;
+	border: none;
+	color: white;
+	padding: 16px;
+	cursor: pointer;
+}
+
+/* Hover */
+.linkRow:hover {
+	background-color: #444;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* 📱 Tablet + Mobile */
 @media (max-width: 768px) {
 	.card {
 		max-width: 100%;
@@ -75,7 +107,10 @@
 	.link {
 		padding: 14px;
 		font-size: 15px;
-		border-radius: 10px;
+	}
+
+	.share {
+		padding: 14px;
 	}
 
 	.links {
