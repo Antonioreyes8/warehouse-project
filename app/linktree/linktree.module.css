@@ -24,6 +24,7 @@
 }
 
 .subtitle {
+	font-size: 24px;
 	margin-bottom: 28px;
 	margin-top: 28px;
 }
@@ -100,7 +101,7 @@
 	}
 
 	.subtitle {
-		font-size: 13px;
+		font-size: 18px;
 		margin-bottom: 20px;
 	}
 
