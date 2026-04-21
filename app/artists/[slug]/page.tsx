@@ -17,10 +17,29 @@
  */
 
 import AboutSection from "../aboutSection";
-import { getArtistByUsername } from "../../../lib/artists/queries";
+import Image from "next/image";
+import styles from "../artists.module.css";
+import {
+	getArtistByUsername,
+	getArtistWorksByProfileId,
+} from "../../../lib/artists/queries";
 
 interface ArtistPageProps {
 	params: Promise<{ slug: string }> | { slug: string };
+}
+
+function hasText(value: string | null | undefined): boolean {
+	return Boolean(value?.trim());
+}
+
+function normalizeExternalUrl(value?: string | null): string | null {
+	if (!value?.trim()) return null;
+
+	const trimmedValue = value.trim();
+	return trimmedValue.startsWith("http://") ||
+		trimmedValue.startsWith("https://")
+		? trimmedValue
+		: `https://${trimmedValue}`;
 }
 
 /**
@@ -48,5 +67,76 @@ export default async function ArtistPage(props: ArtistPageProps) {
 		return <div>This artist hasn’t created their page yet.</div>;
 	}
 
-	return <AboutSection profile={profile} />;
+	const works = await getArtistWorksByProfileId(profile.id);
+	const visibleWorks = works.filter(
+		(work) =>
+			hasText(work.image_url) ||
+			hasText(work.title) ||
+			hasText(work.description),
+	);
+
+	return (
+		<div className={styles.artistPage}>
+			<AboutSection profile={profile} works={[]} />
+			{visibleWorks.length > 0 && (
+				<section className={styles.worksSection}>
+					<h2 className={styles.workHeading}>Works</h2>
+					<div className={styles.workList}>
+						{visibleWorks.map((work) => {
+							const workLinkUrl = normalizeExternalUrl(work.link_url);
+
+							return (
+								<div className={styles.workSection} key={work.id}>
+									<div className={styles.workInner}>
+										<div className={styles.workArtwork}>
+											{work.image_url ? (
+												workLinkUrl ? (
+													<a
+														href={workLinkUrl}
+														target="_blank"
+														rel="noopener noreferrer"
+														className={styles.workImageLink}
+													>
+														<Image
+															src={work.image_url}
+															alt={`${profile.name} featured work`}
+															width={320}
+															height={320}
+															className={styles.workImage}
+														/>
+													</a>
+												) : (
+													<Image
+														src={work.image_url}
+														alt={`${profile.name} featured work`}
+														width={320}
+														height={320}
+														className={styles.workImage}
+													/>
+												)
+											) : null}
+										</div>
+										<div className={styles.workCopy}>
+											<h3>{work.title || "Featured Work"}</h3>
+											{hasText(work.description) && <p>{work.description}</p>}
+											{workLinkUrl && (
+												<a
+													href={workLinkUrl}
+													target="_blank"
+													rel="noopener noreferrer"
+													className={styles.workLink}
+												>
+													View Work
+												</a>
+											)}
+										</div>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</section>
+			)}
+		</div>
+	);
 }

@@ -95,6 +95,7 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
+	width: 100%;
 }
 
 .formGrid > div {
@@ -133,6 +134,58 @@
 	flex-direction: column;
 	align-items: flex-start;
 	gap: 10px;
+}
+
+.workPreview,
+.workCard {
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+	width: 100%;
+}
+
+.workMedia {
+	width: 220px;
+	flex-shrink: 0;
+}
+
+.workContent {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 10px;
+	font-size: 0.95rem;
+	font-weight: 300;
+	line-height: 1.45;
+	min-width: 0;
+}
+
+.workImage {
+	width: 220px;
+	height: 220px;
+	object-fit: cover;
+	border: 1px solid #2a2a2a;
+	background: #fff;
+}
+
+.workPlaceholder {
+	width: 220px;
+	min-height: 220px;
+	border: 1px dashed #2a2a2a;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.8rem;
+	font-weight: 300;
+	padding: 8px;
+	text-align: center;
+	background: #f4f4f4;
+	color: #2a2a2a;
+}
+
+.workImageLink {
+	display: inline-flex;
 }
 
 .avatarDisplayRow strong {
@@ -207,6 +260,10 @@
 	align-items: center;
 }
 
+.profileSection .buttonGroup {
+	margin-bottom: 16px;
+}
+
 .viewPublicButton,
 .saveButton,
 .cancelButton,
@@ -233,6 +290,26 @@
 .backButton:hover {
 	background: #d3d3d3;
 	color: #2a2a2a;
+}
+
+.sectionButton {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	padding: 0.55rem 1rem;
+	cursor: pointer;
+	border: 1px solid #2a2a2a;
+	background: transparent;
+	color: #2a2a2a;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.sectionButton:hover {
+	background: #2a2a2a;
+	color: #d3d3d3;
 }
 
 /* ── Status messages ────────────────────────────────────────── */
@@ -317,6 +394,20 @@
 
 	.avatarField {
 		gap: 10px;
+	}
+
+	.workImage,
+	.workPlaceholder {
+		width: min(100%, 220px);
+	}
+
+	.workPreview,
+	.workCard {
+		flex-wrap: wrap;
+	}
+
+	.workMedia {
+		width: 100%;
 	}
 
 	.avatarControls {

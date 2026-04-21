@@ -19,6 +19,15 @@
 import { supabase } from "../supabase/client";
 import type { Artist } from "./queries";
 
+export type ArtistWorkInput = {
+	id?: number;
+	title?: string | null;
+	description?: string | null;
+	image_url?: string | null;
+	link_url?: string | null;
+	sort_order?: number;
+};
+
 /**
  * Updates an artist profile in the database.
  * @param artistId - The ID of the artist to update
@@ -109,6 +118,116 @@ export async function deleteArtistProfile(
 		return { success: true };
 	} catch (error) {
 		console.error("Unexpected error deleting profile:", error);
+		return { success: false, error: "Unexpected error occurred" };
+	}
+}
+
+export async function syncArtistWorks(
+	profileId: string | number,
+	works: ArtistWorkInput[],
+): Promise<{ success: boolean; error?: string }> {
+	try {
+		// Normalize and keep only meaningful rows.
+		const normalizedWorks = works
+			.map((work, index) => ({
+				id: work.id,
+				title: work.title?.trim() || null,
+				description: work.description?.trim() || null,
+				image_url: work.image_url?.trim() || null,
+				link_url: work.link_url?.trim() || null,
+				sort_order: work.sort_order ?? index,
+			}))
+			.filter(
+				(work) =>
+					Boolean(work.title) ||
+					Boolean(work.description) ||
+					Boolean(work.image_url) ||
+					Boolean(work.link_url),
+			);
+
+		const { data: existingRows, error: existingRowsError } = await supabase
+			.from("artist_works")
+			.select("id")
+			.eq("profile_id", profileId);
+
+		if (existingRowsError) {
+			console.error("Error fetching existing artist works:", existingRowsError);
+			return { success: false, error: existingRowsError.message };
+		}
+
+		const existingIds = (existingRows ?? []).map((row) => row.id);
+		const keptIds = normalizedWorks
+			.map((work) => work.id)
+			.filter((id): id is number => typeof id === "number");
+
+		if (normalizedWorks.length > 0) {
+			const worksToUpdate = normalizedWorks.filter(
+				(work): work is typeof work & { id: number } =>
+					typeof work.id === "number",
+			);
+			const worksToInsert = normalizedWorks.filter(
+				(work) => typeof work.id !== "number",
+			);
+
+			if (worksToUpdate.length > 0) {
+				const updatePayload = worksToUpdate.map((work) => ({
+					id: work.id,
+					profile_id: profileId,
+					title: work.title,
+					description: work.description,
+					image_url: work.image_url,
+					link_url: work.link_url,
+					sort_order: work.sort_order,
+				}));
+
+				const { error: upsertError } = await supabase
+					.from("artist_works")
+					.upsert(updatePayload, { onConflict: "id" });
+
+				if (upsertError) {
+					console.error("Error upserting artist works:", upsertError);
+					return { success: false, error: upsertError.message };
+				}
+			}
+
+			if (worksToInsert.length > 0) {
+				const insertPayload = worksToInsert.map((work) => ({
+					profile_id: profileId,
+					title: work.title,
+					description: work.description,
+					image_url: work.image_url,
+					link_url: work.link_url,
+					sort_order: work.sort_order,
+				}));
+
+				const { error: insertError } = await supabase
+					.from("artist_works")
+					.insert(insertPayload);
+
+				if (insertError) {
+					console.error("Error inserting artist works:", insertError);
+					return { success: false, error: insertError.message };
+				}
+			}
+		}
+
+		const idsToDelete = existingIds.filter((id) => !keptIds.includes(id));
+		if (idsToDelete.length > 0) {
+			const { error: deleteError } = await supabase
+				.from("artist_works")
+				.delete()
+				.eq("profile_id", profileId)
+				.in("id", idsToDelete);
+
+			if (deleteError) {
+				console.error("Error deleting removed artist works:", deleteError);
+				return { success: false, error: deleteError.message };
+			}
+		}
+
+		return { success: true };
+	} catch (error) {
+		console.error("Unexpected error syncing artist works:", error);
 		return { success: false, error: "Unexpected error occurred" };
 	}
 }

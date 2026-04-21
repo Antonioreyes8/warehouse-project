@@ -1,3 +1,12 @@
+.artistPage {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
 .aboutSection {
 	display: flex;
 	flex-wrap: wrap;
@@ -16,7 +25,7 @@
 
 .headerContainer img {
 	width: 300px;
-	height: 400px;
+	height: 300px;
 	object-fit: cover;
 }
 
@@ -34,6 +43,78 @@
 	padding: 32px;
 	background-color: #d3d3d3;
 	min-width: 300px;
+}
+
+.worksSection {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding: 32px;
+	background-color: #2a2a2a;
+}
+
+.workSection {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	min-width: 300px;
+}
+
+.workInner {
+	display: flex;
+	background-color: #d3d3d3;
+	color: #2a2a2a;
+	gap: 32px;
+	align-items: center;
+	width: fit-content;
+	max-width: 100%;
+	padding: 36px;
+}
+
+.workList {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	width: 100%;
+}
+
+.workHeading {
+	margin: 0;
+	padding: 0;
+	color: #d3d3d3;
+	text-transform: uppercase;
+}
+
+.workArtwork {
+	width: 380px;
+	display: flex;
+	justify-content: center;
+}
+
+.workImage {
+	width: 380px;
+	height: 380px;
+	object-fit: cover;
+	display: block;
+}
+
+.workImageLink {
+	display: inline-flex;
+}
+
+.workCopy {
+	flex: 0 1 620px;
+	min-width: 220px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 16px;
+	text-align: left;
+}
+
+.workLink {
+	text-decoration: underline;
+	color: #d3d3d3;
 }
 
 /* INFO SECTION (2 COLUMNS INSIDE) */
@@ -106,6 +187,11 @@
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
+	.artistPage {
+		padding: 20px;
+		gap: 20px;
+	}
+
 	.aboutSection {
 		padding: 20px;
 		gap: 20px;
@@ -115,6 +201,8 @@
 	.headerContainer,
 	.infoandlinksContainer,
 	.bioContainer,
+	.worksSection,
+	.workSection,
 	.infoContainer,
 	.linksContainer {
 		min-width: 0;
@@ -123,9 +211,15 @@
 
 	.headerContainer,
 	.bioContainer,
+	.worksSection,
+	.workSection,
 	.infoContainer,
 	.linksContainer {
 		padding: 20px;
+	}
+
+	.workHeading {
+		padding: 0;
 	}
 
 	.headerContainer {
@@ -159,6 +253,25 @@
 
 	.linksContainer {
 		justify-content: flex-start;
+	}
+
+	.workSection {
+		width: 100%;
+	}
+
+	.workInner {
+		display: grid;
+		grid-template-columns: 1fr;
+		justify-items: center;
+	}
+
+	.workArtwork {
+		width: 100%;
+	}
+
+	.workImage {
+		width: min(100%, 280px);
+		height: auto;
 	}
 
 	.socialLink svg {

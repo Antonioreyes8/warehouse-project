@@ -15,7 +15,7 @@
  *   - Used in artist pages to display profile information
  */
 
-import { Artist } from "../../lib/artists/queries";
+import { Artist, type ArtistWork } from "../../lib/artists/queries";
 import styles from "./artists.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,6 +36,7 @@ import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 // Props: profile (Artist object with all profile data)
 interface AboutSectionProps {
 	profile: Artist;
+	works: ArtistWork[];
 }
 
 function calculateAgeFromBirthday(
@@ -74,7 +75,17 @@ function hasText(value: unknown): boolean {
 	return String(value).trim().length > 0;
 }
 
-export default function AboutSection({ profile }: AboutSectionProps) {
+function normalizeExternalUrl(value?: string | null): string | null {
+	if (!value?.trim()) return null;
+
+	const trimmedValue = value.trim();
+	return trimmedValue.startsWith("http://") ||
+		trimmedValue.startsWith("https://")
+		? trimmedValue
+		: `https://${trimmedValue}`;
+}
+
+export default function AboutSection({ profile, works }: AboutSectionProps) {
 	// Visibility state section
 	// These booleans implement "artist controls what is public":
 	// if a field has no meaningful value, we do not render that row at all.
@@ -87,6 +98,12 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 	const hasContact = hasText(profile.contact);
 	const hasStatus = hasText(profile.status);
 	const hasMemberSince = hasText(profile.member_since);
+	const visibleWorks = works.filter(
+		(work) =>
+			hasText(work.image_url) ||
+			hasText(work.title) ||
+			hasText(work.description),
+	);
 
 	const hasLeftColumn = Boolean(
 		age || hasBasedIn || hasMediums || hasPastProjects,
@@ -319,6 +336,60 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 					</a>
 				)}
 			</div>
+			{visibleWorks.length > 0 && (
+				<div className={styles.workList}>
+					{visibleWorks.map((work) => {
+						const workLinkUrl = normalizeExternalUrl(work.link_url);
+
+						return (
+							<div className={styles.workSection} key={work.id}>
+								<div className={styles.workArtwork}>
+									{work.image_url ? (
+										workLinkUrl ? (
+											<a
+												href={workLinkUrl}
+												target="_blank"
+												rel="noopener noreferrer"
+												className={styles.workImageLink}
+											>
+												<Image
+													src={work.image_url}
+													alt={`${profile.name} featured work`}
+													width={320}
+													height={320}
+													className={styles.workImage}
+												/>
+											</a>
+										) : (
+											<Image
+												src={work.image_url}
+												alt={`${profile.name} featured work`}
+												width={320}
+												height={320}
+												className={styles.workImage}
+											/>
+										)
+									) : null}
+								</div>
+								<div className={styles.workCopy}>
+									<h3>{work.title || "Featured Work"}</h3>
+									{hasText(work.description) && <p>{work.description}</p>}
+									{workLinkUrl && (
+										<a
+											href={workLinkUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+											className={styles.workLink}
+										>
+											View Work
+										</a>
+									)}
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			)}
 		</section>
 	);
 }

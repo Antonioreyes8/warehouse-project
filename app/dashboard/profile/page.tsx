@@ -22,10 +22,16 @@
 import { supabase } from "@/lib/supabase/client";
 import {
 	getArtistByEmail,
+	getArtistWorksByProfileId,
 	isEmailAuthorized,
 	type Artist,
+	type ArtistWork,
 } from "@/lib/artists/queries";
-import { updateArtistProfile } from "@/lib/artists/mutations";
+import {
+	syncArtistWorks,
+	updateArtistProfile,
+	type ArtistWorkInput,
+} from "@/lib/artists/mutations";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -42,6 +48,7 @@ const STATUS_OPTIONS = [
 ];
 
 const AVATAR_BUCKET = "avatars";
+const WORK_BUCKET = "works";
 const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_AVATAR_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
@@ -83,6 +90,48 @@ function getMemberSinceYear(createdAt?: string | null): string {
 	return String(createdDate.getFullYear());
 }
 
+function normalizeExternalUrl(value?: string | null): string {
+	// Display helper for optional external links
+	// Accepts full URLs or bare domains and normalizes to a clickable https URL.
+	if (!value?.trim()) return "";
+
+	const trimmedValue = value.trim();
+	return trimmedValue.startsWith("http://") ||
+		trimmedValue.startsWith("https://")
+		? trimmedValue
+		: `https://${trimmedValue}`;
+}
+
+type EditableWork = {
+	id?: number;
+	title: string;
+	description: string;
+	image_url: string;
+	link_url: string;
+	sort_order: number;
+};
+
+function toEditableWorks(works: ArtistWork[]): EditableWork[] {
+	return works.map((work, index) => ({
+		id: work.id,
+		title: work.title || "",
+		description: work.description || "",
+		image_url: work.image_url || "",
+		link_url: work.link_url || "",
+		sort_order: work.sort_order ?? index,
+	}));
+}
+
+function createEmptyWork(sortOrder: number): EditableWork {
+	return {
+		title: "",
+		description: "",
+		image_url: "",
+		link_url: "",
+		sort_order: sortOrder,
+	};
+}
+
 export default function ArtistProfilePage() {
 	// Component state section
 	// - user/artist/authorized/loading control route protection and data readiness.
@@ -96,6 +145,8 @@ export default function ArtistProfilePage() {
 	const [editing, setEditing] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [avatarUploading, setAvatarUploading] = useState(false);
+	const [workUploading, setWorkUploading] = useState(false);
+	const [artistWorks, setArtistWorks] = useState<EditableWork[]>([]);
 	const [message, setMessage] = useState("");
 
 	const [formData, setFormData] = useState({
@@ -184,6 +235,9 @@ export default function ArtistProfilePage() {
 						soundcloud: profile.soundcloud || "",
 						bandcamp: profile.bandcamp || "",
 					});
+
+					const works = await getArtistWorksByProfileId(profile.id);
+					setArtistWorks(toEditableWorks(works));
 				}
 			}
 
@@ -215,7 +269,7 @@ export default function ArtistProfilePage() {
 
 	const handleSave = async () => {
 		// Save lifecycle section
-		// Persists the entire editable profile payload and then re-reads profile for consistency.
+		// Persists editable profile fields, then syncs the artist works collection.
 		if (!artist) return;
 
 		setSaving(true);
@@ -225,28 +279,76 @@ export default function ArtistProfilePage() {
 			...formData,
 		};
 
-		const result = await updateArtistProfile(
+		const profileResult = await updateArtistProfile(
 			artist.id,
 			artist.email ?? null,
 			payload,
 		);
 
-		if (result.success) {
-			setMessage("Profile updated successfully!");
-			setEditing(false);
-			// Refresh profile after write
-			// Re-fetch ensures UI reflects canonical DB values after triggers/defaults.
-			if (user?.email) {
-				const updatedProfile = await getArtistByEmail(user.email);
-				if (updatedProfile) {
-					setArtist(updatedProfile);
-				}
-			}
-		} else {
-			setMessage(result.error || "Failed to update profile");
+		if (!profileResult.success) {
+			setMessage(profileResult.error || "Failed to update profile");
+			setSaving(false);
+			return;
 		}
 
+		const worksPayload: ArtistWorkInput[] = artistWorks.map((work, index) => ({
+			id: work.id,
+			title: work.title,
+			description: work.description,
+			image_url: work.image_url,
+			link_url: work.link_url,
+			sort_order: index,
+		}));
+
+		const worksResult = await syncArtistWorks(artist.id, worksPayload);
+
+		if (!worksResult.success) {
+			setMessage(
+				worksResult.error ||
+					"Profile saved, but failed to save works. Please try again.",
+			);
+			setSaving(false);
+			return;
+		}
+
+		setMessage("Profile updated successfully!");
+		setEditing(false);
+
+		if (user?.email) {
+			const updatedProfile = await getArtistByEmail(user.email);
+			if (updatedProfile) {
+				setArtist(updatedProfile);
+			}
+		}
+
+		const updatedWorks = await getArtistWorksByProfileId(artist.id);
+		setArtistWorks(toEditableWorks(updatedWorks));
+
 		setSaving(false);
+	};
+
+	const handleWorkFieldChange = (
+		index: number,
+		field: keyof Omit<EditableWork, "id" | "sort_order">,
+		value: string,
+	) => {
+		setArtistWorks((prev) =>
+			prev.map((work, workIndex) =>
+				workIndex === index ? { ...work, [field]: value } : work,
+			),
+		);
+	};
+
+	const handleAddWork = () => {
+		setArtistWorks((prev) => [...prev, createEmptyWork(prev.length)]);
+	};
+
+	const handleRemoveWork = (index: number) => {
+		setArtistWorks((prev) =>
+			prev
+				.filter((_, workIndex) => workIndex !== index)
+				.map((work, nextIndex) => ({ ...work, sort_order: nextIndex })),
+		);
 	};
 
 	const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -262,14 +364,12 @@ export default function ArtistProfilePage() {
 		}
 
 		if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
-			// File type guard keeps accepted media predictable and compatible with image components.
 			setMessage("Please upload a JPG, PNG, or WEBP image.");
 			e.target.value = "";
 			return;
 		}
 
 		if (file.size > MAX_AVATAR_SIZE_BYTES) {
-			// Size guard prevents oversized uploads and improves storage/network behavior.
 			setMessage("Please upload an image smaller than 5MB.");
 			e.target.value = "";
 			return;
@@ -279,8 +379,6 @@ export default function ArtistProfilePage() {
 		setMessage("Uploading profile picture...");
 
 		const extension = getFileExtension(file.name);
-		// Per-user storage path strategy
-		// Folder prefix by auth uid supports clean ownership policies in Supabase Storage RLS.
 		const filePath = `${user.id}/avatar-${Date.now()}.${extension}`;
 
 		const { error: uploadError } = await supabase.storage
@@ -292,7 +390,6 @@ export default function ArtistProfilePage() {
 			});
 
 		if (uploadError) {
-			// Upload failure is surfaced directly so policy/config errors are visible to the user.
 			setMessage(`Failed to upload image: ${uploadError.message}`);
 			setAvatarUploading(false);
 			e.target.value = "";
@@ -303,8 +400,6 @@ export default function ArtistProfilePage() {
 			data: { publicUrl },
 		} = supabase.storage.from(AVATAR_BUCKET).getPublicUrl(filePath);
 
-		// Stage uploaded URL into form state.
-		// User still controls final commit by clicking Save Changes.
 		setFormData((prev) => ({
 			...prev,
 			avatar_url: publicUrl,
@@ -312,6 +407,66 @@ export default function ArtistProfilePage() {
 
 		setMessage("Profile picture uploaded. Click Save Changes to keep it.");
 		setAvatarUploading(false);
+		e.target.value = "";
+	};
+
+	const handleWorkImageUpload = async (
+		index: number,
+		e: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		// Work image upload lifecycle
+		// Mirrors avatar upload, but stores the asset in a dedicated works bucket.
+		const file = e.target.files?.[0];
+
+		if (!file || !user) {
+			return;
+		}
+
+		if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+			setMessage("Please upload a JPG, PNG, or WEBP image.");
+			e.target.value = "";
+			return;
+		}
+
+		if (file.size > MAX_AVATAR_SIZE_BYTES) {
+			setMessage("Please upload an image smaller than 5MB.");
+			e.target.value = "";
+			return;
+		}
+
+		setWorkUploading(true);
+		setMessage("Uploading work image...");
+
+		const extension = getFileExtension(file.name);
+		const filePath = `${user.id}/work-${Date.now()}.${extension}`;
+
+		const { error: uploadError } = await supabase.storage
+			.from(WORK_BUCKET)
+			.upload(filePath, file, {
+				cacheControl: "3600",
+				upsert: true,
+				contentType: file.type,
+			});
+
+		if (uploadError) {
+			setMessage(`Failed to upload work image: ${uploadError.message}`);
+			setWorkUploading(false);
+			e.target.value = "";
+			return;
+		}
+
+		const {
+			data: { publicUrl },
+		} = supabase.storage.from(WORK_BUCKET).getPublicUrl(filePath);
+
+		setArtistWorks((prev) =>
+			prev.map((work, workIndex) =>
+				workIndex === index ? { ...work, image_url: publicUrl } : work,
+			),
+		);
+
+		setMessage("Work image uploaded. Click Save Changes to keep it.");
+		setWorkUploading(false);
 		e.target.value = "";
 	};
 
@@ -341,6 +496,13 @@ export default function ArtistProfilePage() {
 				soundcloud: artist.soundcloud || "",
 				bandcamp: artist.bandcamp || "",
 			});
+
+			const resetWorks = async () => {
+				const works = await getArtistWorksByProfileId(artist.id);
+				setArtistWorks(toEditableWorks(works));
+			};
+
+			void resetWorks();
 		}
 		setEditing(false);
 		setMessage("");
@@ -750,6 +912,135 @@ export default function ArtistProfilePage() {
 							</div>
 						</div>
 
+						<div className={styles.profileSection}>
+							<h2 className={styles.sectionTitle}>Featured Work</h2>
+							<div className={styles.buttonGroup}>
+								<button
+									type="button"
+									onClick={handleAddWork}
+									className={styles.sectionButton}
+								>
+									Add Work
+								</button>
+							</div>
+							{artistWorks.length === 0 ? (
+								<p>No works added yet. Click Add Work to create one.</p>
+							) : (
+								artistWorks.map((work, index) => (
+									<div
+										className={styles.formGrid}
+										key={work.id ?? `new-${index}`}
+									>
+										<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+											<label
+												className={styles.formLabel}
+												htmlFor={`work_upload_${index}`}
+											>
+												Work Image
+											</label>
+											<div className={styles.workPreview}>
+												{work.image_url ? (
+													<Image
+														src={work.image_url}
+														alt={`${artist.name || "Artist"} featured work`}
+														width={220}
+														height={220}
+														className={styles.workImage}
+													/>
+												) : (
+													<div className={styles.workPlaceholder}>
+														No work image uploaded
+													</div>
+												)}
+												<div className={styles.avatarControls}>
+													<input
+														type="file"
+														id={`work_upload_${index}`}
+														accept="image/png,image/jpeg,image/webp"
+														onChange={(e) => handleWorkImageUpload(index, e)}
+														disabled={workUploading || saving}
+														className={styles.formInput}
+													/>
+													<p className={styles.avatarHelpText}>
+														Optional. This image will show on your public artist
+														page.
+													</p>
+												</div>
+											</div>
+										</div>
+										<div className={styles.formGroup}>
+											<label
+												className={styles.formLabel}
+												htmlFor={`work_title_${index}`}
+											>
+												Work Title
+											</label>
+											<input
+												type="text"
+												id={`work_title_${index}`}
+												value={work.title}
+												onChange={(e) =>
+													handleWorkFieldChange(index, "title", e.target.value)
+												}
+												className={styles.formInput}
+											/>
+										</div>
+										<div className={styles.formGroup}>
+											<label
+												className={styles.formLabel}
+												htmlFor={`work_link_${index}`}
+											>
+												Work Link
+											</label>
+											<input
+												type="url"
+												id={`work_link_${index}`}
+												value={work.link_url}
+												onChange={(e) =>
+													handleWorkFieldChange(
+														index,
+														"link_url",
+														e.target.value,
+													)
+												}
+												className={styles.formInput}
+											/>
+										</div>
+										<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+											<label
+												className={styles.formLabel}
+												htmlFor={`work_description_${index}`}
+											>
+												Work Description
+											</label>
+											<textarea
+												id={`work_description_${index}`}
+												value={work.description}
+												onChange={(e) =>
+													handleWorkFieldChange(
+														index,
+														"description",
+														e.target.value,
+													)
+												}
+												className={styles.formTextarea}
+												rows={4}
+											/>
+										</div>
+										<div className={styles.buttonGroup}>
+											<button
+												type="button"
+												onClick={() => handleRemoveWork(index)}
+												className={styles.cancelButton}
+											>
+												Remove Work
+											</button>
+										</div>
+									</div>
+								))
+							)}
+						</div>
+
 						<div className={styles.buttonGroup}>
 							<button
 								onClick={handleCancel}
@@ -761,9 +1052,9 @@ export default function ArtistProfilePage() {
 							<button
 								onClick={handleSave}
 								className={styles.saveButton}
-								disabled={saving || avatarUploading}
+								disabled={saving || avatarUploading || workUploading}
 							>
-								{avatarUploading
+								{avatarUploading || workUploading
 									? "Uploading..."
 									: saving
 										? "Saving..."
@@ -965,6 +1256,78 @@ export default function ArtistProfilePage() {
 									)}
 								</div>
 							</div>
+						</div>
+
+						<div className={styles.profileSection}>
+							<h2 className={styles.sectionTitle}>Featured Work</h2>
+							{artistWorks.length > 0 ? (
+								artistWorks.map((work, index) => {
+									const workLinkUrl = normalizeExternalUrl(work.link_url);
+
+									return (
+										<div
+											className={styles.workCard}
+											key={work.id ?? `work-${index}`}
+										>
+											<div className={styles.workMedia}>
+												{work.image_url ? (
+													workLinkUrl ? (
+														<a
+															href={workLinkUrl}
+															target="_blank"
+															rel="noopener noreferrer"
+															className={styles.workImageLink}
+														>
+															<Image
+																src={work.image_url}
+																alt={`${artist.name || "Artist"} featured work`}
+																width={240}
+																height={240}
+																className={styles.workImage}
+															/>
+														</a>
+													) : (
+														<Image
+															src={work.image_url}
+															alt={`${artist.name || "Artist"} featured work`}
+															width={240}
+															height={240}
+															className={styles.workImage}
+														/>
+													)
+												) : (
+													<div className={styles.workPlaceholder}>
+														No work image set
+													</div>
+												)}
+											</div>
+											<div className={styles.workContent}>
+												<strong>Title:</strong> {work.title || "Not set"}
+												<div>
+													<strong>Description:</strong>{" "}
+													{work.description || "Not set"}
+												</div>
+												<div>
+													<strong>Link:</strong>{" "}
+													{workLinkUrl ? (
+														<a
+															href={workLinkUrl}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															{workLinkUrl}
+														</a>
+													) : (
+														"Not set"
+													)}
+												</div>
+											</div>
+										</div>
+									);
+								})
+							) : (
+								<p>No featured work added yet.</p>
+							)}
 						</div>
 
 						<div className={styles.buttonGroup}>

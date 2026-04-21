@@ -39,6 +39,10 @@ export type Artist = {
 	contact?: string | null;
 	status?: string | null;
 	member_since?: string | null;
+	work_title?: string | null;
+	work_description?: string | null;
+	work_image_url?: string | null;
+	work_link_url?: string | null;
 	instagram?: string | null;
 	youtube?: string | null;
 	patreon?: string | null;
@@ -49,6 +53,18 @@ export type Artist = {
 	soundcloud?: string | null;
 	bandcamp?: string | null;
 	email?: string | null;
+};
+
+export type ArtistWork = {
+	id: number;
+	profile_id: string | number;
+	title?: string | null;
+	description?: string | null;
+	image_url?: string | null;
+	link_url?: string | null;
+	sort_order?: number | null;
+	created_at?: string | null;
+	updated_at?: string | null;
 };
 
 /**
@@ -166,4 +182,24 @@ export async function isEmailAuthorized(email: string): Promise<boolean> {
 	}
 
 	return !!data;
+}
+
+export async function getArtistWorksByProfileId(
+	profileId: string | number,
+): Promise<ArtistWork[]> {
+	// Artist works lookup
+	// Returns all works for one profile ordered for stable rendering.
+	const { data, error } = await supabase
+		.from("artist_works")
+		.select("*")
+		.eq("profile_id", profileId)
+		.order("sort_order", { ascending: true })
+		.order("created_at", { ascending: true });
+
+	if (error) {
+		console.error("Error fetching artist works:", error);
+		return [];
+	}
+
+	return data ?? [];
 }

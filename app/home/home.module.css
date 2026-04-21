@@ -12,7 +12,7 @@
 .rules_media {
 	position: relative;
 	width: 100%;
-	min-height: 180vh;
+	min-height: 200vh;
 	overflow: hidden;
 	z-index: 1000;
 }
@@ -78,7 +78,7 @@
 @media (max-width: 1024px) {
 	/* Rules Section adjustments (unchanged) */
 	.rules_section {
-		min-height: 140svh;
+		min-height: 200svh;
 	}
 
 	.rules_media {
@@ -88,7 +88,7 @@
 
 	.rules_overlay {
 		background-color: rgba(0, 0, 0, 0.75);
-		bottom: 24px;
+		bottom: 250px;
 		padding: 12px; /* smaller padding */
 		width: min(90vw, 250px);
 	}
