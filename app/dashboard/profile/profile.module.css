@@ -312,6 +312,16 @@
 	color: #d3d3d3;
 }
 
+.deleteWorkButton {
+	border-color: #8b1f1f;
+	color: #8b1f1f;
+}
+
+.deleteWorkButton:hover {
+	background: #8b1f1f;
+	color: #fff;
+}
+
 /* ── Status messages ────────────────────────────────────────── */
 .message {
 	padding: 0.75rem 1rem;
@@ -390,6 +400,15 @@
 
 	.formGrid {
 		grid-template-columns: 1fr;
+	}
+
+	.buttonGroup {
+		width: 100%;
+	}
+
+	.deleteWorkButton {
+		width: 100%;
+		text-align: center;
 	}
 
 	.avatarField {

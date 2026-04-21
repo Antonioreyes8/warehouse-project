@@ -298,6 +298,7 @@ export default function ArtistProfilePage() {
 			id: work.id,
 			title: work.title,
 			description: work.description,
+			medium: work.medium,
 			image_url: work.image_url,
 			link_url: work.link_url,
 			sort_order: index,
@@ -346,12 +347,21 @@ export default function ArtistProfilePage() {
 		setArtistWorks((prev) => [...prev, createEmptyWork(prev.length)]);
 	};
 
-	const handleRemoveWork = (index: number) => {
+	const handleDeleteWork = (index: number) => {
+		const shouldDelete = window.confirm(
+			"Delete this work from your profile? Click Save Changes to make it permanent.",
+		);
+
+		if (!shouldDelete) {
+			return;
+		}
+
 		setArtistWorks((prev) =>
 			prev
 				.filter((_, workIndex) => workIndex !== index)
 				.map((work, nextIndex) => ({ ...work, sort_order: nextIndex })),
 		);
+		setMessage("Work removed from the form. Click Save Changes to confirm.");
 	};
 
 	const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1050,10 +1060,11 @@ export default function ArtistProfilePage() {
 										<div className={styles.buttonGroup}>
 											<button
 												type="button"
-												onClick={() => handleRemoveWork(index)}
-												className={styles.cancelButton}
+												onClick={() => handleDeleteWork(index)}
+												className={`${styles.sectionButton} ${styles.deleteWorkButton}`}
+												disabled={saving || workUploading}
 											>
-												Remove Work
+												Delete Work
 											</button>
 										</div>
 									</div>
