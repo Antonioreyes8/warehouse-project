@@ -7,6 +7,9 @@ header {
 	background-color: #2a2a2a;
 	color: white;
 	width: 100%;
+	position: relative;
+	z-index: 5000;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 	/*border: 1px solid white;*/
 }
 
@@ -31,10 +34,12 @@ header {
 .footer {
 	font-family: "TimesNewRoman", serif;
 	display: flex;
-	height: 100svh;
+	min-height: 100vh;
 	background-color: #d3d3d3;
 	color: #2a2a2a;
 	font-weight: 400;
+	position: relative;
+	z-index: 1000;
 }
 
 .footer_left,

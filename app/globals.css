@@ -68,10 +68,21 @@ How It Fits:
 	padding: 0;
 }
 
+html,
+body {
+	overscroll-behavior-y: none;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: "HelveticaNeue", sans-serif;
 	line-height: 1.5;
 	color: #2a2a2a;
+	background-color: #d3d3d3;
+	min-height: 100vh;
 }
 
 h1 {

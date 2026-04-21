@@ -24,18 +24,20 @@ export default function RulesSection() {
 		<section className={styles.rules_section}>
 			{/* Media container with background image */}
 			<div className={styles.rules_media}>
-				{/* Hero media
+				<div className={styles.rules_background}>
+					{/* Hero media
 				    Uses unoptimized because this asset is hosted externally in Supabase Storage
 				    and may be animated (gif), where exact playback is preferred.
 				*/}
-				<Image
-					src="https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/party.gif"
-					alt="Party"
-					width={700}
-					height={400}
-					style={{ height: "auto", width: "100%" }}
-					unoptimized
-				/>
+					<Image
+						src="https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/party.gif"
+						alt="Party"
+						fill
+						className={styles.rules_image}
+						sizes="100vw"
+						unoptimized
+					/>
+				</div>
 				{/* Rules overlay
 				    Keeps core etiquette visible at first glance, framing the cultural expectations
 				    before users browse projects or profiles.
