@@ -63,11 +63,15 @@ export default function LoginPage() {
 
 		try {
 			// OAuth initiation section
-			// redirectTo points back to the dashboard route after provider authentication.
+			// Route OAuth through a callback page so the auth code is exchanged before
+			// the protected dashboard page runs its session check.
 			const { error } = await supabase.auth.signInWithOAuth({
 				provider: "google",
 				options: {
-					redirectTo: `${window.location.origin}/dashboard/profile`,
+					redirectTo: `${window.location.origin}/auth/callback`,
+					queryParams: {
+						prompt: "select_account",
+					},
 				},
 			});
 

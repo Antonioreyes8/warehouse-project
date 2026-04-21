@@ -55,25 +55,6 @@ function getFileExtension(fileName: string): string {
 	return parts[parts.length - 1].toLowerCase();
 }
 
-function calculateAgeFromBirthDate(birthDate: string): string {
-	// Display-only age helper
-	// Age is derived from birthday at render time and not stored as a source-of-truth field.
-	if (!birthDate) return "";
-
-	const birth = new Date(birthDate);
-	if (Number.isNaN(birth.getTime())) return "";
-
-	const today = new Date();
-	let age = today.getFullYear() - birth.getFullYear();
-	const monthDiff = today.getMonth() - birth.getMonth();
-
-	if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-		age -= 1;
-	}
-
-	return age >= 0 ? String(age) : "";
-}
-
 export default function ArtistProfilePage() {
 	// Component state section
 	// - user/artist/authorized/loading control route protection and data readiness.
@@ -342,7 +323,7 @@ export default function ArtistProfilePage() {
 
 	const handleSignOut = async () => {
 		// Sign-out section
-		// Ends Supabase session and returns user to public home page.
+		// Ends Supabase session and returns user to home page.
 		await supabase.auth.signOut();
 		router.push("/");
 	};
@@ -394,23 +375,16 @@ export default function ArtistProfilePage() {
 		<div className={styles.profileContainer}>
 			<header className={styles.profileHeader}>
 				<div className={styles.profileIntro}>
+					<p className={styles.sessionStatus}>
+						You are currently signed in as {user?.email || "your account"}.
+					</p>
 					<h1 className={styles.profileTitle}>My Artist Profile</h1>
 					<p className={styles.profileGreeting}>
-						Hi {greetingName}! Welcome to your artist dashboard, here you can
-						see all the info publicly displayed. Thank you for being part of our
-						community! Please use take advantage of this space and share your
-						work !
+						Hi {greetingName}. This is your artist dashboard. Use the edit form
+						to update the information shown on your public profile.
 					</p>
 				</div>
 				<div className={styles.headerActions}>
-					{!editing && (
-						<button
-							onClick={() => setEditing(true)}
-							className={styles.viewPublicButton}
-						>
-							Edit Profile
-						</button>
-					)}
 					<button onClick={handleSignOut} className={styles.signOutButton}>
 						Sign Out
 					</button>
@@ -781,207 +755,38 @@ export default function ArtistProfilePage() {
 				) : (
 					<>
 						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Basic Information</h2>
-							<div className={styles.formGrid}>
-								<div className={styles.fullWidth}>
-									<div className={styles.avatarDisplayRow}>
-										<strong>Profile Picture:</strong>
-										{artist.avatar_url ? (
-											<Image
-												src={artist.avatar_url}
-												alt={`${artist.name || "Artist"} profile picture`}
-												width={120}
-												height={120}
-												className={styles.avatarImage}
-											/>
-										) : (
-											"Not set"
-										)}
-									</div>
-								</div>
-								<div>
+							<h2 className={styles.sectionTitle}>Signed In</h2>
+							<p className={styles.summaryText}>
+								Your profile is connected and ready to update. Use the edit form
+								to change your bio, links, image, and other details that appear
+								on your public artist page.
+							</p>
+							<div className={styles.summaryMeta}>
+								<p>
 									<strong>Name:</strong> {artist.name}
-								</div>
-								<div>
+								</p>
+								<p>
 									<strong>Username:</strong> {artist.username}
-								</div>
-								<div>
-									<strong>Age:</strong>{" "}
-									{calculateAgeFromBirthDate(artist.birthday || "") ||
-										"Not set"}
-								</div>
-								<div>
-									<strong>Birth Date:</strong> {artist.birthday || "Not set"}
-								</div>
-								<div>
-									<strong>Based In:</strong> {artist.based_in || "Not set"}
-								</div>
-								<div>
-									<strong>Mediums:</strong> {artist.mediums || "Not set"}
-								</div>
-								<div>
-									<strong>Past Projects:</strong>{" "}
-									{artist.past_projects || "Not set"}
-								</div>
-								<div>
-									<strong>Ethnic Background:</strong>{" "}
-									{artist.ethnic_background || "Not set"}
-								</div>
-								<div>
-									<strong>Contact:</strong> {artist.contact || "Not set"}
-								</div>
-								<div>
-									<strong>Status:</strong> {artist.status || "Not set"}
-								</div>
-								<div>
-									<strong>Member Since:</strong>{" "}
-									{artist.member_since || "Not set"}
-								</div>
-								<div className={styles.fullWidth}>
-									<strong>Bio:</strong> {artist.bio || "Not set"}
-								</div>
+								</p>
+								<p>
+									<strong>Email:</strong>{" "}
+									{user?.email || artist.email || "Not set"}
+								</p>
 							</div>
-						</div>
-
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Social Links</h2>
-							<div className={styles.formGrid}>
-								<div>
-									<strong>Instagram:</strong>{" "}
-									{artist.instagram ? (
-										<a
-											href={artist.instagram}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.instagram}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>YouTube:</strong>{" "}
-									{artist.youtube ? (
-										<a
-											href={artist.youtube}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.youtube}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Patreon:</strong>{" "}
-									{artist.patreon ? (
-										<a
-											href={artist.patreon}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.patreon}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Facebook:</strong>{" "}
-									{artist.facebook ? (
-										<a
-											href={artist.facebook}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.facebook}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>TikTok:</strong>{" "}
-									{artist.tik_tok ? (
-										<a
-											href={artist.tik_tok}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.tik_tok}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Etsy:</strong>{" "}
-									{artist.etsy ? (
-										<a
-											href={artist.etsy}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.etsy}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Personal Website:</strong>{" "}
-									{artist.personal_website ? (
-										<a
-											href={artist.personal_website}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.personal_website}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>SoundCloud:</strong>{" "}
-									{artist.soundcloud ? (
-										<a
-											href={artist.soundcloud}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.soundcloud}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Bandcamp:</strong>{" "}
-									{artist.bandcamp ? (
-										<a
-											href={artist.bandcamp}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.bandcamp}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
+							<div className={styles.buttonGroup}>
+								<button
+									onClick={() => setEditing(true)}
+									className={styles.viewPublicButton}
+								>
+									Edit Profile
+								</button>
+								<Link
+									href={`/artists/${artist.username}`}
+									className={styles.viewPublicButton}
+								>
+									View Public Page
+								</Link>
 							</div>
-						</div>
-
-						<div className={styles.buttonGroup}>
-							<Link
-								href={`/artists/${artist.username}`}
-								className={styles.viewPublicButton}
-							>
-								View Public Page
-							</Link>
 						</div>
 					</>
 				)}
