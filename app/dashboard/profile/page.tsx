@@ -106,6 +106,7 @@ type EditableWork = {
 	id?: number;
 	title: string;
 	description: string;
+	medium: string;
 	image_url: string;
 	link_url: string;
 	sort_order: number;
@@ -116,6 +117,7 @@ function toEditableWorks(works: ArtistWork[]): EditableWork[] {
 		id: work.id,
 		title: work.title || "",
 		description: work.description || "",
+		medium: work.medium || "",
 		image_url: work.image_url || "",
 		link_url: work.link_url || "",
 		sort_order: work.sort_order ?? index,
@@ -126,6 +128,7 @@ function createEmptyWork(sortOrder: number): EditableWork {
 	return {
 		title: "",
 		description: "",
+		medium: "",
 		image_url: "",
 		link_url: "",
 		sort_order: sortOrder,
@@ -988,6 +991,23 @@ export default function ArtistProfilePage() {
 										<div className={styles.formGroup}>
 											<label
 												className={styles.formLabel}
+												htmlFor={`work_medium_${index}`}
+											>
+												Medium
+											</label>
+											<input
+												type="text"
+												id={`work_medium_${index}`}
+												value={work.medium}
+												onChange={(e) =>
+													handleWorkFieldChange(index, "medium", e.target.value)
+												}
+												className={styles.formInput}
+											/>
+										</div>
+										<div className={styles.formGroup}>
+											<label
+												className={styles.formLabel}
 												htmlFor={`work_link_${index}`}
 											>
 												Work Link
@@ -1303,6 +1323,9 @@ export default function ArtistProfilePage() {
 											</div>
 											<div className={styles.workContent}>
 												<strong>Title:</strong> {work.title || "Not set"}
+												<div>
+													<strong>Medium:</strong> {work.medium || "Not set"}
+												</div>
 												<div>
 													<strong>Description:</strong>{" "}
 													{work.description || "Not set"}

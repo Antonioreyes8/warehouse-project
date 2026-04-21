@@ -23,6 +23,7 @@ export type ArtistWorkInput = {
 	id?: number;
 	title?: string | null;
 	description?: string | null;
+	medium?: string | null;
 	image_url?: string | null;
 	link_url?: string | null;
 	sort_order?: number;
@@ -133,6 +134,7 @@ export async function syncArtistWorks(
 				id: work.id,
 				title: work.title?.trim() || null,
 				description: work.description?.trim() || null,
+				medium: work.medium?.trim() || null,
 				image_url: work.image_url?.trim() || null,
 				link_url: work.link_url?.trim() || null,
 				sort_order: work.sort_order ?? index,
@@ -141,6 +143,7 @@ export async function syncArtistWorks(
 				(work) =>
 					Boolean(work.title) ||
 					Boolean(work.description) ||
+					Boolean(work.medium) ||
 					Boolean(work.image_url) ||
 					Boolean(work.link_url),
 			);

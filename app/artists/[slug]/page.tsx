@@ -117,8 +117,22 @@ export default async function ArtistPage(props: ArtistPageProps) {
 											) : null}
 										</div>
 										<div className={styles.workCopy}>
-											<h3>{work.title || "Featured Work"}</h3>
-											{hasText(work.description) && <p>{work.description}</p>}
+											<div className={styles.workRow}>
+												<h3>Title:</h3>
+												<p>{work.title || "Untitled"}</p>
+											</div>{" "}
+											{hasText(work.medium) && (
+												<div className={styles.workRow}>
+													<h3>Medium:</h3>
+													<p>{work.medium}</p>
+												</div>
+											)}{" "}
+											<div className={styles.workRow}>
+												<h3>Description:</h3>
+												<p>
+													{hasText(work.description) ? work.description : "—"}
+												</p>
+											</div>
 											{workLinkUrl && (
 												<a
 													href={workLinkUrl}

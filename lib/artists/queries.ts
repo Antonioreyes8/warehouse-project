@@ -60,6 +60,7 @@ export type ArtistWork = {
 	profile_id: string | number;
 	title?: string | null;
 	description?: string | null;
+	medium?: string | null;
 	image_url?: string | null;
 	link_url?: string | null;
 	sort_order?: number | null;
