@@ -280,7 +280,7 @@
 
 	.workArtwork {
 		width: 100%;
-		max-width: 240px;
+		max-width: 250px;
 		margin: 0 auto;
 	}
 
@@ -292,8 +292,7 @@
 
 	.workImage {
 		width: 100%;
-		max-width: 240px;
-		aspect-ratio: 1 / 1;
+		max-width: 250px;
 		height: auto;
 	}
 
