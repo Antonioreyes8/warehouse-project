@@ -43,15 +43,6 @@
 	line-height: 1.5;
 }
 
-.sessionStatus {
-	font-size: 0.78rem;
-	font-weight: 700;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: #a8a8a8;
-	margin: 0;
-}
-
 .headerActions {
 	display: flex;
 	flex-wrap: wrap;
@@ -214,29 +205,6 @@
 	display: flex;
 	gap: 12px;
 	align-items: center;
-	flex-wrap: wrap;
-}
-
-.summaryText {
-	font-size: 1rem;
-	font-weight: 300;
-	line-height: 1.6;
-	margin: 0 0 20px;
-	max-width: 60ch;
-}
-
-.summaryMeta {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	gap: 10px 16px;
-	margin-bottom: 24px;
-}
-
-.summaryMeta p {
-	margin: 0;
-	font-size: 0.95rem;
-	font-weight: 300;
-	line-height: 1.45;
 }
 
 .viewPublicButton,
