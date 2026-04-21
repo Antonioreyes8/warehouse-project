@@ -56,7 +56,6 @@
 .workSection {
 	display: flex;
 	width: 100%;
-	min-width: 300px;
 }
 
 .workInner {
@@ -266,21 +265,41 @@
 
 	.workSection {
 		width: 100%;
+		padding: 0;
 	}
 
 	.workInner {
 		display: grid;
 		grid-template-columns: 1fr;
 		justify-items: center;
+		width: 100%;
+		padding: 16px;
+		gap: 16px;
+		overflow: hidden;
 	}
 
 	.workArtwork {
 		width: 100%;
+		max-width: 180px;
+		margin: 0 auto;
+	}
+
+	.workImageLink {
+		width: 100%;
+		display: flex;
+		justify-content: center;
 	}
 
 	.workImage {
-		width: min(100%, 280px);
+		width: 100%;
+		max-width: 180px;
+		aspect-ratio: 1 / 1;
 		height: auto;
+	}
+
+	.workCopy {
+		min-width: 0;
+		width: 100%;
 	}
 
 	.socialLink svg {
