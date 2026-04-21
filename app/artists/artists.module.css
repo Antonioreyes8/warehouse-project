@@ -292,7 +292,7 @@
 
 	.workImage {
 		width: 100%;
-		max-width: 180px;
+		max-width: 240px;
 		aspect-ratio: 1 / 1;
 		height: auto;
 	}
