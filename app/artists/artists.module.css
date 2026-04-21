@@ -85,14 +85,13 @@
 }
 
 .workArtwork {
-	width: 380px;
 	display: flex;
 	justify-content: center;
 }
 
 .workImage {
-	width: 380px;
-	height: 380px;
+	width: auto;
+	height: 250px;
 	object-fit: cover;
 	display: block;
 }
