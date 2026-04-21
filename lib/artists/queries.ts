@@ -26,6 +26,7 @@ export type Artist = {
 	// NOTE: id is currently typed as string for runtime compatibility even though
 	// some database rows may be numeric ids depending on migration history.
 	id: string;
+	created_at?: string | null;
 	name: string;
 	username: string;
 	bio: string | null;

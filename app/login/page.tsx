@@ -18,6 +18,8 @@
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import styles from "./login.module.css";
 
 export default function LoginPage() {
@@ -103,6 +105,7 @@ export default function LoginPage() {
 					disabled={loading}
 					className={styles.loginButton}
 				>
+					<FontAwesomeIcon icon={faGoogle} style={{ marginRight: "8px" }} />
 					{loading ? "Signing in..." : "Sign in with Google"}
 				</button>
 				{message && (

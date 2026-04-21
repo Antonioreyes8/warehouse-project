@@ -38,9 +38,7 @@ const STATUS_OPTIONS = [
 	"Available for Commissions",
 	"Available for Collaborations",
 	"Not Currently Available",
-	"On Hiatus",
 	"Student",
-	"Other",
 ];
 
 const AVATAR_BUCKET = "avatars";
@@ -74,6 +72,17 @@ function calculateAgeFromBirthDate(birthDate: string): string {
 	return age >= 0 ? String(age) : "";
 }
 
+function getMemberSinceYear(createdAt?: string | null): string {
+	// Display-only membership helper
+	// Uses profile created_at as source of truth and returns only the year.
+	if (!createdAt) return "";
+
+	const createdDate = new Date(createdAt);
+	if (Number.isNaN(createdDate.getTime())) return "";
+
+	return String(createdDate.getFullYear());
+}
+
 export default function ArtistProfilePage() {
 	// Component state section
 	// - user/artist/authorized/loading control route protection and data readiness.
@@ -103,7 +112,6 @@ export default function ArtistProfilePage() {
 		ethnic_background: "",
 		contact: "",
 		status: "",
-		member_since: "",
 		instagram: "",
 		youtube: "",
 		patreon: "",
@@ -166,7 +174,6 @@ export default function ArtistProfilePage() {
 						ethnic_background: profile.ethnic_background || "",
 						contact: profile.contact || "",
 						status: profile.status || "",
-						member_since: profile.member_since || "",
 						instagram: profile.instagram || "",
 						youtube: profile.youtube || "",
 						patreon: profile.patreon || "",
@@ -324,7 +331,6 @@ export default function ArtistProfilePage() {
 				ethnic_background: artist.ethnic_background || "",
 				contact: artist.contact || "",
 				status: artist.status || "",
-				member_since: artist.member_since || "",
 				instagram: artist.instagram || "",
 				youtube: artist.youtube || "",
 				patreon: artist.patreon || "",
@@ -385,6 +391,7 @@ export default function ArtistProfilePage() {
 
 	const greetingName =
 		artist.name?.trim().split(" ")[0] || user?.email?.split("@")[0] || "Artist";
+	const memberSinceYear = getMemberSinceYear(artist.created_at);
 
 	// Main render section
 	// - editing=true shows form controls
@@ -605,20 +612,6 @@ export default function ArtistProfilePage() {
 										))}
 									</select>
 								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="member_since">
-										Member Since
-									</label>
-									<input
-										type="text"
-										id="member_since"
-										name="member_since"
-										value={formData.member_since}
-										placeholder={artist.member_since || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
 							</div>
 						</div>
 
@@ -834,8 +827,7 @@ export default function ArtistProfilePage() {
 									<strong>Status:</strong> {artist.status || "Not set"}
 								</div>
 								<div>
-									<strong>Member Since:</strong>{" "}
-									{artist.member_since || "Not set"}
+									<strong>Member Since:</strong> {memberSinceYear || "Not set"}
 								</div>
 								<div className={styles.fullWidth}>
 									<strong>Bio:</strong> {artist.bio || "Not set"}
