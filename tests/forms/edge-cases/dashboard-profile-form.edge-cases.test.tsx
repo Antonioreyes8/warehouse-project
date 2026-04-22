@@ -9,6 +9,8 @@ const mocks = vi.hoisted(() => ({
 	getArtistByEmailMock: vi.fn(),
 	isEmailAuthorizedMock: vi.fn(),
 	updateArtistProfileMock: vi.fn(),
+	getArtistWorksByProfileIdMock: vi.fn(),
+	syncArtistWorksMock: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
@@ -41,10 +43,12 @@ vi.mock("@/lib/supabase/client", () => ({
 vi.mock("@/lib/artists/queries", () => ({
 	getArtistByEmail: mocks.getArtistByEmailMock,
 	isEmailAuthorized: mocks.isEmailAuthorizedMock,
+	getArtistWorksByProfileId: mocks.getArtistWorksByProfileIdMock,
 }));
 
 vi.mock("@/lib/artists/mutations", () => ({
 	updateArtistProfile: mocks.updateArtistProfileMock,
+	syncArtistWorks: mocks.syncArtistWorksMock,
 }));
 
 import ArtistProfilePage from "@/app/dashboard/profile/page";
@@ -54,6 +58,8 @@ beforeEach(() => {
 	mocks.getSessionMock.mockResolvedValue({
 		data: { session: { user: { id: "uid-1", email: "f2arc.8@gmail.com" } } },
 	});
+	mocks.getArtistWorksByProfileIdMock.mockResolvedValue([]);
+	mocks.syncArtistWorksMock.mockResolvedValue({ success: true });
 });
 
 describe("Dashboard Form Edge Cases", () => {

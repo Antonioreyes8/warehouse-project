@@ -9,6 +9,8 @@ const mocks = vi.hoisted(() => ({
 	getArtistByEmailMock: vi.fn(),
 	isEmailAuthorizedMock: vi.fn(),
 	updateArtistProfileMock: vi.fn(),
+	getArtistWorksByProfileIdMock: vi.fn(),
+	syncArtistWorksMock: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
@@ -41,10 +43,12 @@ vi.mock("@/lib/supabase/client", () => ({
 vi.mock("@/lib/artists/queries", () => ({
 	getArtistByEmail: mocks.getArtistByEmailMock,
 	isEmailAuthorized: mocks.isEmailAuthorizedMock,
+	getArtistWorksByProfileId: mocks.getArtistWorksByProfileIdMock,
 }));
 
 vi.mock("@/lib/artists/mutations", () => ({
 	updateArtistProfile: mocks.updateArtistProfileMock,
+	syncArtistWorks: mocks.syncArtistWorksMock,
 }));
 
 import ArtistProfilePage from "@/app/dashboard/profile/page";
@@ -81,7 +85,9 @@ beforeEach(() => {
 	});
 	mocks.isEmailAuthorizedMock.mockResolvedValue(true);
 	mocks.getArtistByEmailMock.mockResolvedValue(baseArtist);
+	mocks.getArtistWorksByProfileIdMock.mockResolvedValue([]);
 	mocks.updateArtistProfileMock.mockResolvedValue({ success: true });
+	mocks.syncArtistWorksMock.mockResolvedValue({ success: true });
 });
 
 describe("Dashboard Form Black-Box", () => {
@@ -105,7 +111,6 @@ describe("Dashboard Form Black-Box", () => {
 		expect(screen.getByLabelText("Ethnic Background")).toBeInTheDocument();
 		expect(screen.getByLabelText("Contact")).toBeInTheDocument();
 		expect(screen.getByLabelText("Status")).toBeInTheDocument();
-		expect(screen.getByLabelText("Member Since")).toBeInTheDocument();
 		expect(screen.getByLabelText("Instagram")).toBeInTheDocument();
 		expect(screen.getByLabelText("YouTube")).toBeInTheDocument();
 		expect(screen.getByLabelText("Patreon")).toBeInTheDocument();
@@ -137,7 +142,6 @@ describe("Dashboard Form Black-Box", () => {
 				ethnic_background: "Hispanic/Latino",
 				contact: "tony@surco.studio",
 				status: "Open for Work",
-				member_since: "2025-05",
 				instagram: "https://instagram.com/antonioreyes",
 				youtube: "https://youtube.com/@antonioreyes",
 				patreon: "https://patreon.com/antonioreyes",

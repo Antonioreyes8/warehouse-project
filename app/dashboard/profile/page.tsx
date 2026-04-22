@@ -112,6 +112,107 @@ type EditableWork = {
 	sort_order: number;
 };
 
+type ArtistProfileFormData = {
+	name: string;
+	username: string;
+	bio: string;
+	avatar_url: string;
+	birthday: string;
+	based_in: string;
+	mediums: string;
+	past_projects: string;
+	ethnic_background: string;
+	contact: string;
+	status: string;
+	instagram: string;
+	youtube: string;
+	patreon: string;
+	facebook: string;
+	tik_tok: string;
+	etsy: string;
+	personal_website: string;
+	soundcloud: string;
+	bandcamp: string;
+};
+
+// Original creation problem:
+// Repeated inline object construction for form hydration/reset and works payloads
+// was spread across multiple handlers.
+//
+// Refactored creation approach (Simple Factory):
+// Centralize object creation in one place so shape changes happen once.
+const ArtistProfileFactory = {
+	createEmptyFormData(): ArtistProfileFormData {
+		return {
+			name: "",
+			username: "",
+			bio: "",
+			avatar_url: "",
+			birthday: "",
+			based_in: "",
+			mediums: "",
+			past_projects: "",
+			ethnic_background: "",
+			contact: "",
+			status: "",
+			instagram: "",
+			youtube: "",
+			patreon: "",
+			facebook: "",
+			tik_tok: "",
+			etsy: "",
+			personal_website: "",
+			soundcloud: "",
+			bandcamp: "",
+		};
+	},
+
+	createFormDataFromArtist(artist: Artist): ArtistProfileFormData {
+		return {
+			name: artist.name || "",
+			username: artist.username || "",
+			bio: artist.bio || "",
+			avatar_url: artist.avatar_url || "",
+			birthday: artist.birthday || "",
+			based_in: artist.based_in || "",
+			mediums: artist.mediums || "",
+			past_projects: artist.past_projects || "",
+			ethnic_background: artist.ethnic_background || "",
+			contact: artist.contact || "",
+			status: artist.status || "",
+			instagram: artist.instagram || "",
+			youtube: artist.youtube || "",
+			patreon: artist.patreon || "",
+			facebook: artist.facebook || "",
+			tik_tok: artist.tik_tok || "",
+			etsy: artist.etsy || "",
+			personal_website: artist.personal_website || "",
+			soundcloud: artist.soundcloud || "",
+			bandcamp: artist.bandcamp || "",
+		};
+	},
+
+	createProfileUpdatePayload(
+		formData: ArtistProfileFormData,
+	): Partial<Omit<Artist, "id" | "email">> {
+		return {
+			...formData,
+		};
+	},
+
+	createWorksPayload(works: EditableWork[]): ArtistWorkInput[] {
+		return works.map((work, index) => ({
+			id: work.id,
+			title: work.title,
+			description: work.description,
+			medium: work.medium,
+			image_url: work.image_url,
+			link_url: work.link_url,
+			sort_order: index,
+		}));
+	},
+};
+
 function toEditableWorks(works: ArtistWork[]): EditableWork[] {
 	return works.map((work, index) => ({
 		id: work.id,
@@ -152,30 +253,11 @@ export default function ArtistProfilePage() {
 	const [artistWorks, setArtistWorks] = useState<EditableWork[]>([]);
 	const [message, setMessage] = useState("");
 
-	const [formData, setFormData] = useState({
+	const [formData, setFormData] = useState<ArtistProfileFormData>(
 		// Form state mirrors editable profile columns.
 		// avatar_url is included so uploaded image URL can be previewed before final save.
-		name: "",
-		username: "",
-		bio: "",
-		avatar_url: "",
-		birthday: "",
-		based_in: "",
-		mediums: "",
-		past_projects: "",
-		ethnic_background: "",
-		contact: "",
-		status: "",
-		instagram: "",
-		youtube: "",
-		patreon: "",
-		facebook: "",
-		tik_tok: "",
-		etsy: "",
-		personal_website: "",
-		soundcloud: "",
-		bandcamp: "",
-	});
+		ArtistProfileFactory.createEmptyFormData(),
+	);
 
 	useEffect(() => {
 		// Auth + profile bootstrap section
@@ -215,29 +297,7 @@ export default function ArtistProfilePage() {
 				const profile = await getArtistByEmail(session.user.email);
 				if (profile) {
 					setArtist(profile);
-					// Hydrate form with existing values so edit mode starts with current data.
-					setFormData({
-						name: profile.name || "",
-						username: profile.username || "",
-						bio: profile.bio || "",
-						avatar_url: profile.avatar_url || "",
-						birthday: profile.birthday || "",
-						based_in: profile.based_in || "",
-						mediums: profile.mediums || "",
-						past_projects: profile.past_projects || "",
-						ethnic_background: profile.ethnic_background || "",
-						contact: profile.contact || "",
-						status: profile.status || "",
-						instagram: profile.instagram || "",
-						youtube: profile.youtube || "",
-						patreon: profile.patreon || "",
-						facebook: profile.facebook || "",
-						tik_tok: profile.tik_tok || "",
-						etsy: profile.etsy || "",
-						personal_website: profile.personal_website || "",
-						soundcloud: profile.soundcloud || "",
-						bandcamp: profile.bandcamp || "",
-					});
+					setFormData(ArtistProfileFactory.createFormDataFromArtist(profile));
 
 					const works = await getArtistWorksByProfileId(profile.id);
 					setArtistWorks(toEditableWorks(works));
@@ -278,9 +338,7 @@ export default function ArtistProfilePage() {
 		setSaving(true);
 		setMessage("");
 
-		const payload = {
-			...formData,
-		};
+		const payload = ArtistProfileFactory.createProfileUpdatePayload(formData);
 
 		const profileResult = await updateArtistProfile(
 			artist.id,
@@ -294,15 +352,7 @@ export default function ArtistProfilePage() {
 			return;
 		}
 
-		const worksPayload: ArtistWorkInput[] = artistWorks.map((work, index) => ({
-			id: work.id,
-			title: work.title,
-			description: work.description,
-			medium: work.medium,
-			image_url: work.image_url,
-			link_url: work.link_url,
-			sort_order: index,
-		}));
+		const worksPayload = ArtistProfileFactory.createWorksPayload(artistWorks);
 
 		const worksResult = await syncArtistWorks(artist.id, worksPayload);
 
@@ -487,28 +537,7 @@ export default function ArtistProfilePage() {
 		// Cancel behavior
 		// Restores form to current profile snapshot and exits edit mode without persisting changes.
 		if (artist) {
-			setFormData({
-				name: artist.name || "",
-				username: artist.username || "",
-				bio: artist.bio || "",
-				avatar_url: artist.avatar_url || "",
-				birthday: artist.birthday || "",
-				based_in: artist.based_in || "",
-				mediums: artist.mediums || "",
-				past_projects: artist.past_projects || "",
-				ethnic_background: artist.ethnic_background || "",
-				contact: artist.contact || "",
-				status: artist.status || "",
-				instagram: artist.instagram || "",
-				youtube: artist.youtube || "",
-				patreon: artist.patreon || "",
-				facebook: artist.facebook || "",
-				tik_tok: artist.tik_tok || "",
-				etsy: artist.etsy || "",
-				personal_website: artist.personal_website || "",
-				soundcloud: artist.soundcloud || "",
-				bandcamp: artist.bandcamp || "",
-			});
+			setFormData(ArtistProfileFactory.createFormDataFromArtist(artist));
 
 			const resetWorks = async () => {
 				const works = await getArtistWorksByProfileId(artist.id);
