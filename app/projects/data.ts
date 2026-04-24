@@ -101,7 +101,7 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 
 			// Organizers
 			{ name: "Wyatt Sanchez", role: "Organizers" },
-			{ name: "Gabriel Cook", role: "Organizers" },
+			{ name: "Diego Espino", role: "Organizers", username: "diegoespino" },
 			{ name: "Antonio Reyes", role: "Organizers", username: "antonioreyes" },
 			{ name: "Julian Cox", role: "Organizers" },
 

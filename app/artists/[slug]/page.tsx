@@ -64,7 +64,18 @@ export default async function ArtistPage(props: ArtistPageProps) {
 	// Profile rendering section
 	// Shows profile if found, otherwise displays placeholder
 	if (!profile) {
-		return <div>This artist hasn’t created their page yet.</div>;
+		return (
+			<div className={styles.emptyStateWrap}>
+				<section className={styles.emptyStateCard}>
+					<p className={styles.emptyStateEyebrow}>Artist Profile</p>
+					<h1 className={styles.emptyStateTitle}>Page not set up yet</h1>
+					<p className={styles.emptyStateText}>
+						This artist has not created their public page yet. Check back later
+						for updates.
+					</p>
+				</section>
+			</div>
+		);
 	}
 
 	const works = await getArtistWorksByProfileId(profile.id);
