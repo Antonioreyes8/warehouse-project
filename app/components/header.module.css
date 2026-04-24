@@ -44,13 +44,14 @@
 }
 
 @media (max-width: 1024px) {
+	.inner {
+		white-space: normal;
+		line-height: 1.1;
+	}
+
 	.title {
 		font-size: 3.25rem;
-	}
-}
-
-@media (max-width: 768px) {
-	.title {
-		font-size: 2rem;
+		display: block;
+		overflow-wrap: anywhere;
 	}
 }

@@ -19,28 +19,36 @@
 .projectsGrid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	gap: 1rem;
+	gap: 1.5rem;
 	margin-top: 2rem;
 }
 
 .projectCard {
 	padding: 1rem;
 	text-align: left;
+	max-width: 420px;
+	margin: 0 auto;
+}
+
+.projectCard img {
+	width: 100% !important;
+	height: auto !important;
+	max-height: none !important;
 }
 
 @media (max-width: 1024px) {
 	.projectsGrid {
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: 1fr;
+		gap: 2.25rem;
 	}
 
-	.projectCard img {
-		height: 180px !important;
-		width: auto !important;
+	.projectCard {
+		max-width: 720px;
 	}
 
 	.projectsSection {
 		padding-top: 50px;
-		padding-left: 10px;
-		padding-right: 10px;
+		padding-left: 16px;
+		padding-right: 16px;
 	}
 }

@@ -40,7 +40,6 @@ export default function ManifestoSection() {
 						bigger than ourselves.
 					</p>
 					<br></br>
-					<br></br>
 					<p>
 						Artistic expression is fundamental to unification, healing, and
 						growth.
@@ -59,7 +58,6 @@ export default function ManifestoSection() {
 						meaning that give it power.
 					</p>
 					<br></br>
-					<br></br>
 					<p>
 						Our mission is to redistribute influence within our community and
 						empower those who have been systemically marginalized.
@@ -72,7 +70,6 @@ export default function ManifestoSection() {
 						exists within a broader context, one that is often abstracted or
 						erased.
 					</p>
-					<br></br>
 					<br></br>
 					<p>
 						We believe we have a responsibility to be clear about who and what

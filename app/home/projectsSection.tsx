@@ -41,8 +41,9 @@ export default function ProjectsSection() {
 								<Image
 									src={project.img}
 									alt={project.title}
-									width={300}
-									height={450}
+									width={700}
+									height={1050}
+									sizes="(max-width: 1024px) 92vw, (max-width: 1400px) 30vw, 420px"
 									style={{ width: "100%", height: "auto", cursor: "pointer" }}
 									unoptimized
 								/>
