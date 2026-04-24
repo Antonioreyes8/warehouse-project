@@ -52,7 +52,8 @@ export default function AuthCallbackPage() {
 				if (!active) return;
 
 				if (session) {
-					// Success — navigate straight to dashboard, no message shown.
+					// Success — scroll to top then navigate to dashboard.
+					window.scrollTo({ top: 0, behavior: "instant" });
 					router.replace("/dashboard/profile");
 					return;
 				}
