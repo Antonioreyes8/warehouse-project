@@ -33,14 +33,18 @@ export default function AuthCallbackPage() {
 				const code = url.searchParams.get("code");
 
 				if (code) {
-					const { error } = await supabase.auth.exchangeCodeForSession(code);
-					if (error) {
-						throw error;
-					}
+					// detectSessionInUrl:true (set in client.ts) may have already
+					// exchanged this code automatically before this effect ran.
+					// Attempting to exchange an already-used code throws a PKCE error
+					// even though the session is valid.  We intentionally ignore the
+					// exchange error here and rely on getSession() below to confirm
+					// whether the sign-in actually succeeded.
+					await supabase.auth.exchangeCodeForSession(code);
 				}
 
-				// detectSessionInUrl:true may have already exchanged the code before
-				// this effect ran — getSession() picks up that result.
+				// Always check getSession() — it covers both the case where we just
+				// exchanged the code above AND the case where detectSessionInUrl already
+				// did it for us before this effect ran.
 				const {
 					data: { session },
 				} = await supabase.auth.getSession();
