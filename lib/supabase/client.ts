@@ -30,4 +30,20 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Client initialization and export
 // Creates a singleton client instance to avoid recreating connections/config repeatedly.
 // This client is safe to use in browser contexts with public anon credentials.
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+//
+// auth.flowType: 'pkce' – explicitly opt into PKCE so the code verifier is always
+//   written to localStorage before the OAuth redirect.  Without this, some builds of
+//   @supabase/auth-js can fall back to implicit flow, which skips verifier storage.
+// auth.persistSession: true – ensures the session and verifier survive full-page
+//   navigation cycles.  Critical on mobile browsers (iOS Safari, Samsung Internet)
+//   where storage can be lazily cleared between page loads.
+// auth.detectSessionInUrl: true – lets the client parse the ?code= param on the
+//   callback page automatically, so the exchange happens even if the useEffect fires
+//   after the client has already started processing the URL.
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+	auth: {
+		flowType: "pkce",
+		persistSession: true,
+		detectSessionInUrl: true,
+	},
+});
