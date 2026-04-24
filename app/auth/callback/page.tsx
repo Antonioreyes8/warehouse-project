@@ -3,10 +3,15 @@
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import styles from "./callback.module.css";
+
+type CallbackState =
+	| { status: "loading" }
+	| { status: "error"; message: string };
 
 export default function AuthCallbackPage() {
 	const router = useRouter();
-	const [message, setMessage] = useState("Completing sign-in...");
+	const [state, setState] = useState<CallbackState>({ status: "loading" });
 
 	useEffect(() => {
 		let active = true;
@@ -28,56 +33,46 @@ export default function AuthCallbackPage() {
 				const code = url.searchParams.get("code");
 
 				if (code) {
-					// exchangeCodeForSession needs the PKCE verifier that was stored in
-					// localStorage before the OAuth redirect.  On mobile browsers the
-					// verifier can occasionally be missing (private mode, storage
-					// throttling, etc.).  If the exchange fails we surface the real
-					// reason instead of silently bouncing back to login.
 					const { error } = await supabase.auth.exchangeCodeForSession(code);
 					if (error) {
 						throw error;
 					}
 				}
 
-				// detectSessionInUrl:true (set in client.ts) may have already exchanged
-				// the code before this effect ran.  Calling getSession() here picks up
-				// that result so we never miss a successful sign-in.
+				// detectSessionInUrl:true may have already exchanged the code before
+				// this effect ran — getSession() picks up that result.
 				const {
 					data: { session },
 				} = await supabase.auth.getSession();
 
-				if (!active) {
-					return;
-				}
+				if (!active) return;
 
 				if (session) {
+					// Success — navigate straight to dashboard, no message shown.
 					router.replace("/dashboard/profile");
 					return;
 				}
 
-				// No session and no error from exchange – something unexpected happened.
+				// No session and no explicit error — something unexpected happened.
 				if (active) {
-					setMessage("Sign-in could not be completed. Please try again.");
-					// Give the user a moment to read the message before redirecting.
+					setState({
+						status: "error",
+						message: "Sign-in could not be completed. Please try again.",
+					});
 					setTimeout(() => {
 						if (active) router.replace("/login");
-					}, 2500);
+					}, 3000);
 				}
 			} catch (error) {
-				if (!active) {
-					return;
-				}
+				if (!active) return;
 
 				const errorMessage =
 					error instanceof Error ? error.message : "Unexpected sign-in error";
 
-				// Surface the error so the user (and you in dev tools) can see it,
-				// then redirect after a short pause instead of immediately navigating
-				// away before the message is ever rendered.
-				setMessage(`Sign-in failed: ${errorMessage}. Redirecting to login…`);
+				setState({ status: "error", message: errorMessage });
 				setTimeout(() => {
 					if (active) router.replace("/login");
-				}, 2500);
+				}, 3000);
 			}
 		};
 
@@ -88,5 +83,21 @@ export default function AuthCallbackPage() {
 		};
 	}, [router]);
 
-	return <div>{message}</div>;
+	return (
+		<div className={styles.wrap}>
+			{state.status === "loading" ? (
+				<div className={styles.loadingCard}>
+					<div className={styles.spinner} />
+					<p className={styles.loadingText}>Signing you in…</p>
+				</div>
+			) : (
+				<div className={styles.errorCard}>
+					<p className={styles.errorLabel}>Sign-in failed</p>
+					<h2 className={styles.errorTitle}>Something went wrong</h2>
+					<p className={styles.errorMessage}>{state.message}</p>
+					<p className={styles.redirectNote}>Redirecting back to login…</p>
+				</div>
+			)}
+		</div>
+	);
 }
