@@ -1,0 +1,92 @@
+.causeSection {
+	margin-top: 48px;
+}
+
+.causeSection h2 {
+	margin-bottom: 16px;
+}
+
+.causeSection p {
+	line-height: 1.6;
+}
+
+.causeSection ul {
+	margin-top: 12px;
+	padding-left: 20px;
+	list-style-type: disc;
+}
+
+.causeSection ul li {
+	margin-bottom: 8px;
+}
+
+.causeSection a {
+	color: #1e90ff;
+	text-decoration: none;
+	transition: color 0.2s ease-in-out;
+}
+
+.causeSection a:hover {
+	color: #63b3ed;
+	text-decoration: underline;
+}
+
+.collaboratorsSection {
+	margin-top: 48px;
+}
+
+.collaboratorsSection h2 {
+	margin-bottom: 16px;
+}
+
+.collaboratorsCategory {
+	margin-bottom: 24px;
+}
+
+.collaboratorsCategory h3 {
+	margin-bottom: 8px;
+}
+
+.collaboratorsGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 8px;
+}
+
+.collaboratorName a {
+	text-decoration: none;
+	color: #d3d3d3;
+}
+
+.collaboratorName a:hover {
+	text-decoration: underline;
+}
+
+.recapSection {
+	margin-top: 48px;
+}
+
+.recapSection h2 {
+	margin-bottom: 16px;
+}
+
+.recapGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 16px;
+}
+
+.recapItem {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+}
+
+.recapItem img,
+.recapItem video {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}

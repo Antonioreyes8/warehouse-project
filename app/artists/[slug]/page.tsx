@@ -18,7 +18,9 @@
 
 import AboutSection from "../aboutSection";
 import Image from "next/image";
-import styles from "../artists.module.css";
+import pageStyles from "../page-layout.module.css";
+import worksStyles from "../works-section.module.css";
+import emptyStateStyles from "../empty-state.module.css";
 import {
 	getArtistByUsername,
 	getArtistWorksByProfileId,
@@ -65,11 +67,13 @@ export default async function ArtistPage(props: ArtistPageProps) {
 	// Shows profile if found, otherwise displays placeholder
 	if (!profile) {
 		return (
-			<div className={styles.emptyStateWrap}>
-				<section className={styles.emptyStateCard}>
-					<p className={styles.emptyStateEyebrow}>Artist Profile</p>
-					<h1 className={styles.emptyStateTitle}>Page not set up yet</h1>
-					<p className={styles.emptyStateText}>
+			<div className={emptyStateStyles.emptyStateWrap}>
+				<section className={emptyStateStyles.emptyStateCard}>
+					<p className={emptyStateStyles.emptyStateEyebrow}>Artist Profile</p>
+					<h1 className={emptyStateStyles.emptyStateTitle}>
+						Page not set up yet
+					</h1>
+					<p className={emptyStateStyles.emptyStateText}>
 						This artist has not created their public page yet. Check back later
 						for updates.
 					</p>
@@ -87,33 +91,33 @@ export default async function ArtistPage(props: ArtistPageProps) {
 	);
 
 	return (
-		<div className={styles.artistPage}>
+		<div className={pageStyles.artistPage}>
 			<AboutSection profile={profile} works={[]} />
 			{visibleWorks.length > 0 && (
-				<section className={styles.worksSection}>
-					<h2 className={styles.workHeading}>Works</h2>
-					<div className={styles.workList}>
+				<section className={worksStyles.worksSection}>
+					<h2 className={worksStyles.workHeading}>Works</h2>
+					<div className={worksStyles.workList}>
 						{visibleWorks.map((work) => {
 							const workLinkUrl = normalizeExternalUrl(work.link_url);
 
 							return (
-								<div className={styles.workSection} key={work.id}>
-									<div className={styles.workInner}>
-										<div className={styles.workArtwork}>
+								<div className={worksStyles.workSection} key={work.id}>
+									<div className={worksStyles.workInner}>
+										<div className={worksStyles.workArtwork}>
 											{work.image_url ? (
 												workLinkUrl ? (
 													<a
 														href={workLinkUrl}
 														target="_blank"
 														rel="noopener noreferrer"
-														className={styles.workImageLink}
+														className={worksStyles.workImageLink}
 													>
 														<Image
 															src={work.image_url}
 															alt={`${profile.name} featured work`}
 															width={320}
 															height={320}
-															className={styles.workImage}
+															className={worksStyles.workImage}
 														/>
 													</a>
 												) : (
@@ -122,23 +126,23 @@ export default async function ArtistPage(props: ArtistPageProps) {
 														alt={`${profile.name} featured work`}
 														width={320}
 														height={320}
-														className={styles.workImage}
+														className={worksStyles.workImage}
 													/>
 												)
 											) : null}
 										</div>
-										<div className={styles.workCopy}>
-											<div className={styles.workRow}>
+										<div className={worksStyles.workCopy}>
+											<div className={worksStyles.workRow}>
 												<h3>Title:</h3>
 												<p>{work.title || "Untitled"}</p>
 											</div>{" "}
 											{hasText(work.medium) && (
-												<div className={styles.workRow}>
+												<div className={worksStyles.workRow}>
 													<h3>Medium:</h3>
 													<p>{work.medium}</p>
 												</div>
 											)}{" "}
-											<div className={styles.workRow}>
+											<div className={worksStyles.workRow}>
 												<h3>Description:</h3>
 												<p>
 													{hasText(work.description) ? work.description : "—"}
@@ -149,7 +153,7 @@ export default async function ArtistPage(props: ArtistPageProps) {
 													href={workLinkUrl}
 													target="_blank"
 													rel="noopener noreferrer"
-													className={styles.workLink}
+													className={worksStyles.workLink}
 												>
 													View Work
 												</a>

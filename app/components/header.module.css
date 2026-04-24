@@ -1,0 +1,56 @@
+.header {
+	font-family: "HelveticaNeue", sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 60px 20px;
+	background-color: #2a2a2a;
+	color: #fff;
+	width: 100%;
+	position: relative;
+	z-index: 5000;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.inner {
+	width: 100%;
+	font-weight: 800;
+	text-transform: uppercase;
+	line-height: 1;
+	text-align: center;
+	white-space: nowrap;
+	position: relative;
+	height: 100%;
+}
+
+.title {
+	color: #fff;
+	text-decoration: none;
+	font-size: 5rem;
+}
+
+.titleLink {
+	color: inherit;
+	text-decoration: none;
+	font-size: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+	display: inline-block;
+	transition: transform 0.2s ease;
+}
+
+.titleLink:hover {
+	transform: scale(1.04);
+}
+
+@media (max-width: 1024px) {
+	.title {
+		font-size: 3.25rem;
+	}
+}
+
+@media (max-width: 768px) {
+	.title {
+		font-size: 2rem;
+	}
+}

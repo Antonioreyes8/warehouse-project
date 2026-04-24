@@ -14,8 +14,20 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
+
+type MockLinkProps = {
+	href: string;
+	className?: string;
+	children: ReactNode;
+};
+
+type MockImageProps = {
+	src: string;
+	alt: string;
+} & ComponentPropsWithoutRef<"img">;
 
 const mocks = vi.hoisted(() => ({
 	pushMock: vi.fn(),
@@ -33,7 +45,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("next/link", () => ({
-	default: ({ href, className, children }: any) => (
+	default: ({ href, className, children }: MockLinkProps) => (
 		<a href={href} className={className}>
 			{children}
 		</a>
@@ -41,7 +53,7 @@ vi.mock("next/link", () => ({
 }));
 
 vi.mock("next/image", () => ({
-	default: ({ src, alt, ...props }: any) => (
+	default: ({ src, alt, ...props }: MockImageProps) => (
 		<img src={src} alt={alt} {...props} />
 	),
 }));

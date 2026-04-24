@@ -1,0 +1,58 @@
+.linkRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #2a2a2a;
+	border-radius: 12px;
+	padding: 0;
+	overflow: hidden;
+}
+
+.link {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	padding: 16px;
+	text-decoration: none;
+	color: #fff;
+	font-weight: 500;
+	font-size: 16px;
+	gap: 12px;
+}
+
+.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+}
+
+.text {
+	flex: 1;
+	text-align: left;
+}
+
+.share {
+	background: none;
+	border: none;
+	color: #fff;
+	padding: 16px;
+	cursor: pointer;
+}
+
+.linkRow:hover {
+	background-color: #444;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+	.link {
+		padding: 14px;
+		font-size: 15px;
+	}
+
+	.share {
+		padding: 14px;
+	}
+}

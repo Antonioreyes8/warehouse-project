@@ -15,67 +15,68 @@
  */
 
 import Link from "next/link";
+import styles from "./footer.module.css";
 
 // Footer component
 // Provides persistent navigation, external community links, and location metadata.
 // This footer is intentionally content-heavy so users can access key routes from any page.
 export default function Footer() {
 	return (
-		<footer className="footer">
+		<footer className={styles.footer}>
 			{/* Left column
 			    Contains internal navigation plus program/action links used frequently by visitors.
 			*/}
-			<div className="footer_left">
+			<div className={styles.left}>
 				<div>
 					<p>
-						<Link href="/" className="link">
+						<Link href="/" className={styles.link}>
 							Home
 						</Link>
 					</p>
 					<p>
-						<Link href="/manifesto" className="link">
+						<Link href="/manifesto" className={styles.link}>
 							Manifesto
 						</Link>
 					</p>
 					<p>Financial Hub</p>
 					<p>
-						<Link href="/guidelines" className="link">
+						<Link href="/guidelines" className={styles.link}>
 							Community Guidelines
 						</Link>
 					</p>
 					<p>
-						<Link href="/FAQ" className="link">
+						<Link href="/FAQ" className={styles.link}>
 							FAQ
 						</Link>
 					</p>
 					<p>
 						<Link
 							href="https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=header"
-							className="link"
+							className={styles.link}
 						>
 							Join the team
 						</Link>
 					</p>
 					<p>
-						<Link href="/linktree" className="link">
+						<Link href="/linktree" className={styles.link}>
 							Linktree
 						</Link>
 					</p>
 					<br />
 					<p>
-						<Link href="/login" className="link">
+						<Link href="/login" className={styles.link}>
 							Artist Login
 						</Link>
 					</p>
 					<br />
 					<p>Denton, Texas</p>
-					<p>The Warehouse Project © 2026</p>
+					<p>The Diaspora Project © 2026</p>
 				</div>
 			</div>
 			{/* Right column
 			    Reserved for future content blocks (newsletter, social, legal, etc.).
 			*/}
-			<div className="footer_right"></div>
+			<div className={styles.right}></div>
 		</footer>
 	);
 }

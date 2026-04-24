@@ -38,7 +38,7 @@ type LinkItem = {
 
 // Content config section
 // Link groups are defined as data to keep rendering logic minimal and easy to maintain.
-const aboutlinks: LinkItem[] = [
+const aboutLinks: LinkItem[] = [
 	{ title: "Manifesto", url: "/manifesto", icon: faHeart },
 	{
 		title: "Community Guidelines",
@@ -48,7 +48,7 @@ const aboutlinks: LinkItem[] = [
 	{ title: "FAQ", url: "/FAQ", icon: faQuestion },
 ];
 
-const contactlinks: LinkItem[] = [
+const contactLinks: LinkItem[] = [
 	{
 		title: "Application to join",
 		url: "https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=dialog",
@@ -61,7 +61,7 @@ const contactlinks: LinkItem[] = [
 	},
 ];
 
-const sociallinks: LinkItem[] = [
+const socialLinks: LinkItem[] = [
 	{
 		title: "Instagram",
 		url: "https://www.instagram.com/diaspora.sound",
@@ -104,13 +104,13 @@ export default function LinksPage() {
 				<h1 className={styles.title}>LinkTree</h1>
 
 				<p className={styles.subtitle}>About</p>
-				<div className={styles.links}>{renderLinks(aboutlinks)}</div>
+				<div className={styles.links}>{renderLinks(aboutLinks)}</div>
 
 				<p className={styles.subtitle}>Forms</p>
-				<div className={styles.links}>{renderLinks(contactlinks)}</div>
+				<div className={styles.links}>{renderLinks(contactLinks)}</div>
 
 				<p className={styles.subtitle}>Socials</p>
-				<div className={styles.links}>{renderLinks(sociallinks)}</div>
+				<div className={styles.links}>{renderLinks(socialLinks)}</div>
 			</div>
 		</div>
 	);

@@ -501,7 +501,7 @@ export default function ArtistProfilePage() {
 		setMessage("Uploading work image...");
 
 		const extension = getFileExtension(file.name);
-		const filePath = `${user.id}/work-${Date.now()}.${extension}`;
+		const filePath = `${user.id}/work-${index}-${file.lastModified}.${extension}`;
 
 		const { error: uploadError } = await supabase.storage
 			.from(WORK_BUCKET)

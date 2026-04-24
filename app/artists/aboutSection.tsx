@@ -10,13 +10,13 @@
  *   - Next.js Image component for optimization
  *   - CSS Modules for styling
  * Dependencies:
- *   - Artist type, styles from artists.module.css
+ *   - Artist type, styles from about-section.module.css
  * How It Fits:
  *   - Used in artist pages to display profile information
  */
 
 import { Artist, type ArtistWork } from "../../lib/artists/queries";
-import styles from "./artists.module.css";
+import styles from "./about-section.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -132,7 +132,7 @@ export default function AboutSection({ profile, works }: AboutSectionProps) {
 				<p>@{profile.username}</p>
 			</div>
 			{/* Main content area with info and bio */}
-			<div className={styles.infoandlinksContainer}>
+			<div className={styles.infoAndLinksContainer}>
 				{/* Personal information block
 				    - Entire block hides when no info fields exist.
 				    - Each column is conditionally rendered only if it has at least one row.

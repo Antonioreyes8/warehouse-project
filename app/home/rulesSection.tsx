@@ -21,10 +21,10 @@ import styles from "./home.module.css";
 // The overlay pattern communicates values immediately without forcing a route change.
 export default function RulesSection() {
 	return (
-		<section className={styles.rules_section}>
+		<section className={styles.rulesSection}>
 			{/* Media container with background image */}
-			<div className={styles.rules_media}>
-				<div className={styles.rules_background}>
+			<div className={styles.rulesMedia}>
+				<div className={styles.rulesBackground}>
 					{/* Hero media
 				    Uses unoptimized because this asset is hosted externally in Supabase Storage
 				    and may be animated (gif), where exact playback is preferred.
@@ -33,7 +33,7 @@ export default function RulesSection() {
 						src="https://sshdocgpnnptiftcccei.supabase.co/storage/v1/object/public/posters/party.gif"
 						alt="Party"
 						fill
-						className={styles.rules_image}
+						className={styles.rulesImage}
 						sizes="100vw"
 						unoptimized
 					/>
@@ -42,7 +42,7 @@ export default function RulesSection() {
 				    Keeps core etiquette visible at first glance, framing the cultural expectations
 				    before users browse projects or profiles.
 				*/}
-				<div className={styles.rules_overlay}>
+				<div className={styles.rulesOverlay}>
 					<h3>BEFORE YOU COME</h3>
 					<ol className={styles.rules_list}>
 						<li>Be open to unfamiliar art</li>

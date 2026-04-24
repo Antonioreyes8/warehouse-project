@@ -1,120 +1,197 @@
-# The Creative Incubator and Portfolio
+# The Diaspora Project Web App
 
-Community-first artist platform built with Next.js and Supabase.
+Community-first artist platform built with Next.js App Router and Supabase.
 
-## Table of Contents
+This repository hosts the public website, artist profiles, project archives, and a protected artist dashboard for editing profile and work content.
 
-1. Project Goals
-2. Current Features
+## Contents
+
+1. Project Overview
+2. Core Product Areas
 3. Architecture
-4. Data Model and Storage
-5. Authentication and Authorization
-6. Profile Image Upload Flow
-7. Local Setup
-8. Environment Variables
-9. Supabase Storage Policies
-10. Scripts and Testing
-11. Folder Map
-12. Coding and Documentation Conventions
-13. Deployment Notes
+4. Routing and Rendering Strategy
+5. Data Layer and Supabase Model
+6. Authentication and Authorization
+7. Storage and Media
+8. Styling and CSS Organization
+9. Repository Structure
+10. Local Development
+11. Environment Variables
+12. Testing Strategy
+13. How to Add or Extend Features
+14. Deployment Checklist
 
-## Project Goals
+## Project Overview
 
-This app creates a digital home for artists to:
+The app is designed around three primary goals:
 
-1. Publish a public profile page.
-2. Share project/media recaps.
-3. Update profile details from a protected dashboard.
-4. Keep access restricted to allowlisted users.
+1. Present projects and artists publicly through curated pages.
+2. Let approved artists sign in and manage their own profile/work metadata.
+3. Keep content architecture simple enough for non-engineer collaborators to maintain.
 
-## Current Features
+## Core Product Areas
 
-1. Home route composed from modular sections.
-2. Dynamic artist pages via `/artists/[slug]`.
-3. Dynamic project pages via `/projects/[slug]`.
-4. Google OAuth login via Supabase.
-5. Dashboard profile editor for allowlisted users.
-6. Avatar upload to Supabase Storage bucket `avatars`.
-7. Social link fields and birthday-driven age display.
-8. Organized test suites for API and form behavior.
+1. Home and informational routes:
+   - Home, Manifesto, Guidelines, FAQ, Linktree
+2. Public artist pages:
+   - Dynamic route at /artists/[slug]
+   - Displays profile identity, optional details, bio, links, and works
+3. Public project pages:
+   - Dynamic route at /projects/[slug]
+   - Displays context (cause), collaborators, and recap media
+4. Protected artist dashboard:
+   - Route at /dashboard/profile
+   - Edits profile metadata and artist works
 
 ## Architecture
 
-High-level architecture:
+High-level stack:
 
-1. Next.js App Router for route-based composition.
-2. Supabase for auth, Postgres data, and Storage objects.
-3. CSS Modules for scoped per-page styles.
+1. Framework: Next.js 16 App Router
+2. Runtime split:
+   - Server components for public content pages
+   - Client components for auth/dashboard interactions
+3. Backend platform: Supabase
+   - Auth (Google OAuth)
+   - Postgres data tables
+   - Storage buckets for media
+4. Styling approach:
+   - CSS Modules for route/component-level styles
+   - Minimal global baseline in app/globals.css
 
-Core runtime split:
+## Routing and Rendering Strategy
 
-1. Server-rendered routes for public content pages.
-2. Client-rendered dashboard/login routes for auth interactions.
-3. Data access utilities in `lib/` for query/mutation isolation.
+Public pages are mostly server-rendered from static data and Supabase reads:
 
-## Data Model and Storage
+1. /artists/[slug]
+   - Resolves slug
+   - Fetches profile + works
+   - Renders fallback empty-state if no profile exists
+2. /projects/[slug]
+   - Resolves slug from local project data map
+   - Fetches project media from storage helper
 
-Primary table used in profile flows:
+Protected pages are client-rendered due to session/auth state needs:
 
-1. `public.profiles`
-2. Key fields used by dashboard/public pages:
-   - `id`
-   - `email`
-   - `name`
-   - `username`
-   - `bio`
-   - `avatar_url`
-   - `birthday`
-   - `based_in`
-   - `mediums`
-   - `past_projects`
-   - `ethnic_background`
-   - `contact`
-   - `status`
-   - `member_since`
-   - social link fields
+1. /login
+   - Starts Google OAuth flow
+2. /auth/callback
+   - Completes OAuth exchange and redirects on success
+   - Shows explicit UI only on actual error
+3. /dashboard/profile
+   - Session + allowlist gate
+   - Profile and work editing workflow
 
-Authorization table:
+## Data Layer and Supabase Model
 
-1. `public.allowed_users`
-2. Used to gate dashboard access by normalized email.
+Code organization in lib/:
 
-Storage buckets:
+1. lib/artists/queries.ts
+   - Profile and works reads
+2. lib/artists/mutations.ts
+   - Profile updates and works synchronization
+3. lib/auth/authorization.ts
+   - Allowlist checks
+4. lib/projects/media.ts
+   - Project media retrieval helpers
+5. lib/supabase/client.ts
+   - Browser Supabase client
+6. lib/supabase/server.ts
+   - Server-side Supabase client helper
 
-1. `projects` for project recap media.
-2. `avatars` for artist profile pictures.
+Main tables and resources used by the app:
+
+1. profiles
+   - public artist profile fields
+2. artist_works
+   - per-profile work items
+3. allowed_users and/or authorized_artists
+   - allowlist for dashboard access (environment-dependent table naming exists in current code)
+4. Storage buckets
+   - avatars for profile images
+   - projects (or project-specific storage paths) for recap media
 
 ## Authentication and Authorization
 
-Current auth flow:
+Current login behavior:
 
-1. User signs in with Google OAuth on `/login`.
-2. App redirects to `/dashboard/profile`.
-3. Dashboard checks session and email allowlist.
-4. If authorized, profile is loaded by email and editable.
+1. User initiates Google OAuth on /login
+2. Redirect returns to /auth/callback
+3. Callback verifies/loads session and routes to /dashboard/profile
+4. Dashboard checks allowlist by normalized email before loading editable content
 
-If session is missing, user is redirected to `/login`.
-If user is not allowlisted, an access denied message is shown.
+Important implementation details:
 
-## Profile Image Upload Flow
+1. Supabase client is configured for PKCE and URL session detection.
+2. Callback flow avoids false-positive early error flashes by checking session state before failing.
+3. Unauthorized users see a dedicated access denied state instead of editable UI.
 
-Dashboard avatar flow:
+## Storage and Media
 
-1. User picks a file in dashboard profile editor.
-2. Client validates:
-   - max size 5MB
-   - allowed types: JPG, PNG, WEBP
-3. File uploads to bucket `avatars` at path:
-   - `auth.uid()/avatar-timestamp.ext`
-4. Public URL is generated.
-5. URL is stored in `profiles.avatar_url` on save.
+Artist avatar upload flow:
 
-Important pattern:
+1. File selected in dashboard
+2. Client-side validation for size/type
+3. Upload to avatars bucket
+4. Public URL stored in profile row
 
-1. Bucket is not linked to `profiles` by a DB foreign key.
-2. The link is application-level via `avatar_url` (or path, if you later migrate).
+Project recap media flow:
 
-## Local Setup
+1. Route identifies project slug
+2. Media helper loads items from storage
+3. Recap section renders image/video tiles with type-based output
+
+## Styling and CSS Organization
+
+The codebase has been normalized to use sectioned CSS modules for larger features.
+
+Patterns used:
+
+1. Keep a feature entry stylesheet as an import hub.
+2. Split long styles by concern: shell, sections, buttons/states, responsive overrides.
+3. Prefer camelCase class names in CSS Modules.
+
+Examples of current organization:
+
+1. artists/
+   - page-layout.module.css
+   - empty-state.module.css
+   - about-section.module.css
+   - works-section.module.css
+2. dashboard/profile/
+   - profile.module.css (import hub)
+   - profile-shell.module.css
+   - profile-form.module.css
+   - profile-buttons.module.css
+   - profile-states.module.css
+   - profile-responsive.module.css
+3. home/
+   - home.module.css (import hub)
+   - home-rules.module.css
+   - home-projects.module.css
+4. linktree/
+   - linktree.module.css (import hub)
+   - linktree-layout.module.css
+   - linktree-links.module.css
+5. projects/
+   - project.module.css (import hub)
+   - project-layout.module.css
+   - project-sections.module.css
+
+## Repository Structure
+
+Top-level functional map:
+
+1. app/
+   - Route handlers, page components, and CSS modules
+2. lib/
+   - Data/query/mutation/auth/storage helpers
+3. tests/
+   - API and form tests (black-box, white-box, edge cases)
+4. public/
+   - Static assets and fonts
+
+## Local Development
 
 1. Install dependencies:
 
@@ -122,20 +199,20 @@ Important pattern:
 npm install
 ```
 
-2. Create `.env.local`:
+2. Create local env file:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-3. Start dev server:
+3. Start development server:
 
 ```bash
 npm run dev
 ```
 
-4. Build and run production locally:
+4. Build and run production mode locally:
 
 ```bash
 npm run build
@@ -146,78 +223,84 @@ npm run start
 
 Required:
 
-1. `NEXT_PUBLIC_SUPABASE_URL`
-2. `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+1. NEXT_PUBLIC_SUPABASE_URL
+2. NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-## Supabase Storage Policies
+## Testing Strategy
 
-For the `avatars` bucket, use policies that allow users to manage only their own folder.
+Available scripts:
 
-Example conditions:
+1. npm test
+2. npm run test:coverage
+3. npm run test:watch
+4. npm run test:ui
+5. npm run test:api
+6. npm run test:api:coverage
+7. npm run test:api:black-box
+8. npm run test:api:white-box
+9. npm run test:api:edge-cases
+10. npm run test:forms
+11. npm run test:forms:black-box
+12. npm run test:forms:edge-cases
 
-1. Insert check:
-   - `bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text`
-2. Update using/check:
-   - `bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text`
-3. Delete using:
-   - `bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text`
-4. Select using (public avatars):
-   - `bucket_id = 'avatars'`
+Recommended test commands:
 
-If avatars should be viewable without auth, set the bucket to Public and keep read policy aligned.
+1. Fast API sanity run:
 
-## Scripts and Testing
-
-Main scripts:
-
-1. `npm run dev`
-2. `npm run build`
-3. `npm run start`
-4. `npm run lint`
-5. `npm test`
-
-Organized test buckets include:
-
-1. API black-box tests.
-2. API white-box tests.
-3. API edge-case tests.
-4. Dashboard form black-box tests.
-5. Dashboard form edge-case tests.
-
-## Folder Map
-
-```text
-app/
-  dashboard/profile/    Protected profile editor and dashboard view
-  artists/[slug]/       Public artist pages
-  projects/[slug]/      Public project pages
-  login/                OAuth sign-in page
-  manifesto/            Mission and values page
-  guidelines/           Community rules page
-  FAQ/                  FAQ page
-  linktree/             Link hub page
-
-lib/
-  artists/              Artist queries and mutations
-  auth/                 Authorization helpers
-  projects/             Storage media helpers
-  supabase/             Client and server Supabase setup
+```bash
+npm run test:api
 ```
 
-## Coding and Documentation Conventions
+2. API + lib coverage run (branch-focused quality gate):
 
-This project uses verbose file headers and section comments in route files to explain:
+```bash
+npm run test:api:coverage
+```
 
-1. Purpose of the file.
-2. Responsibilities.
-3. Dependencies.
-4. How each file fits the full system.
+3. Full repository coverage run:
 
-When adding new pages/components, follow the same style so onboarding remains fast.
+```bash
+npm run test:coverage
+```
 
-## Deployment Notes
+Coverage notes:
 
-1. Add production domain in Supabase Auth URL settings.
-2. Add redirect URL for OAuth callback target.
-3. Ensure Supabase env vars are configured in deployment platform.
-4. Verify Storage policies in production project.
+1. Coverage is configured in vitest.config.ts for API-layer modules under lib/artists, lib/auth, and lib/projects.
+2. Thresholds are enforced at 90%+ for statements, lines, functions, and branches.
+3. HTML coverage report is generated in the default coverage output folder after coverage runs.
+
+Current suites cover:
+
+1. API behavior under expected and edge inputs
+2. Dashboard form behavior and input-level edge cases
+3. Query/mutation-level helper correctness
+
+## How to Add or Extend Features
+
+Recommended workflow for new pages/features:
+
+1. Create route and component in app/
+2. Keep data logic in lib/ (do not embed query logic deeply in UI)
+3. Start with one feature stylesheet, then split into sectioned modules if it grows
+4. Use camelCase module class naming
+5. Add tests in matching tests/ subtree
+
+When adding a new style-heavy route:
+
+1. Create feature-name.module.css as import hub
+2. Create companion files like:
+   - feature-name-shell.module.css
+   - feature-name-sections.module.css
+   - feature-name-responsive.module.css
+
+## Deployment Checklist
+
+1. Configure environment variables on host
+2. Configure Supabase Auth redirect URLs for deployed domain
+3. Verify allowlist table contains expected artist emails
+4. Verify storage policies for avatars/projects buckets
+5. Smoke test:
+   - login
+   - callback redirect
+   - dashboard edit/save
+   - public artist/project pages

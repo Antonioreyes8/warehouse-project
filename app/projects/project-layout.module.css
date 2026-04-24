@@ -1,0 +1,23 @@
+.projectMain {
+	margin: 0 auto;
+	padding: 48px 24px;
+	background-color: #2a2a2a;
+	color: #d3d3d3;
+}
+
+.projectPoster {
+	width: 25%;
+	height: auto;
+	margin-bottom: 16px;
+}
+
+.projectMain p {
+	margin-bottom: 8px;
+	line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+	.projectPoster {
+		width: 50%;
+	}
+}

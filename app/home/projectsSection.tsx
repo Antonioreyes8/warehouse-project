@@ -23,17 +23,17 @@ import { projects } from "../projects/data";
 // This section is data-driven: adding/removing entries in projects data updates this grid automatically.
 export default function ProjectsSection() {
 	return (
-		<section id="projects" className={styles.projects_section}>
-			<div className={styles.projects_container}>
+		<section id="projects" className={styles.projectsSection}>
+			<div className={styles.projectsContainer}>
 				<h2>PROJECTS</h2>
 				{/* Project card mapping
 				    - Uses slug as the stable key and route target.
 				    - Keeps each card simple: title, visual, date.
 				    - Image-only link creates a clear visual click target while preserving text readability.
 				*/}
-				<div className={styles.projects_grid}>
+				<div className={styles.projectsGrid}>
 					{projects.map((project) => (
-						<div className={styles.project_card} key={project.slug}>
+						<div className={styles.projectCard} key={project.slug}>
 							<h3>{project.title}</h3>
 
 							{/* Visual navigation target */}

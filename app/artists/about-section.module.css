@@ -1,0 +1,175 @@
+.aboutSection {
+	display: flex;
+	flex-wrap: wrap;
+	background-color: #2a2a2a;
+	padding: 32px;
+	gap: 32px;
+}
+
+.headerContainer {
+	padding: 32px;
+	background-color: #d3d3d3;
+	flex: 1;
+	min-width: 300px;
+}
+
+.headerContainer img {
+	width: 300px;
+	height: 300px;
+	object-fit: cover;
+}
+
+.headerContainer h2 {
+	font-size: 2rem;
+	line-height: 1.1;
+}
+
+.infoAndLinksContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	flex: 2;
+	min-width: 300px;
+}
+
+.bioContainer {
+	padding: 32px;
+	background-color: #d3d3d3;
+	min-width: 300px;
+}
+
+.bioContainer h3 {
+	font-size: 1.3rem;
+	font-weight: 600;
+	line-height: 1.2;
+	margin-bottom: 4px;
+}
+
+.infoContainer {
+	display: flex;
+	padding: 32px;
+	background-color: #d3d3d3;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.leftColumn {
+	flex: 1;
+	padding-right: 8px;
+	border-right: 2px solid #aaa;
+	min-width: 150px;
+}
+
+.singleColumn {
+	border-right: none;
+	padding-right: 0;
+}
+
+.rightColumn {
+	flex: 1;
+	padding-left: 8px;
+	min-width: 150px;
+}
+
+.infoRow {
+	margin-bottom: 14px;
+}
+
+.infoRow:last-child {
+	margin-bottom: 0;
+}
+
+.infoRow h3 {
+	font-size: 1.3rem;
+	font-weight: 600;
+	line-height: 1.2;
+	margin-bottom: 4px;
+}
+
+.infoRow p {
+	margin: 0;
+}
+
+.linksContainer {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 32px;
+	width: 100%;
+	background-color: #444;
+	border-radius: 16px;
+	color: #d3d3d3;
+	gap: 16px;
+}
+
+.socialLink {
+	color: #d3d3d3;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.socialLink:hover {
+	color: #fff;
+}
+
+@media (max-width: 1024px) {
+	.aboutSection {
+		padding: 20px;
+		gap: 20px;
+		flex-direction: column;
+	}
+
+	.headerContainer,
+	.infoAndLinksContainer,
+	.bioContainer,
+	.infoContainer,
+	.linksContainer {
+		min-width: 0;
+		width: 100%;
+	}
+
+	.headerContainer,
+	.bioContainer,
+	.infoContainer,
+	.linksContainer {
+		padding: 20px;
+	}
+
+	.headerContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.headerContainer img {
+		width: min(100%, 280px);
+		height: auto;
+		max-height: 360px;
+	}
+
+	.infoContainer {
+		flex-direction: column;
+	}
+
+	.leftColumn {
+		border-right: none;
+		border-bottom: 2px solid #aaa;
+		padding-right: 0;
+		padding-bottom: 8px;
+	}
+
+	.rightColumn {
+		padding-left: 0;
+		padding-top: 8px;
+	}
+
+	.linksContainer {
+		justify-content: flex-start;
+	}
+
+	.socialLink svg {
+		width: 2.25rem;
+		height: 2.25rem;
+	}
+}

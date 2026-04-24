@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { User } from "@supabase/supabase-js";
 import {
 	mockSupabase,
 	mockMaybeSingle,
 	mockSelect,
 	mockEq,
-	mockIlike,
 	resetSupabaseMocks,
 } from "../../__mocks__/supabase";
 
@@ -114,20 +114,26 @@ describe("API Black-Box: Authorization", () => {
 			});
 
 		await expect(
-			isArtistAuthorized({ id: "uid-1", email: "f2arc.8@gmail.com" } as any),
+			isArtistAuthorized({
+				id: "uid-1",
+				email: "f2arc.8@gmail.com",
+			} as unknown as User),
 		).resolves.toBe(true);
 	});
 
 	it("blocks user without email", async () => {
-		await expect(isArtistAuthorized({ id: "uid-1" } as any)).resolves.toBe(
-			false,
-		);
+		await expect(
+			isArtistAuthorized({ id: "uid-1" } as unknown as User),
+		).resolves.toBe(false);
 	});
 
 	it("blocks user when no allowlist table returns a match", async () => {
 		mockMaybeSingle.mockResolvedValue({ data: null, error: null });
 		await expect(
-			isArtistAuthorized({ id: "uid-1", email: "none@example.com" } as any),
+			isArtistAuthorized({
+				id: "uid-1",
+				email: "none@example.com",
+			} as unknown as User),
 		).resolves.toBe(false);
 	});
 });

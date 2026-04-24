@@ -1,0 +1,68 @@
+/* Actions + buttons */
+.buttonGroup {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+
+.profileSection .buttonGroup {
+	margin-bottom: 16px;
+}
+
+.viewPublicButton,
+.saveButton,
+.cancelButton,
+.signOutButton,
+.backButton {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	padding: 0.55rem 1rem;
+	cursor: pointer;
+	border: 1px solid #d3d3d3;
+	background: transparent;
+	color: #d3d3d3;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.viewPublicButton:hover,
+.saveButton:hover,
+.cancelButton:hover,
+.signOutButton:hover,
+.backButton:hover {
+	background: #d3d3d3;
+	color: #2a2a2a;
+}
+
+.sectionButton {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	padding: 0.55rem 1rem;
+	cursor: pointer;
+	border: 1px solid #2a2a2a;
+	background: transparent;
+	color: #2a2a2a;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.sectionButton:hover {
+	background: #2a2a2a;
+	color: #d3d3d3;
+}
+
+.deleteWorkButton {
+	border-color: #8b1f1f;
+	color: #8b1f1f;
+}
+
+.deleteWorkButton:hover {
+	background: #8b1f1f;
+	color: #fff;
+}

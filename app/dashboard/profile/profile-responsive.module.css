@@ -1,0 +1,65 @@
+/* Responsive overrides */
+@media (max-width: 768px) {
+	.profileContainer {
+		padding: 16px;
+	}
+
+	.profileHeader {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 16px;
+	}
+
+	.headerActions {
+		margin-left: 0;
+		justify-content: flex-start;
+	}
+
+	.formGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.buttonGroup {
+		width: 100%;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.deleteWorkButton {
+		width: 100%;
+		text-align: center;
+	}
+
+	.avatarField {
+		gap: 10px;
+	}
+
+	.workImage,
+	.workPlaceholder {
+		width: min(100%, 220px);
+	}
+
+	.workPreview,
+	.workCard {
+		flex-wrap: wrap;
+	}
+
+	.workMedia {
+		width: 100%;
+	}
+
+	.avatarControls {
+		max-width: 100%;
+	}
+
+	.avatarImage,
+	.avatarPlaceholder {
+		width: 120px;
+		height: 120px;
+	}
+
+	.profileSection a {
+		display: inline;
+		max-width: 100%;
+	}
+}

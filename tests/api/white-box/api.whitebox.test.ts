@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { User } from "@supabase/supabase-js";
 import {
 	mockSupabase,
 	mockFrom,
@@ -99,7 +100,7 @@ describe("API White-Box: authorization.ts table order", () => {
 		await isArtistAuthorized({
 			id: "uid-1",
 			email: "f2arc.8@gmail.com",
-		} as any);
+		} as unknown as User);
 
 		expect(mockFrom).toHaveBeenNthCalledWith(1, "authorized_artists");
 		expect(mockFrom).toHaveBeenNthCalledWith(2, "authorized");

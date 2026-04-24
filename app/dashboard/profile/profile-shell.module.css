@@ -1,0 +1,89 @@
+/* Layout + section shell */
+.profileContainer {
+	min-height: 100vh;
+	background-color: #2a2a2a;
+	font-family: "HelveticaNeue", sans-serif;
+	color: #d3d3d3;
+	padding: 32px;
+	--profile-label-size: 0.76rem;
+}
+
+.profileHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 32px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid #444;
+}
+
+.profileTitle {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 2rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	color: #d3d3d3;
+	margin: 0;
+}
+
+.profileIntro {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	flex: 1;
+	min-width: 0;
+}
+
+.profileGreeting {
+	font-size: 1rem;
+	font-weight: 300;
+	color: #d3d3d3;
+	margin: 0;
+	max-width: 62ch;
+	line-height: 1.5;
+}
+
+.headerActions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-items: flex-start;
+	gap: 12px;
+	margin-left: 24px;
+	flex-shrink: 0;
+}
+
+.profileContent {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+.profileSection {
+	background-color: #d3d3d3;
+	padding: 32px;
+	color: #2a2a2a;
+}
+
+.sectionTitle {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 1rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-bottom: 24px;
+	color: #2a2a2a;
+}
+
+.profileSection a {
+	color: #2a2a2a;
+	text-decoration: underline;
+	font-size: 0.95rem;
+	font-weight: 300;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+
+.profileSection a:hover {
+	color: #555;
+}

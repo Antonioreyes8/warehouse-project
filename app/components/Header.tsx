@@ -16,14 +16,21 @@
 
 "use client";
 
+import Link from "next/link";
+import styles from "./header.module.css";
+
 // Header component
 // Displays a consistent title bar across the full application shell.
 // Keeping this component intentionally simple avoids route-specific logic in global chrome.
 export default function Header() {
 	return (
-		<header>
-			<div className="Header">
-				<h1 className="title">The Warehouse Project</h1>
+		<header className={styles.header}>
+			<div className={styles.inner}>
+				<h1 className={styles.title}>
+					<Link href="/" className={styles.titleLink}>
+						The Diaspora project
+					</Link>
+				</h1>
 			</div>
 		</header>
 	);

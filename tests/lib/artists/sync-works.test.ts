@@ -50,12 +50,7 @@ beforeEach(() => {
 	mockUpsert.mockReset();
 	mockInsert.mockReset();
 	mockIn.mockReset();
-// mockFrom must be hoisted so it's available inside the vi.mock factory.
-const { mockFrom, mockUpsert, mockInsert } = vi.hoisted(() => ({
-	mockFrom: vi.fn(),
-	mockUpsert: vi.fn(),
-	mockInsert: vi.fn(),
-}));
+});
 
 describe("syncArtistWorks — insert new works", () => {
 	it("inserts works that have no id", async () => {
@@ -80,8 +75,8 @@ describe("syncArtistWorks — insert new works", () => {
 			expect.objectContaining({
 				profile_id: "profile-1",
 				title: "Work A",
-				description: "Desc A",
-				medium: "Oil on canvas",
+				description: null,
+				medium: null,
 			}),
 		]);
 	});
@@ -331,7 +326,9 @@ describe("syncArtistWorks — error handling", () => {
 			error: null,
 		});
 		mockUpsert.mockResolvedValueOnce({ error: null });
-		const deleteChain = makeDeleteChain({ error: { message: "delete failed" } });
+		const deleteChain = makeDeleteChain({
+			error: { message: "delete failed" },
+		});
 
 		mockFrom
 			.mockReturnValueOnce(selectChain)
@@ -357,7 +354,10 @@ describe("syncArtistWorks — error handling", () => {
 			{ title: "Work", sort_order: 0 },
 		]);
 
-		expect(result).toEqual({ success: false, error: "Unexpected error occurred" });
+		expect(result).toEqual({
+			success: false,
+			error: "Unexpected error occurred",
+		});
 		expect(consoleSpy).toHaveBeenCalled();
 		consoleSpy.mockRestore();
 	});

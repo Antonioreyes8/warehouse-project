@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { User } from "@supabase/supabase-js";
 import {
 	mockSupabase,
 	mockMaybeSingle,
@@ -79,7 +80,10 @@ describe("API Edge Cases: authorization loops", () => {
 			error: { message: "table unavailable" },
 		});
 		await expect(
-			isArtistAuthorized({ id: "uid-1", email: "f2arc.8@gmail.com" } as any),
+			isArtistAuthorized({
+				id: "uid-1",
+				email: "f2arc.8@gmail.com",
+			} as unknown as User),
 		).resolves.toBe(false);
 	});
 });

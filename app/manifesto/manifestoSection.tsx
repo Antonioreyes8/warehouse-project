@@ -25,7 +25,6 @@ export default function ManifestoSection() {
 				*/}
 				<div>
 					<h2>Our Manifesto</h2>
-					<h3>I. The Revolution starts here</h3>
 					<br></br>
 					<p>
 						We want to be part of a movement that reclaims social spaces from
@@ -41,7 +40,6 @@ export default function ManifestoSection() {
 						bigger than ourselves.
 					</p>
 					<br></br>
-					<h3>II. Artistic Liberation</h3>
 					<br></br>
 					<p>
 						Artistic expression is fundamental to unification, healing, and
@@ -61,7 +59,6 @@ export default function ManifestoSection() {
 						meaning that give it power.
 					</p>
 					<br></br>
-					<h3>III. For the Marginalized</h3>
 					<br></br>
 					<p>
 						Our mission is to redistribute influence within our community and
@@ -76,7 +73,6 @@ export default function ManifestoSection() {
 						erased.
 					</p>
 					<br></br>
-					<h3>IV. Institutional Power</h3>
 					<br></br>
 					<p>
 						We believe we have a responsibility to be clear about who and what

@@ -1,0 +1,167 @@
+/* Form + media fields */
+.formGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	width: 100%;
+}
+
+.formGrid > div {
+	font-size: 0.95rem;
+	font-weight: 300;
+	line-height: 1.45;
+	min-width: 0;
+}
+
+.formGrid strong {
+	font-size: var(--profile-label-size);
+	font-weight: 600;
+}
+
+.fullWidth {
+	grid-column: 1 / -1;
+}
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.avatarField {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: flex-start;
+}
+
+.avatarControls {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	width: 100%;
+}
+
+.avatarDisplayRow {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.workPreview,
+.workCard {
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+	width: 100%;
+}
+
+.workMedia {
+	width: 220px;
+	flex-shrink: 0;
+}
+
+.workContent {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 10px;
+	font-size: 0.95rem;
+	font-weight: 300;
+	line-height: 1.45;
+	min-width: 0;
+}
+
+.workImage {
+	width: 220px;
+	height: 220px;
+	object-fit: cover;
+	border: 1px solid #2a2a2a;
+	background: #fff;
+}
+
+.workPlaceholder {
+	width: 220px;
+	min-height: 220px;
+	border: 1px dashed #2a2a2a;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.8rem;
+	font-weight: 300;
+	padding: 8px;
+	text-align: center;
+	background: #f4f4f4;
+	color: #2a2a2a;
+}
+
+.workImageLink {
+	display: inline-flex;
+}
+
+.avatarDisplayRow strong {
+	min-width: 0;
+}
+
+.avatarImage {
+	width: 132px;
+	height: 132px;
+	object-fit: cover;
+	border: 1px solid #2a2a2a;
+}
+
+.avatarPlaceholder {
+	width: 132px;
+	height: 132px;
+	border: 1px dashed #2a2a2a;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.8rem;
+	font-weight: 300;
+	padding: 8px;
+	text-align: center;
+	background: #f4f4f4;
+}
+
+.avatarHelpText {
+	font-size: 0.75rem;
+	font-weight: 300;
+	margin: 0;
+	color: #4d4d4d;
+}
+
+.formLabel {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: var(--profile-label-size);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: #2a2a2a;
+}
+
+.formInput,
+.formTextarea {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.95rem;
+	font-weight: 300;
+	padding: 0.5rem 0.6rem;
+	border: 1px solid #2a2a2a;
+	background: #fff;
+	color: #2a2a2a;
+	outline: none;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+	border-color: #2a2a2a;
+	outline: 2px solid #2a2a2a;
+	outline-offset: 0;
+}
+
+.formTextarea {
+	min-height: 100px;
+	resize: vertical;
+}
