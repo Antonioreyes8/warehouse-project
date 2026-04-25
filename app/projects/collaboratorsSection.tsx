@@ -47,11 +47,10 @@ export default function CollaboratorsSection({
 	// Role display order
 	// Explicit ordering keeps presentation consistent with program priorities.
 	const roleOrder = [
-		"Performers",
+		"Artists",
 		"Organizers",
 		"Preparation",
 		"Media",
-		"Non-Performative Artists",
 		"Technical Production",
 	];
 

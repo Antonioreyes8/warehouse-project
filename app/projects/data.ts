@@ -32,11 +32,10 @@ export type Media = {
 export type Collaborator = {
 	name: string;
 	role?:
-		| "Performers"
+		| "Artists"
 		| "Organizers"
 		| "Preparation"
 		| "Media"
-		| "Non-Performative Artists"
 		| "Technical Production";
 	slug?: string;
 	username?: string;
@@ -94,35 +93,34 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 			],
 		},
 		collaboratorsSection: [
-			// Performers
-			{ name: "Aiden Perez", role: "Performers" },
-			{ name: "Ella Roberts", role: "Performers" },
-			{ name: "Scarlett Parker", role: "Performers" },
+			// Artists
+			{ name: "Santi", role: "Artists" },
+			{ name: "Uriel Espinosa", role: "Artists" },
+			{ name: "Matteo Espinosa", role: "Artists" },
+			{ name: "Amy", role: "Artists" },
+			{ name: "Diego Espino", role: "Artists", username: "diegoespino" },
 
 			// Organizers
-			{ name: "Wyatt Sanchez", role: "Organizers" },
+			{ name: "Uriel Espinosa", role: "Organizers" },
 			{ name: "Diego Espino", role: "Organizers", username: "diegoespino" },
 			{ name: "Antonio Reyes", role: "Organizers", username: "antonioreyes" },
-			{ name: "Julian Cox", role: "Organizers" },
+			{ name: "Matteo Espinosa", role: "Organizers" },
+			{ name: "America Elizalde", role: "Organizers" },
 
 			// Preparation
-			{ name: "Grace Edwards", role: "Preparation" },
-			{ name: "Victoria Morris", role: "Preparation" },
-			{ name: "Hannah Morgan", role: "Preparation" },
+			{ name: "Antonio Reyes", role: "Preparation", username: "antonioreyes" },
+			{ name: "Diego Espino", role: "Preparation", username: "diegoespino" },
 
 			// Media
-			{ name: "Carter Collins", role: "Media" },
-			{ name: "Jayden Rogers", role: "Media" },
+			{ name: "Junior", role: "Media" },
+			{ name: "Rafa", role: "Media" },
+			{ name: "Antonio Reyes", role: "Media", username: "antonioreyes" },
 
 			// Technical Production
-			{ name: "Tyler Brooks", role: "Technical Production" },
-			{ name: "Jordan Kim", role: "Technical Production" },
-			{ name: "Alex Rivera", role: "Technical Production" },
+			{ name: "Uriel Espinosa", role: "Technical Production" },
+			{ name: "Matteo Espinosa", role: "Technical Production" },
+			{ name: "Diego Espino", role: "Technical Production", username: "diegoespino" },
 
-			// Non-Performative Artists
-
-			{ name: "Taylor Brooks", role: "Non-Performative Artists" },
-			{ name: "Rowan Blake", role: "Non-Performative Artists" },
 		],
 		recapSection: [], // <-- will populate dynamically from Supabase
 	},
@@ -160,35 +158,22 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 			],
 		},
 		collaboratorsSection: [
-			// Performers
+			// Artists
 
-			{ name: "Amelia Walker", role: "Performers" },
-			{ name: "Harper King", role: "Performers" },
-			{ name: "Abigail Nguyen", role: "Performers" },
+			{ name: "Amelia Walker", role: "Artists" },
 
 			// Organizers
 			{ name: "Gabriel Cook", role: "Organizers" },
-			{ name: "Anthony Bailey", role: "Organizers" },
+
 
 			// Preparation
 			{ name: "Avery Phillips", role: "Preparation" },
-			{ name: "Grace Edwards", role: "Preparation" },
-			{ name: "Victoria Morris", role: "Preparation" },
 
 			// Media
 			{ name: "Jayden Rogers", role: "Media" },
-			{ name: "Isaac Bell", role: "Media" },
 
 			// Technical Production
 			{ name: "Alex Rivera", role: "Technical Production" },
-			{ name: "Cameron Diaz", role: "Technical Production" },
-			{ name: "Riley Foster", role: "Technical Production" },
-
-			// Non-Performative Artists
-			{ name: "Jamie Cruz", role: "Non-Performative Artists" },
-			{ name: "Taylor Brooks", role: "Non-Performative Artists" },
-			{ name: "Rowan Blake", role: "Non-Performative Artists" },
-			{ name: "Dakota Hayes", role: "Non-Performative Artists" },
 		],
 		recapSection: [], // <-- dynamic fetch
 	},
@@ -227,35 +212,22 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 			],
 		},
 		collaboratorsSection: [
-			// Performers
-			{ name: "Harper King", role: "Performers" },
-			{ name: "Abigail Nguyen", role: "Performers" },
+			// Artists
+
+			{ name: "Amelia Walker", role: "Artists" },
 
 			// Organizers
-			{ name: "Wyatt Sanchez", role: "Organizers" },
 			{ name: "Gabriel Cook", role: "Organizers" },
-			{ name: "Anthony Bailey", role: "Organizers" },
+
 
 			// Preparation
-			{ name: "Evelyn Scott", role: "Preparation" },
-			{ name: "Emily Flores", role: "Preparation" },
 			{ name: "Avery Phillips", role: "Preparation" },
-			{ name: "Grace Edwards", role: "Preparation" },
-			{ name: "Victoria Morris", role: "Preparation" },
 
 			// Media
-			{ name: "Jackson Campbell", role: "Media" },
-			{ name: "Carter Collins", role: "Media" },
 			{ name: "Jayden Rogers", role: "Media" },
-			{ name: "Isaac Bell", role: "Media" },
 
 			// Technical Production
-			{ name: "Cameron Diaz", role: "Technical Production" },
-			{ name: "Riley Foster", role: "Technical Production" },
-
-			// Non-Performative Artists
-			{ name: "Rowan Blake", role: "Non-Performative Artists" },
-			{ name: "Dakota Hayes", role: "Non-Performative Artists" },
+			{ name: "Alex Rivera", role: "Technical Production" },
 		],
 		recapSection: [], // <-- dynamic fetch
 	},

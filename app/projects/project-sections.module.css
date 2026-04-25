@@ -56,6 +56,7 @@
 .collaboratorName a {
 	text-decoration: none;
 	color: #d3d3d3;
+	font-weight: 300;
 }
 
 .collaboratorName a:hover {
