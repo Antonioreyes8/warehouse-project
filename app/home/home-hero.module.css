@@ -1,0 +1,40 @@
+/* Hero section */
+.heroSection {
+	display: flex;
+	justify-content: center;
+	min-height: 180vh;
+	background-color: transparent;
+	color: #d3d3d3;
+	position: relative;
+	z-index: 1000;
+}
+
+.heroMedia {
+	position: relative;
+	width: 100%;
+	min-height: 200vh;
+	overflow: hidden;
+	z-index: 1000;
+}
+
+.heroBackground {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+}
+
+.heroImage {
+	object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+	.heroSection {
+		min-height: 200svh;
+	}
+
+	.heroMedia {
+		width: 100%;
+		min-height: 140svh;
+	}
+}

@@ -14,14 +14,14 @@
  */
 
 import ProjectsSection from "@/app/home/projectsSection";
-import RulesSection from "@/app/home/rulesSection";
+import HeroSection from "@/app/home/heroSection";
 
 // Home page component
 // Composes the main sections of the landing page
 export default function HomePage() {
 	return (
 		<>
-			<RulesSection />
+			<HeroSection />
 			<ProjectsSection />
 		</>
 	);
