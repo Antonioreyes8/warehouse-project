@@ -65,7 +65,7 @@ export default function Footer() {
 					<br />
 					<p>
 						<Link href="/login" className={styles.link}>
-							Artist Login
+							Artist Portal
 						</Link>
 					</p>
 					<br />

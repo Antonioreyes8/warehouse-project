@@ -1,83 +1,101 @@
 /**
  * File: app/projects/collaboratorsSection.tsx
- * Purpose: Renders project collaborators grouped by role with links to artist profiles.
- * Responsibilities:
- *   - Display collaborators in role-based categories
- *   - Keep output deterministic through custom role ordering
- *   - Provide links to each collaborator's public artist page
- * Key Concepts:
- *   - Grouping arrays into keyed records
- *   - Stable role ordering and alphabetical sorting inside each group
- * Dependencies:
- *   - Collaborator type from project data
- *   - project.module.css and Next.js Link
- * How It Fits:
- *   - Connects projects to people and drives cross-navigation to artist profiles
  */
 
-import type { Collaborator } from "@/lib/projects/types";
 import styles from "./project.module.css";
 import Link from "next/link";
 
+type Collaborator = {
+  role: string;
+  name?: string;
+  username?: string;
+};
+
+type NormalizedCollaborator = {
+  role: string;
+  displayName: string;
+  slug: string;
+};
+
 export default function CollaboratorsSection({
-	collaboratorsSection,
+  collaboratorsSection,
 }: {
-	collaboratorsSection?: Collaborator[];
+  collaboratorsSection?: Collaborator[];
 }) {
-	// Empty-state behavior
-	// Projects can be published before collaborator metadata is finalized.
-	if (!collaboratorsSection || collaboratorsSection.length === 0) {
-		return (
-			<section className={styles.collaboratorsSection}>
-				<h2>Collaborators</h2>
-				<p>No collaborators added yet.</p>
-			</section>
-		);
-	}
+  if (!collaboratorsSection?.length) {
+    return (
+      <section className={styles.collaboratorsSection}>
+        <h2>Collaborators</h2>
+        <p>No collaborators added yet.</p>
+      </section>
+    );
+  }
 
-	// Grouping phase
-	// Transform flat collaborator list into role buckets for sectional rendering.
-	const grouped: Record<string, Collaborator[]> = {};
-	collaboratorsSection.forEach((collab) => {
-		const role = collab.role || "Other";
-		if (!grouped[role]) grouped[role] = [];
-		grouped[role].push(collab);
-	});
+  // Normalize into safe display format
+  const normalized: NormalizedCollaborator[] = collaboratorsSection.map(
+    (person, i) => {
+      const displayName = person.name || "Unknown";
 
-	// Role display order
-	// Explicit ordering keeps presentation consistent with program priorities.
-	const roleOrder = [
-		"Artists",
-		"Organizers",
-		"Preparation",
-		"Media",
-		"Technical Production",
-	];
+      const slug =
+        person.username ||
+        displayName
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-]/g, "") ||
+        `unknown-${i}`;
 
-	const sortedRoles = roleOrder.filter((role) => grouped[role]);
+      return {
+        role: person.role || "Other",
+        displayName,
+        slug,
+      };
+    }
+  );
 
-	// Render grouped collaborator cards
-	// Names are sorted alphabetically within each role for scanability.
-	return (
-		<section className={styles.collaboratorsSection}>
-			<h2>Collaborators</h2>
+  // Group by role
+  const grouped: Record<string, NormalizedCollaborator[]> = {};
 
-			{sortedRoles.map((role) => (
-				<div key={role} className={styles.collaboratorsCategory}>
-					<h3>{role}</h3>
-					<div className={styles.collaboratorsGrid}>
-						{grouped[role]
-							.sort((a, b) => a.name.localeCompare(b.name))
-							.map((person, i) => (
-								<div key={i} className={styles.collaboratorName}>
-									<Link href={`/artists/${person.username}`}>
-										{person.name}
-									</Link>
-								</div>
-							))}
-					</div>
-				</div>
-			))}
-		</section>
-	);
+  normalized.forEach((c) => {
+    if (!grouped[c.role]) grouped[c.role] = [];
+    grouped[c.role].push(c);
+  });
+
+  const roleOrder = [
+    "Artists",
+    "Organizers",
+    "Preparation",
+    "Media",
+    "Technical Production",
+  ];
+
+  const sortedRoles = roleOrder.filter((role) => grouped[role]);
+
+  return (
+    <section className={styles.collaboratorsSection}>
+      <h2>Collaborators</h2>
+
+      {sortedRoles.map((role) => (
+        <div key={role} className={styles.collaboratorsCategory}>
+          <h3>{role}</h3>
+
+          <div className={styles.collaboratorsGrid}>
+            {grouped[role]
+              .sort((a, b) =>
+                a.displayName.localeCompare(b.displayName)
+              )
+              .map((person, i) => (
+                <div
+                  key={`${person.slug}-${i}`}
+                  className={styles.collaboratorName}
+                >
+                  <Link href={`/artists/${person.slug}`}>
+                    {person.displayName}
+                  </Link>
+                </div>
+              ))}
+          </div>
+        </div>
+      ))}
+    </section>
+  );
 }

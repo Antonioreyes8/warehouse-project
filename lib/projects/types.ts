@@ -21,10 +21,11 @@ export type CollaboratorRole =
 	| "Technical Production";
 
 export type Collaborator = {
-	name: string;
-	role?: CollaboratorRole;
-	slug?: string;
-	username?: string;
+    profile_id?: string;
+    role?: CollaboratorRole;
+    name?: string;
+    username?: string;
+    slug?: string;
 };
 
 export type Project = {
