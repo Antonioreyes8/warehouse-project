@@ -18,8 +18,8 @@
 
 // app/projects/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import { projects, Project } from "../data";
 import { getProjectMedia } from "@/lib/projects/media";
+import { getProjectBySlug } from "@/lib/projects/queries";
 
 import CauseSection from "./../causeSection";
 import CollaboratorsSection from "./../collaboratorsSection";
@@ -51,8 +51,8 @@ export default async function ProjectPage(props: ProjectPageProps) {
 	const { slug } = resolvedParams;
 
 	// Project lookup section
-	// Finds the project in static data or returns 404
-	const project = projects.find((p): p is Project => p.slug === slug);
+	// Finds the project in Supabase or returns 404
+	const project = await getProjectBySlug(slug);
 	if (!project) return notFound();
 
 	// Media fetching section

@@ -16,12 +16,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./home.module.css";
-import { projects } from "../projects/data";
+import { getProjects } from "@/lib/projects/queries";
 
 // ProjectsSection component
 // Displays the home-page project catalog from static project metadata.
 // This section is data-driven: adding/removing entries in projects data updates this grid automatically.
-export default function ProjectsSection() {
+export default async function ProjectsSection() {
+	const projects = await getProjects();
+
 	return (
 		<section id="projects" className={styles.projectsSection}>
 			<div className={styles.projectsContainer}>

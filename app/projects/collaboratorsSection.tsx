@@ -15,7 +15,7 @@
  *   - Connects projects to people and drives cross-navigation to artist profiles
  */
 
-import { Collaborator } from "./data";
+import type { Collaborator } from "@/lib/projects/types";
 import styles from "./project.module.css";
 import Link from "next/link";
 

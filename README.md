@@ -68,7 +68,7 @@ Public pages are mostly server-rendered from static data and Supabase reads:
    - Fetches profile + works
    - Renders fallback empty-state if no profile exists
 2. /projects/[slug]
-   - Resolves slug from local project data map
+   - Resolves slug from Supabase project catalog
    - Fetches project media from storage helper
 
 Protected pages are client-rendered due to session/auth state needs:

@@ -15,18 +15,7 @@
  */
 
 import styles from "./project.module.css";
-
-// Define Source type
-export type Source = {
-	title: string;
-	url: string;
-};
-
-// Define CauseSection type with optional sources
-export type CauseSectionType = {
-	text: string;
-	sources?: Source[];
-};
+import type { CauseSectionType, Source } from "@/lib/projects/types";
 
 // Component receives only causeSection prop
 export default function CauseSection({

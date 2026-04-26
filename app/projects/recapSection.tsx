@@ -14,7 +14,7 @@
  *   - Serves as the project's evidence/archive section after descriptive context
  */
 
-import { Media } from "./data";
+import type { Media } from "@/lib/projects/types";
 import styles from "./project.module.css";
 
 export default function RecapSection({

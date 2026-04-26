@@ -11,14 +11,14 @@
  *   - URL construction for public access
  * Dependencies:
  *   - lib/supabase/client.ts
- *   - Media type from app/projects/data.ts
+ *   - Media type from lib/projects/types.ts
  *   - Supabase projects storage bucket
  * How It Fits:
  *   - Used by project dynamic pages to hydrate recap sections at request time
  */
 
 import { supabase } from "@/lib/supabase/client";
-import { Media } from "@/app/projects/data";
+import type { Media } from "@/lib/projects/types";
 
 /**
  * Description: Retrieves all media files for a project from Supabase Storage and transforms them into Media objects.
