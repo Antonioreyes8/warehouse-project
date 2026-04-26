@@ -6,7 +6,7 @@ import styles from "./project.module.css";
 import Link from "next/link";
 
 type Collaborator = {
-  role: string;
+  role?: string;     // <-- Add the ? right here
   name?: string;
   username?: string;
 };
