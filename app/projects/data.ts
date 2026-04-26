@@ -109,7 +109,9 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 
 			// Preparation
 			{ name: "Antonio Reyes", role: "Preparation", username: "antonioreyes" },
-			{ name: "Diego Espino", role: "Preparation", username: "diegoespino" },
+			{ name: "America Elizalde", role: "Organizers", username: "aec.23" },
+			{ name: "Uriel Espinosa", role: "Organizers" },
+			{ name: "Matteo Espinosa", role: "Organizers" },
 
 			// Media
 			{ name: "Junior", role: "Media" },
@@ -119,8 +121,11 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 			// Technical Production
 			{ name: "Uriel Espinosa", role: "Technical Production" },
 			{ name: "Matteo Espinosa", role: "Technical Production" },
-			{ name: "Diego Espino", role: "Technical Production", username: "diegoespino" },
-
+			{
+				name: "Diego Espino",
+				role: "Technical Production",
+				username: "diegoespino",
+			},
 		],
 		recapSection: [], // <-- will populate dynamically from Supabase
 	},
@@ -164,7 +169,6 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 
 			// Organizers
 			{ name: "Gabriel Cook", role: "Organizers" },
-
 
 			// Preparation
 			{ name: "Avery Phillips", role: "Preparation" },
@@ -218,7 +222,6 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 
 			// Organizers
 			{ name: "Gabriel Cook", role: "Organizers" },
-
 
 			// Preparation
 			{ name: "Avery Phillips", role: "Preparation" },
