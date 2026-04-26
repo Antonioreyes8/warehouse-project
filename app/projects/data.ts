@@ -109,9 +109,9 @@ In addition to physical activities, the project emphasized dialogue and reflecti
 
 			// Preparation
 			{ name: "Antonio Reyes", role: "Preparation", username: "antonioreyes" },
-			{ name: "America Elizalde", role: "Organizers", username: "aec.23" },
-			{ name: "Uriel Espinosa", role: "Organizers" },
-			{ name: "Matteo Espinosa", role: "Organizers" },
+			{ name: "America Elizalde", role: "Preparation", username: "aec.23" },
+			{ name: "Uriel Espinosa", role: "Preparation" },
+			{ name: "Matteo Espinosa", role: "Preparation" },
 
 			// Media
 			{ name: "Junior", role: "Media" },
