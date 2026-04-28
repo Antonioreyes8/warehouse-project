@@ -38,7 +38,11 @@ export default function Footer() {
 							Manifesto
 						</Link>
 					</p>
-					<p>Financial Hub</p>
+					<p>
+						<Link href="/financial" className={styles.link}>
+						Financial Hub
+						</Link>
+					</p>
 					<p>
 						<Link href="/guidelines" className={styles.link}>
 							Community Guidelines
