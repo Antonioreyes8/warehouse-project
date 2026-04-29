@@ -219,7 +219,7 @@ export default function AboutSection({ profile, works }: AboutSectionProps) {
 			<div className={styles.linksContainer}>
 				{profile.instagram && (
 					<a
-						href={`https://instagram.com/${profile.instagram}`}
+						href={profile.instagram}
 						target="_blank"
 						rel="noopener noreferrer"
 						className={styles.socialLink}
