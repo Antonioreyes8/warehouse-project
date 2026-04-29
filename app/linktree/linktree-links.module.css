@@ -57,7 +57,7 @@
 /* Styling for the individual social links */
 .socialIcon {
 	color: #fff;
-	font-size: 64px; /* Makes them slightly larger than list icons */
+	font-size: 52px; /* Makes them slightly larger than list icons */
 	transition:
 		transform 0.2s ease,
 		color 0.2s ease;
