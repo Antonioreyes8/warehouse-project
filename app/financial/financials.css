@@ -2,6 +2,9 @@
 
 .financials_content {
     width: 100%;
+    max-width: 1200px; /* Optional: prevents the text from getting too wide on huge screens */
+    margin: 0 auto;
+    overflow: hidden; /* Safety net to prevent horizontal scroll */
 }
 
 .financials_container {
@@ -13,33 +16,33 @@
 }
 
 .financials_text {
-    flex: 1 1 300px;
+    flex: 1 1 400px; /* Increased basis for better desktop balance */
 }
 
-/* Default chart height for desktop */
 .financials_chart {
     flex: 1 1 400px;
-    height: 500px; 
+    height: 500px;
+    min-width: 0; /* CRITICAL: Allows Recharts to shrink correctly inside Flexbox */
 }
 
 /* =========================================
-   BREAKPOINT: iPad and below (1024px)
+   BREAKPOINT: 1024px and below
    ========================================= */
 @media (max-width: 1024px) {
     .financials_container {
-        flex-direction: column; /* Forces them to stack */
+        flex-direction: column;
         gap: 2rem;
     }
 
-    /* Make both the text and chart take up the full width */
     .financials_text,
     .financials_chart {
-        flex: 1 1 100%;
+        /* Use 100% width but ensure it accounts for parent padding/gaps */
         width: 100%;
+        flex: none; 
     }
 
-    /* Shrink the chart a little bit on smaller screens so it fits better */
     .financials_chart {
-        height: 350px; 
+        height: 400px; /* Slightly taller than 350px looks better on iPads */
+        max-width: 100vw; 
     }
 }
