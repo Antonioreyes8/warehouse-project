@@ -46,6 +46,37 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Container for the row of icons */
+.socialHeader {
+	display: flex;
+	justify-content: center;
+	gap: 24px; /* Space between icons */
+	margin: 10px 0 30px 0; /* Space below the title and above the first section */
+}
+
+/* Styling for the individual social links */
+.socialIcon {
+	color: #fff;
+	font-size: 64px; /* Makes them slightly larger than list icons */
+	transition:
+		transform 0.2s ease,
+		color 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Hover effect to match your linkRow feel */
+.socialIcon:hover {
+	color: #444; /* Or a specific brand color like #E1306C for Insta */
+	transform: translateY(-2px);
+}
+
+/* Ensure the title doesn't have too much bottom margin now */
+.title {
+	margin-bottom: 10px;
+}
+
 @media (max-width: 768px) {
 	.link {
 		padding: 14px;

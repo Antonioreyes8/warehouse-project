@@ -34,7 +34,7 @@ export default function FinancialSection() {
 				<div className="financials_container">
 					{/* Left Column: Text */}
 					<div className="financials_text">
-						<h2>Financial hub</h2>
+						<h2>The Breakdown</h2>
 						<br />
 						<p>
 							Transparency is an active choice. Here is exactly how our funding

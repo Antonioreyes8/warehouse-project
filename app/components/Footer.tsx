@@ -40,7 +40,7 @@ export default function Footer() {
 					</p>
 					<p>
 						<Link href="/financial" className={styles.link}>
-						Financial Hub
+						Financial Breakdown
 						</Link>
 					</p>
 					<p>
@@ -55,10 +55,10 @@ export default function Footer() {
 					</p>
 					<p>
 						<Link
-							href="https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=header"
+							href="https://docs.google.com/forms/d/e/1FAIpQLSfTwTgewINwYUD3gcaODLd3x_MQkMU30CfUNmlpeT9bvzZR5g/viewform"
 							className={styles.link}
 						>
-							Join the team
+							Tip Line
 						</Link>
 					</p>
 					<p>
@@ -67,6 +67,14 @@ export default function Footer() {
 						</Link>
 					</p>
 					<br />
+										<p>
+						<Link
+							href="https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=header"
+							className={styles.link}
+						>
+							Join the team
+						</Link>
+					</p>
 					<p>
 						<Link href="/login" className={styles.link}>
 							Artist Portal

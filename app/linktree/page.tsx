@@ -21,97 +21,101 @@ import styles from "./linktree.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
+// import { faTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons"; // Example for future additions
 import {
-	faPaperPlane,
-	faHeart,
-	faQuestion,
-	faCircleExclamation,
-	faStar,
-	faCrown,
+    faPaperPlane,
+    faHeart,
+    faQuestion,
+    faCircleExclamation,
+    faStar,
+    faCrown,
+    faCoins,
 } from "@fortawesome/free-solid-svg-icons";
 
 type LinkItem = {
-	title: string;
-	url: string;
-	icon: IconProp;
+    title: string;
+    url: string;
+    icon: IconProp;
 };
 
-// Content config section
-// Link groups are defined as data to keep rendering logic minimal and easy to maintain.
 const aboutLinks: LinkItem[] = [
-	{ title: "Manifesto", url: "/manifesto", icon: faHeart },
-	{
-		title: "Community Guidelines",
-		url: "/guidelines",
-		icon: faCrown,
-	},
-	{ title: "FAQ", url: "/FAQ", icon: faQuestion },
+    { title: "Manifesto", url: "/manifesto", icon: faHeart },
+    { title: "Community Guidelines", url: "/guidelines", icon: faCrown },
+    { title: "Financial Breakdown", url: "/financial", icon: faCoins },
+    { title: "FAQ", url: "/FAQ", icon: faQuestion },
 ];
 
 const contactLinks: LinkItem[] = [
-	{
-		title: "Application to join",
-		url: "https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=dialog",
-		icon: faStar,
-	},
-	{
-		title: "Tip line",
-		url: "https://docs.google.com/forms/d/e/1FAIpQLSfTwTgewINwYUD3gcaODLd3x_MQkMU30CfUNmlpeT9bvzZR5g/viewform?usp=dialog",
-		icon: faCircleExclamation,
-	},
+    {
+        title: "Application to join",
+        url: "https://docs.google.com/forms/d/...",
+        icon: faStar,
+    },
+    {
+        title: "Tip line",
+        url: "https://docs.google.com/forms/d/...",
+        icon: faCircleExclamation,
+    },
 ];
 
 const socialLinks: LinkItem[] = [
-	{
-		title: "Instagram",
-		url: "https://www.instagram.com/diaspora.sound",
-		icon: faInstagram,
-	},
+    {
+        title: "Instagram",
+        url: "https://www.instagram.com/diaspora.sound",
+        icon: faInstagram,
+    },
+    // Add future socials here
 ];
 
 export default function LinksPage() {
-	// Share helper section
-	// Copies either full external links or an absolute URL for internal routes.
-	const handleShare = (url: string) => {
-		const fullUrl = url.startsWith("http") ? url : window.location.origin + url;
+    const handleShare = (url: string) => {
+        const fullUrl = url.startsWith("http") ? url : window.location.origin + url;
+        navigator.clipboard.writeText(fullUrl);
+        alert("Link copied!");
+    };
 
-		navigator.clipboard.writeText(fullUrl);
-		alert("Link copied!");
-	};
+    const renderLinks = (links: LinkItem[]) =>
+        links.map((link, i) => (
+            <div key={i} className={styles.linkRow}>
+                <a href={link.url} className={styles.link}>
+                    <span className={styles.icon}>
+                        <FontAwesomeIcon icon={link.icon} />
+                    </span>
+                    <span className={styles.text}>{link.title}</span>
+                </a>
+                <button className={styles.share} onClick={() => handleShare(link.url)}>
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+            </div>
+        ));
 
-	// List rendering helper
-	// Converts each LinkItem into a consistently styled row with link and share controls.
-	const renderLinks = (links: LinkItem[]) =>
-		links.map((link, i) => (
-			<div key={i} className={styles.linkRow}>
-				<a href={link.url} className={styles.link}>
-					<span className={styles.icon}>
-						<FontAwesomeIcon icon={link.icon} />
-					</span>
+    return (
+        <div className={styles.container}>
+            <div className={styles.card}>
+                <h1 className={styles.title}>LinkTree</h1>
 
-					<span className={styles.text}>{link.title}</span>
-				</a>
+                {/* Social Icons Section */}
+                <div className={styles.socialHeader}>
+                    {socialLinks.map((social, i) => (
+                        <a 
+                            key={i} 
+                            href={social.url} 
+                            className={styles.socialIcon} 
+                            title={social.title}
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            <FontAwesomeIcon icon={social.icon} />
+                        </a>
+                    ))}
+                </div>
 
-				<button className={styles.share} onClick={() => handleShare(link.url)}>
-					<FontAwesomeIcon icon={faPaperPlane} />
-				</button>
-			</div>
-		));
+                <p className={styles.subtitle}>About</p>
+                <div className={styles.links}>{renderLinks(aboutLinks)}</div>
 
-	return (
-		<div className={styles.container}>
-			<div className={styles.card}>
-				<h1 className={styles.title}>LinkTree</h1>
-
-				<p className={styles.subtitle}>About</p>
-				<div className={styles.links}>{renderLinks(aboutLinks)}</div>
-
-				<p className={styles.subtitle}>Forms</p>
-				<div className={styles.links}>{renderLinks(contactLinks)}</div>
-
-				<p className={styles.subtitle}>Socials</p>
-				<div className={styles.links}>{renderLinks(socialLinks)}</div>
-			</div>
-		</div>
-	);
+                <p className={styles.subtitle}>Forms</p>
+                <div className={styles.links}>{renderLinks(contactLinks)}</div>
+            </div>
+        </div>
+    );
 }
