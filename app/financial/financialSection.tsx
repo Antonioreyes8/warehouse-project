@@ -4,126 +4,132 @@
 
 "use client";
 
-// Import your brand new CSS file!
 import "./financials.css";
-
 import {
-	PieChart,
-	Pie,
-	Cell,
-	Tooltip,
-	Legend,
-	ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
 } from "recharts";
 
-// 1. The exact same data, formatted for Recharts
 const data = [
-	{ name: "The Cause", value: 20 },
-	{ name: "People Involved", value: 20 },
-	{ name: "Future Investment", value: 60 },
+    { name: "The Cause", value: 20 },
+    { name: "The Community", value: 20 },
+    { name: "Future Investment", value: 60 },
 ];
 
-// 2. The hex codes for Rose, Emerald, and Blue to match your dark theme
 const COLORS = ["#9D4343", "#4B7091", "#538C55"];
 
 export default function FinancialSection() {
-	return (
-		<section className="basic_section">
-			<div className="basic_content financials_content">
-				{/* Clean CSS classes instead of inline styles */}
-				<div className="financials_container">
-					{/* Left Column: Text */}
-					<div className="financials_text">
-						<h2>The Breakdown</h2>
-						<br />
-						<p>
-							Transparency is an active choice. Here is exactly how our funding
-							is distributed back into the community, to our artists, and into
-							building the future of this space.
-						</p>
-						<br />
+    return (
+        <section className="financials_section">
+            <div className="financials_container">
+                <h1 className="financials_mainTitle">Financial Breakdown</h1>
 
-						<p>
-							<strong>The Cause (20%):</strong> This slice represents the funds
-							going directly back into the community and to the artists. It is
-							the active financial support for the core mission and the specific
-							causes that align with our values.
-						</p>
+                {/* NEW INTRO SECTION: Centered above the grid */}
+                <div className="financials_introText">
+                    <p className="financials_text">
+                        We are committed to maintaining a non-profit approach to the way we
+                        function. The Diaspora Project was born out of the desire to
+                        support local artists, build community, and impact the world in a
+                        positive way.
+                    </p>
+                    <p className="financials_text">
+                        Ticket sales are the main way we can continue to do what we do. 
+                        Every time you buy a ticket, you are directly supporting a local
+                        community but also helping a cause we all agree is important at
+                        the time.
+                    </p>
+                </div>
 
-						<br />
+                <div className="financials_bentoGrid">
+                    
+                    {/* Left Box: The Breakdown details */}
+                    <div className="financials_articleBox">
+                        <h3 className="financials_articleHeader">The Breakdown</h3>
 
-						<p>
-							<strong>People Involved (20%):</strong> This portion ensures that
-							the creators, organizers, and team members who make this space
-							possible are recognized and supported for their time and labor.
-						</p>
+                        <h4 className="financials_subHeader">The Cause (20%)</h4>
+                        <p className="financials_text financials_indented">
+                            Before each event we vote on a cause to support because we believe 
+                            we have a responsibility to use our platform to bring attention and 
+                            resources to important issues. This portion of the funds is donated 
+                            to a cause that the community has collectively chosen to support.
+                        </p>
 
-						<br />
+                        <h4 className="financials_subHeader">The Community (20%)</h4>
+                        <p className="financials_text financials_indented">
+                            From the artists to those who help clean up after, we encourage 
+                            everyone to get involved in the work that goes into making our 
+                            events happen. This portion is distributed equally among the 
+                            artists, organizers, and volunteers.
+                        </p>
 
-						<p>
-							<strong>Future Investment (60%):</strong> As the largest slice,
-							this shows our commitment to longevity. It represents the
-							resources being saved and reinvested into building the future of
-							this space, ensuring the incubator can grow and sustain itself
-							long-term.
-						</p>
-					</div>
+                        <h4 className="financials_subHeader">The Projects (60%)</h4>
+                        <p className="financials_text financials_indented">
+                            We want to continue to have more projects and grow our community. 
+                            We use this portion to pay off what was invested into the event 
+                            and to fund future projects including venue rentals, production 
+                            costs, and other expenses.
+                        </p>
+                    </div>
 
-					{/* Right Column: Chart */}
-					<div className="financials_chart">
-						<ResponsiveContainer width="100%" height="100%">
-							<PieChart>
-								<Pie
-									data={data}
-									cx="50%"
-									cy="50%"
-									innerRadius={0}
-									outerRadius="80%" /* Changed this to a percentage so it scales better on mobile! */
-									fill="#8884d8"
-									paddingAngle={0}
-									dataKey="value"
-								>
-									{data.map((entry, index) => (
-										<Cell
-											key={`cell-${index}`}
-											fill={COLORS[index % COLORS.length]}
-										/>
-									))}
-								</Pie>
+                    {/* Right Box: The Chart */}
+                    <div className="financials_articleBox">
+                        <h3 className="financials_articleHeader">Distribution</h3>
+                        
+                        <div className="financials_chartContainer">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={data}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={0}
+                                        outerRadius="80%"
+                                        fill="#8884d8"
+                                        paddingAngle={0}
+                                        dataKey="value"
+                                    >
+                                        {data.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={COLORS[index % COLORS.length]}
+                                            />
+                                        ))}
+                                    </Pie>
 
-								{/* Note: Recharts strictly requires these styles to be inline objects to work properly */}
-								<Tooltip
-									formatter={(value) => `${value}%`}
-									contentStyle={{
-										backgroundColor: "#2a2a2a",
-										border: "none",
-										borderRadius: "8px",
-										color: "#fff",
-									}}
-									itemStyle={{ color: "#d3d3d3" }}
-								/>
+                                    <Tooltip
+                                        formatter={(value) => `${value}%`}
+                                        contentStyle={{
+                                            backgroundColor: "#1a1a1a",
+                                            border: "1px solid #444",
+                                            borderRadius: "8px",
+                                            color: "#fff",
+                                        }}
+                                        itemStyle={{ color: "#d3d3d3" }}
+                                    />
 
-								<Legend
-									verticalAlign="bottom"
-									align="center"
-									iconType="circle"
-									iconSize={10}
-									/* Use formatter to add custom spacing between legend items */
-									formatter={(value) => (
-										<span style={{ color: "#d3d3d3", marginRight: "20px" }}>
-											{value}
-										</span>
-									)}
-									wrapperStyle={{
-										paddingTop: "30px" /* Space between Pie and Legend */,
-										bottom: 0,
-									}}
-								/>
-							</PieChart>
-						</ResponsiveContainer>
-					</div>
-				</div>
-			</div>
-		</section>
-	);
+                                    <Legend
+                                        verticalAlign="bottom"
+                                        align="center"
+                                        iconType="circle"
+                                        iconSize={12}
+                                        formatter={(value) => (
+                                            <span style={{ color: "#d3d3d3", marginRight: "20px" }}>
+                                                {value}
+                                            </span>
+                                        )}
+                                        wrapperStyle={{ paddingTop: "20px" }}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    );
 }

@@ -1,48 +1,113 @@
 /* File: app/financials/financials.css */
 
-.financials_content {
-    width: 100%;
-    max-width: 1200px; /* Optional: prevents the text from getting too wide on huge screens */
-    margin: 0 auto;
-    overflow: hidden; /* Safety net to prevent horizontal scroll */
+.financials_section {
+    font-family: "HelveticaNeue", sans-serif;
+    font-weight: 300;
+    padding: 100px 5% 150px 5%;
+    background-color: #d3d3d3; /* Light grey background */
+    color: #2a2a2a;
+    display: flex;
+    justify-content: center;
 }
 
 .financials_container {
+    max-width: 1200px;
+    width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 3rem;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.financials_mainTitle {
+    font-family: "HelveticaNeue", sans-serif;
+    font-weight: 800;
+    font-size: 54px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+/* Two-column layout for Desktop */
+.financials_bentoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: stretch; /* Forces both boxes to be identical in height */
+}
+
+/* The Article Box (Bento styling) */
+.financials_articleBox {
+    background-color: #2a2a2a;
+    color: #d3d3d3;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.financials_articleHeader {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.financials_subHeader {
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Add this right below .financials_mainTitle */
+
+.financials_introText {
+    max-width: 800px; /* Keeps the text from stretching too wide and becoming hard to read */
+    margin: 0 auto 20px auto; /* Centers the block and adds 50px of space below it */
+    text-align: center; /* Centers the text itself */
+}
+
+/* Make the intro text slightly larger than the text inside the boxes */
+.financials_introText .financials_text {
+    font-size: 20px; 
+}
+
+.financials_indented {
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid #444;
+}
+
+/* Chart specific container */
+.financials_chartContainer {
+    flex: 1; /* Takes up remaining height in the box */
+    min-height: 400px;
     width: 100%;
 }
 
-.financials_text {
-    flex: 1 1 400px; /* Increased basis for better desktop balance */
-}
-
-.financials_chart {
-    flex: 1 1 400px;
-    height: 500px;
-    min-width: 0; /* CRITICAL: Allows Recharts to shrink correctly inside Flexbox */
-}
-
-/* =========================================
-   BREAKPOINT: 1024px and below
-   ========================================= */
+/* Mobile Responsiveness */
 @media (max-width: 1024px) {
-    .financials_container {
-        flex-direction: column;
-        gap: 2rem;
+    .financials_section {
+        padding: 60px 5%;
     }
-
-    .financials_text,
-    .financials_chart {
-        /* Use 100% width but ensure it accounts for parent padding/gaps */
-        width: 100%;
-        flex: none; 
+    .financials_mainTitle {
+        font-size: 36px;
     }
-
-    .financials_chart {
-        height: 400px; /* Slightly taller than 350px looks better on iPads */
-        max-width: 100vw; 
+    .financials_bentoGrid {
+        grid-template-columns: 1fr; /* Stacks the boxes on mobile */
+    }
+    .financials_articleBox {
+        padding: 25px;
+    }
+    .financials_chartContainer {
+        min-height: 350px;
     }
 }
