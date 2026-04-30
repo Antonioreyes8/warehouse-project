@@ -84,7 +84,7 @@ vi.mock("@/lib/artists/mutations", () => ({
 	syncArtistWorks: mocks.syncArtistWorksMock,
 }));
 
-import ArtistProfilePage from "@/app/dashboard/profile/page";
+import ArtistProfilePage from "@/app/artists/dashboard/profile/page";
 
 const baseArtist = {
 	id: "42",

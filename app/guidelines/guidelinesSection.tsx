@@ -1,211 +1,191 @@
 /**
  * File: app/guidelines/guidelinesSection.tsx
  * Purpose: Renders the complete governance and conduct framework for the community.
- * Responsibilities:
- *   - Present policy-like guidance in a readable article format
- *   - Define participation expectations, safety standards, and enforcement language
- * Key Concepts:
- *   - Structured static content rendering
- *   - Heading/subheading hierarchy for policy scanning
- * Dependencies:
- *   - Global utility classes (basic_section, basic_content, indented)
- * How It Fits:
- *   - Serves as the authoritative behavioral contract linked across public routes
  */
 
-// GuidelinesSection component
-// Content is organized as articles so users can reference rules quickly and unambiguously.
+import styles from "./guidelines.module.css";
+
 export default function GuidelinesSection() {
 	return (
-		<section className="basic_section">
-			<div className="basic_content">
-				{/* Guidelines document body
-				    The article structure is intentional: it mirrors policy docs and makes
-				    enforcement expectations easier to understand for members and organizers.
-				*/}
-				<div>
-					<h2>Community Guidelines</h2>
-					<h3>Article I. Our Mission & Shared Responsibility</h3>
-					<br></br>
-					<p>
-						Membership in this community is a shared commitment to the
-						preservation of a creative and collaborative environment. By
-						participating, every member accepts the responsibility to act as a
-						steward of the space, ensuring that their actions contribute to a
-						culture of inclusivity, safety, and support.
-					</p>
-					<br></br>
-					<h3>Article II. Media, Privacy & Public Visibility</h3>
-					<br></br>
-					<p>
-						The nature of this community involves the documentation and
-						celebration of our collective work.
-					</p>
-					<br></br>
-					<h4>Public Environment Notice:</h4>
-					<br></br>
-					<p className="indented">
-						This space is a public-facing environment. By entering and
-						participating in community activities, members acknowledge and
-						accept that the environment is actively photographed and filmed, and
-						that their likeness may be captured.
-					</p>
-					<br></br>
-					<h4>Purpose of Documentation:</h4>
-					<br></br>
-					<p className="indented">
-						Media captured within the space is intended for shared use within
-						the community. The primary goal of this documentation is to
-						facilitate cross-disciplinary collaboration and to assist members in
-						professional portfolio building.
-					</p>
-					<br></br>
-					<h4>Shared Visibility & Privacy:</h4>
-					<br></br>
-					<p className="indented">
-						Members are encouraged to document and share their personal
-						experiences. However, we expect a high degree of professional
-						courtesy; privacy must be respected when requested by individuals,
-						particularly in sensitive or focused contexts.
-					</p>
-					<br></br>
-					<h4>Consent and Liability:</h4>
-					<br></br>
-					<p className="indented">
-						For content published via official organization accounts, the
-						leadership will take reasonable precautions to obtain specific
-						consent on a case-by-case basis.
-					</p>
-					<br></br>
-					<h4>Third-Party Disclaimer:</h4>
-					<br></br>
-					<p className="indented">
-						While the organization strives for a culture of consent, it does not
-						assume liability for the actions of third parties or individual
-						members. The organization is not responsible for ensuring that
-						independent members or visitors adhere to these internal consent
-						precautions when capturing or sharing their own media.
-					</p>
-					<br></br>
-					<h3>Article III. Stewardship of Space & Resources</h3>
-					<br></br>
-					<p>
-						To ensure the longevity of our facilities, members must adhere to
-						the following:
-					</p>
-					<br></br>
-					<h4>Equipment Integrity:</h4>
-					<br></br>
-					<p className="indented">
-						All tools, technology, and hardware must be used solely for their
-						intended purposes. Destruction, negligent misuse, or unauthorized
-						modification of equipment will not be tolerated.
-					</p>
-					<br></br>
-					<h4>Zonal Respect:</h4>
-					<br></br>
-					<p className="indented">
-						Dedicated areas are optimized for specific activities. Members must
-						respect the boundaries of these zones to ensure the safety and focus
-						of others.
-					</p>
-					<br></br>
-					<h4>Operational Flow:</h4>
-					<br></br>
-					<p className="indented">
-						Members are required to follow the established organization and flow
-						of activities to maintain an efficient and harmonious environment.
-					</p>
-					<br></br>
-					<h3>Article IV. Commitment to Safety & Inclusion</h3>
-					<br></br>
-					<p>
-						We do not merely offer a &quot;safe space&quot;; we maintain an
-						Intentional Sanctuary. We are a community that actively prioritizes
-						the safety, dignity, and equity of women, LGBTQ+ individuals,
-						immigrants, and working class artists. We are committed to fostering
-						an environment where all members feel empowered to express
-						themselves without fear of discrimination, harassment, or
-						marginalization. We expect all members to uphold these values and to
-						contribute to a culture of radical respect and mutual support.
-					</p>
-					<br></br>
-					<h3>Article V. Leadership & Governance</h3>
-					<br></br>
-					<p>
-						Our community is guided by a collective leadership model that values
-					</p>
-					<br></br>
-					<h4>Zero-Tolerance Policy:</h4>
-					<br></br>
-					<p className="indented">
-						Harassment, discrimination, intimidation, or the intentional
-						exclusion of any member based on identity or background is a
-						fundamental breach of this contract. We expect all interactions to
-						be rooted in professional courtesy and radical respect.
-					</p>
-					<br></br>
-					<h3>Article V. Governance and Structural Authority</h3>
-					<br></br>
-					<p>
-						The sustainability of our community relies on respect for its
-						leadership and operational structure.
-					</p>
-					<br></br>
-					<h4>Facilitator Authority:</h4>
-					<br></br>
-					<p className="indented">
-						Organizers and facilitators are the designated leads for safety and
-						scheduling. Their instructions regarding the use of the space must
-						be followed immediately and without exception.
-					</p>
-					<br></br>
-					<h4>Finality of Decisions:</h4>
-					<br></br>
-					<p className="indented">
-						Decisions made by leadership regarding the protection of the
-						community, the space, or its members are final.
-					</p>
-					<br></br>
-					<h3>Article VI. Prohibited Use and Legal Compliance</h3>
-					<br></br>
-					<p>
-						The space exists for the advancement of our community’s core
-						mission.
-					</p>
-					<br></br>
-					<h4>Authorized Use Only:</h4>
-					<br></br>
-					<p className="indented">
-						The exploitation, manipulation, or misrepresentation of the space
-						for personal gain outside of its intended purpose is prohibited.
-					</p>
-					<br></br>
-					<h4>Illegal Activity:</h4>
-					<br></br>
-					<p className="indented">
-						The possession, sale, or distribution of illegal substances and any
-						engagement in illegal activities are strictly prohibited.
-					</p>
-					<br></br>
-					<h3>Article VII. Accountability and Enforcement</h3>
-					<br></br>
-					<p>We hold our members to a high standard of conduct.</p>
-					<br></br>
-					<h4>Corrective Action:</h4>
-					<br></br>
-					<p className="indented">
-						Any individual found in violation of these guidelines may be asked
-						to vacate the space immediately.
-					</p>
-					<br></br>
-					<h4>Permanent Removal:</h4>
-					<br></br>
-					<p className="indented">
-						Repeated or severe violations will result in the permanent
-						revocation of membership and a ban from all future events and
-						community platforms.
-					</p>
+		<section className={styles.section}>
+			<div className={styles.container}>
+				<h1 className={styles.mainTitle}>Community Guidelines</h1>
+
+				<div className={styles.basic_content}>
+					{/* Article I */}
+					<article className={styles.articleBox}>
+						<h3 className={styles.articleHeader}>
+							Article I. Our Mission & Shared Responsibility
+						</h3>
+						<p className={styles.text}>
+							The Diaspora Project's community shares its commitment to offering
+							a safe space for its performers, organizers, and audience. By
+							choosing to attend any events you must actively take on the
+							responsiblity of upholding the values of this community and by
+							respecting others and the space itself.
+						</p>
+					</article>
+
+					<br />
+
+					{/* Article II */}
+					<article className={styles.articleBox}>
+						<h3 className={styles.articleHeader}>
+							Article II. Media, Privacy & Public Visibility
+						</h3>
+						<p className={styles.text}>
+							The nature of this community involves the documentation and
+							celebration of our collective work.
+						</p>
+
+						<h4 className={styles.subHeader}>Public Environment:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							This space is a public-facing environment. By entering and
+							participating at events, members acknowledge that they may be
+							actively photographed and filmed, and that their likeness may be
+							captured. Active collaboration is encouraged with the primary goal
+							to facilitate cross-disciplanary newtworking and portfolio
+							building.
+						</p>
+
+						<h4 className={styles.subHeader}>Privacy:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							For content published via official organization accounts, the
+							leadership will take reasonable precautions and will consider
+							requests for privacy on a case-by-case basis. However, the
+							organization does not assume liability for the actions of third
+							parties or individual members.
+						</p>
+					</article>
+
+					<br />
+
+					{/* Article III */}
+					<article className={styles.articleBox}>
+						<h3 className={styles.articleHeader}>
+							Article III. Stewardship of Space & Resources
+						</h3>
+						<p className={styles.text}>
+							To ensure the longevity of our facilities, members must adhere to
+							the following:
+						</p>
+
+						<h4 className={styles.subHeader}>Equipment Integrity:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							All tools, technology, and hardware must be used solely for their
+							intended purposes. Destruction, negligent misuse, or unauthorized
+							modification of equipment will not be tolerated.
+						</p>
+
+						<h4 className={styles.subHeader}>Zonal Respect:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							Dedicated areas are optimized for specific activities. Members
+							must respect the boundaries of these zones to ensure the safety
+							and functionality of the space for all.
+						</p>
+
+						<h4 className={styles.subHeader}>Operational Flow:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							To provide the best experience for all, members must follow the
+							established flow of events and activities. This includes adhering
+							to scheduled times and respecting the structure of events as
+							outlined.
+						</p>
+					</article>
+
+					<br />
+
+					{/* Article IV */}
+					<article className={styles.articleBox}>
+						<h3 className={styles.articleHeader}>
+							Article IV. Commitment to Safety & Inclusion
+						</h3>
+						<p className={styles.text}>
+							We are a community that actively prioritizes the safety, dignity,
+							and equity of women, LGBTQ+ individuals, immigrants, and working
+							class artists. We are committed to fostering an environment where
+							all members feel empowered to express themselves without fear of
+							discrimination or marginalization.
+						</p>
+
+						<h4 className={styles.subHeader}>Zero-Tolerance Policy:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							Harassment, discrimination, intimidation, or the intentional
+							exclusion of any member based on identity or background is a
+							fundamental breach of this contract. We expect all interactions to
+							be rooted in professional courtesy and radical respect.
+						</p>
+					</article>
+
+					<br />
+
+					{/* Article V */}
+					<article className={styles.articleBox}>
+						<h3 className={styles.articleHeader}>
+							Article V. Governance and Structural Authority
+						</h3>
+						<p className={styles.text}>
+							The sustainability of our community relies on respect for its
+							leadership and operational structure.
+						</p>
+
+						<h4 className={styles.subHeader}>Facilitator Authority:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							Organizers and facilitators are the designated leads for safety
+							and scheduling. Their instructions regarding the use of the space
+							must be followed immediately and without exception. Decisions made
+							by leadership regarding the protection of the community are final.
+						</p>
+					</article>
+
+					<br />
+
+					{/* Article VI */}
+					<article className={styles.articleBox}>
+						<h3 className={styles.articleHeader}>
+							Article VI. Prohibited Use and Legal Compliance
+						</h3>
+						<p className={styles.text}>
+							The space exists for the advancement of our community’s core
+							mission.
+						</p>
+
+						<h4 className={styles.subHeader}>Authorized Use Only:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							The exploitation, manipulation, or misrepresentation of the space
+							for personal gain outside of its intended purpose is prohibited.
+						</p>
+
+						<h4 className={styles.subHeader}>Illegal Activity:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							The possession, sale, or distribution of illegal substances and
+							any engagement in illegal activities are strictly prohibited.
+						</p>
+					</article>
+
+					<br />
+
+					{/* Article VII */}
+					<article className={styles.articleBox}>
+						<h3 className={styles.articleHeader}>
+							Article VII. Accountability and Enforcement
+						</h3>
+						<p className={styles.text}>
+							We hold our members to a high standard of conduct.
+						</p>
+
+						<h4 className={styles.subHeader}>Corrective Action:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							Any individual found in violation of these guidelines may be asked
+							to vacate the space immediately.
+						</p>
+
+						<h4 className={styles.subHeader}>Permanent Removal:</h4>
+						<p className={`${styles.text} ${styles.indented}`}>
+							Repeated or severe violations will result in the permanent ban
+							from all future events and community platforms.
+						</p>
+					</article>
 				</div>
 			</div>
 		</section>

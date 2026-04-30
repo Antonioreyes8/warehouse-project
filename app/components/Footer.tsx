@@ -72,7 +72,7 @@ export default function Footer() {
 							href="https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=header"
 							className={styles.link}
 						>
-							Join the team
+							Join the movement
 						</Link>
 					</p>
 					<p>
