@@ -1,0 +1,130 @@
+.section {
+    font-family: "HelveticaNeue", sans-serif;
+    font-weight: 300;
+    
+    /* The Incubator Grid Background */
+    background-color: #d3d3d3;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 24px 24px; 
+    
+    display: flex;
+    justify-content: center;
+    position: relative; 
+    overflow: hidden; 
+    min-height: 100vh;
+}
+
+/* The Ambient Aura - Pulses behind the glass canvas */
+.aura {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw; 
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle at center, rgba(157, 67, 67, 0.2) 0%, rgba(75, 112, 145, 0.2) 40%, transparent 70%);
+    filter: blur(90px); 
+    z-index: 0;
+    pointer-events: none;
+    animation: breathe 15s ease-in-out infinite alternate; 
+}
+
+@keyframes breathe {
+    0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.6; }
+    100% { transform: translate(-50%, -45%) scale(1.15); opacity: 1; }
+}
+
+/* The Cinematic Watermark */
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24vw; 
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.04); 
+    z-index: 1; 
+    pointer-events: none; 
+    text-transform: uppercase;
+    letter-spacing: -5px;
+    user-select: none;
+    white-space: nowrap;
+}
+
+/* EDGE-TO-EDGE GLASS CANVAS */
+.glassCanvas {
+    width: 100%; /* Spans the entire screen */
+    min-height: 100vh;
+    padding: 120px 5% 150px 5%;
+    
+    /* The Backdrop effect applied to the whole screen */
+    background-color: rgba(30, 30, 30, 0.75); 
+    backdrop-filter: blur(20px); 
+    -webkit-backdrop-filter: blur(20px);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the text column */
+    z-index: 2; /* Sits above the grid and aura */
+}
+
+/* The reading column (keeps text from getting too wide to read) */
+.textContent {
+    max-width: 1000px; /* Optimal reading width */
+    width: 100%;
+    color: #d3d3d3;
+}
+
+.mainTitle {
+    font-family: "HelveticaNeue", sans-serif;
+    font-weight: 800;
+    font-size: 72px; /* Large, powerful title */
+    text-align: center;
+    margin-bottom: 80px;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    color: #fff;
+}
+
+.text {
+    font-size: 22px; /* Large, editorial font size */
+    font-weight: 300;
+    line-height: 1.8; 
+    margin-bottom: 35px; 
+}
+
+.text:last-child {
+    margin-bottom: 0;
+}
+
+/* The Editorial Drop Cap */
+.dropCap::first-letter {
+    float: left;
+    font-size: 100px; 
+    line-height: 75px;
+    padding-top: 6px;
+    padding-right: 15px;
+    padding-left: 2px;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+/* Clean, bold emphasis text (No pillars/borders) */
+.emphasis {
+    font-size: 32px; 
+    font-weight: 500;
+    color: #fff;
+    margin: 60px 0; 
+    letter-spacing: -0.5px;
+    line-height: 1.4;
+}
+
+@media (max-width: 1024px) {
+    .glassCanvas { padding: 80px 5% 100px 5%; }
+    .watermark { font-size: 30vw; }
+    .mainTitle { font-size: 42px; margin-bottom: 50px; }
+    .text { font-size: 19px; }
+    .emphasis { font-size: 24px; margin: 40px 0; }
+    .dropCap::first-letter { font-size: 60px; line-height: 55px; }
+}
