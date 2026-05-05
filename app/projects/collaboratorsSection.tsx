@@ -6,7 +6,7 @@ import styles from "./project.module.css";
 import Link from "next/link";
 
 type Collaborator = {
-  role?: string;     // <-- Add the ? right here
+  role?: string;
   name?: string;
   username?: string;
 };
@@ -73,6 +73,8 @@ export default function CollaboratorsSection({
   return (
     <section className={styles.collaboratorsSection}>
       <h2>Collaborators</h2>
+      {/* Light instruction to match the projects section guidance */}
+      <p className={styles.instruction}>Select a collaborator to explore their profile</p>
 
       {sortedRoles.map((role) => (
         <div key={role} className={styles.collaboratorsCategory}>

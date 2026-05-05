@@ -28,31 +28,34 @@ export default async function ProjectsSection() {
 		<section id="projects" className={styles.projectsSection}>
 			<div className={styles.projectsContainer}>
 				<h2>PROJECTS</h2>
-				{/* Project card mapping
-				    - Uses slug as the stable key and route target.
-				    - Keeps each card simple: title, visual, date.
-				    - Image-only link creates a clear visual click target while preserving text readability.
-				*/}
+				{/* Lighter tone instruction to guide the user */}
+				<p className={styles.instruction}>
+					Select a project
+				</p>
+
 				<div className={styles.projectsGrid}>
 					{projects.map((project) => (
-						<div className={styles.projectCard} key={project.slug}>
+						<Link
+							href={`/projects/${project.slug}`}
+							key={project.slug}
+							className={styles.projectCard}
+						>
 							<h3>{project.title}</h3>
 
-							{/* Visual navigation target */}
-							<Link href={`/projects/${project.slug}`}>
+							<div className={styles.imageWrapper}>
 								<Image
 									src={project.img}
 									alt={project.title}
 									width={700}
 									height={1050}
 									sizes="(max-width: 1024px) 92vw, (max-width: 1400px) 30vw, 420px"
-									style={{ width: "100%", height: "auto", cursor: "pointer" }}
+									style={{ width: "100%", height: "auto" }}
 									unoptimized
 								/>
-							</Link>
+							</div>
 
-							<p>{project.date}</p>
-						</div>
+							<p className={styles.projectDate}>{project.date}</p>
+						</Link>
 					))}
 				</div>
 			</div>

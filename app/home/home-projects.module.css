@@ -1,54 +1,106 @@
-/* Projects section */
+/* --- PROJECTS SECTION --- */
 .projectsSection {
-	padding: 100px;
-	text-align: center;
-	background-color: #d3d3d3;
-	color: #2a2a2a;
-	position: relative;
-	z-index: 1000;
+    font-family: "HelveticaNeue", sans-serif;
+    padding: 100px 5%;
+    text-align: center;
+    background-color: #d3d3d3; /* Your signature light grey */
+    color: #2a2a2a;
+    position: relative;
+    z-index: 1000;
 }
 
 .projectsContainer {
-	width: 100%;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
 }
 
+/* Main Section Title */
 .projectsSection h2 {
-	padding-bottom: 20px;
+    font-size: 32px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
 }
 
+/* Lighter toned instruction for user guidance */
+.instruction {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #666;
+    margin-bottom: 60px;
+    margin-top: 0;
+}
+
+/* --- THE GRID --- */
 .projectsGrid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 1.5rem;
-	margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
 }
 
+/* --- PROJECT CARDS --- */
 .projectCard {
-	padding: 1rem;
-	text-align: left;
-	max-width: 420px;
-	margin: 0 auto;
+    text-decoration: none; /* Removes link styling from text */
+    color: inherit;
+    padding: 1rem;
+    text-align: left;
+    max-width: 420px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: transform 0.3s ease;
+	border: 3px solid rgba(0, 0, 0, 0.1);
 }
 
-.projectCard img {
-	width: 100% !important;
-	height: auto !important;
-	max-height: none !important;
+.projectCard h3 {
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
 }
 
+.imageWrapper img {
+    width: 100% !important;
+    height: auto !important;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.projectDate {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    margin: 0;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 1024px) {
-	.projectsGrid {
-		grid-template-columns: 1fr;
-		gap: 2.25rem;
-	}
+    .projectsGrid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
 
-	.projectCard {
-		max-width: 720px;
-	}
+    .projectCard {
+        max-width: 100%;
+        padding: 0;
+    }
 
-	.projectsSection {
-		padding-top: 50px;
-		padding-left: 16px;
-		padding-right: 16px;
-	}
+    .projectsSection {
+        padding: 60px 20px;
+    }
+
+    .projectsSection h2 {
+        font-size: 28px;
+    }
+
+    .instruction {
+        font-size: 12px;
+        margin-bottom: 40px;
+    }
 }
