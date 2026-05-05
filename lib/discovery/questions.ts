@@ -1,0 +1,23 @@
+export const QUESTIONS = [
+  { id: 'q1', text: "Digital art is 'real' art." },
+  { id: 'q2', text: "AI will eventually replace human creativity." },
+  { id: 'q3', text: "Streaming services are killing the music industry." },
+  { id: 'q4', text: "I prefer working in total silence." },
+  { id: 'q5', text: "An artist's personal life shouldn't affect how we see their work." },
+  { id: 'q6', text: "Social media is the most important tool for a modern creative." },
+  { id: 'q7', text: "Mainstream success is better than 'underground' respect." },
+  { id: 'q8', text: "Vinyl sounds better than high-res digital audio." },
+  { id: 'q9', text: "Collaborating is harder than working solo." },
+  { id: 'q10', text: "Formal education is unnecessary for a career in the arts." },
+  { id: 'q11', text: "Art should always be political." },
+  { id: 'q12', text: "I find inspiration in nature more than in cities." },
+  { id: 'q13', text: "The 'Starving Artist' trope is outdated and harmful." },
+  { id: 'q14', text: "I value technical skill over emotional expression." },
+  { id: 'q15', text: "NFTs were a mistake for the art world." },
+  { id: 'q16', text: "Consistency is more important than raw talent." },
+  { id: 'q17', text: "I prefer dark, moody aesthetics over bright and colorful ones." },
+  { id: 'q18', text: "Gatekeeping in creative communities is sometimes necessary." },
+  { id: 'q19', text: "Physical physical studios are better than remote setups." },
+  { id: 'q20', text: "Awards (Grammys, Oscars, etc.) actually matter." },
+  { id: 'q21', text: "The journey is more important than the finished product." }
+];

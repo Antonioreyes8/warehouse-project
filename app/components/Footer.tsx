@@ -66,6 +66,14 @@ export default function Footer() {
 							Linktree
 						</Link>
 					</p>
+					<p>
+						<Link
+							href="/discovery/quiz"
+							className={styles.link}
+						>
+							Artist Discovery
+						</Link>
+					</p>
 					<br />
 										<p>
 						<Link
