@@ -74,7 +74,7 @@ export default function CollaboratorsSection({
     <section className={styles.collaboratorsSection}>
       <h2>Collaborators</h2>
       {/* Light instruction to match the projects section guidance */}
-      <p className={styles.instruction}>Select a collaborator to explore their profile</p>
+      <p className={styles.instruction}>Select a collaborator to view their profile</p>
 
       {sortedRoles.map((role) => (
         <div key={role} className={styles.collaboratorsCategory}>
