@@ -17,7 +17,7 @@ import {
 const data = [
 	{ name: "The Cause", value: 20 },
 	{ name: "The Community", value: 20 },
-	{ name: "Future Investment", value: 60 },
+	{ name: "The Projects", value: 60 },
 ];
 
 const COLORS = ["#9D4343", "#4B7091", "#538C55"];
@@ -48,6 +48,14 @@ export default function FinancialSection() {
 					<div className="financials_articleBox">
 						<h3 className="financials_articleHeader">The Breakdown</h3>
 
+						<h4 className="financials_subHeader">The Projects (60%)</h4>
+						<p className="financials_text financials_indented">
+							We want to continue to have more projects and grow our community.
+							We use this portion to pay off what was invested into the event
+							and to fund future projects including venue rentals, production
+							costs, and other expenses.
+						</p>
+
 						<h4 className="financials_subHeader">The Cause (20%)</h4>
 						<p className="financials_text financials_indented">
 							Before each event we vote on a cause to support because we believe
@@ -62,14 +70,6 @@ export default function FinancialSection() {
 							everyone to get involved in the work that goes into making our
 							events happen. This portion is distributed among the artists,
 							organizers, and volunteers.
-						</p>
-
-						<h4 className="financials_subHeader">The Projects (60%)</h4>
-						<p className="financials_text financials_indented">
-							We want to continue to have more projects and grow our community.
-							We use this portion to pay off what was invested into the event
-							and to fund future projects including venue rentals, production
-							costs, and other expenses.
 						</p>
 					</div>
 
