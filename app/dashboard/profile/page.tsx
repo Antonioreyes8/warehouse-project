@@ -30,6 +30,7 @@ import {
 import {
 	syncArtistWorks,
 	updateArtistProfile,
+	deleteArtistProfile,
 	type ArtistWorkInput,
 } from "@/lib/artists/mutations";
 import { useRouter } from "next/navigation";
@@ -248,6 +249,7 @@ export default function ArtistProfilePage() {
 	const [loading, setLoading] = useState(true);
 	const [editing, setEditing] = useState(false);
 	const [saving, setSaving] = useState(false);
+	const [deleting, setDeleting] = useState(false);
 	const [avatarUploading, setAvatarUploading] = useState(false);
 	const [workUploading, setWorkUploading] = useState(false);
 	const [artistWorks, setArtistWorks] = useState<EditableWork[]>([]);
@@ -379,6 +381,32 @@ export default function ArtistProfilePage() {
 		setArtistWorks(toEditableWorks(updatedWorks));
 
 		setSaving(false);
+	};
+
+	const handleDeleteProfile = async () => {
+		if (!artist) return;
+
+		const confirmed = window.confirm(
+			"Delete your artist profile permanently? This action cannot be undone and you will be signed out.",
+		);
+
+		if (!confirmed) {
+			return;
+		}
+
+		setDeleting(true);
+		setMessage("");
+
+		const result = await deleteArtistProfile(String(artist.id));
+
+		if (!result.success) {
+			setMessage(result.error || "Failed to delete profile");
+			setDeleting(false);
+			return;
+		}
+
+		await supabase.auth.signOut();
+		router.push("/");
 	};
 
 	const handleWorkFieldChange = (
@@ -1105,20 +1133,28 @@ export default function ArtistProfilePage() {
 							<button
 								onClick={handleCancel}
 								className={styles.cancelButton}
-								disabled={saving}
+								disabled={saving || deleting}
 							>
 								Cancel
 							</button>
 							<button
 								onClick={handleSave}
 								className={styles.saveButton}
-								disabled={saving || avatarUploading || workUploading}
+								disabled={saving || deleting || avatarUploading || workUploading}
 							>
 								{avatarUploading || workUploading
 									? "Uploading..."
 									: saving
 										? "Saving..."
 										: "Save Changes"}
+							</button>
+							<button
+								type="button"
+								onClick={handleDeleteProfile}
+								className={`${styles.saveButton} ${styles.dangerButton}`}
+								disabled={saving || deleting || avatarUploading || workUploading}
+							>
+								{deleting ? "Deleting..." : "Delete Profile"}
 							</button>
 						</div>
 					</>

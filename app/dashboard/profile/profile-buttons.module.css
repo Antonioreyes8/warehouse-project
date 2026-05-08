@@ -66,3 +66,14 @@
 	background: #8b1f1f;
 	color: #fff;
 }
+
+.dangerButton {
+	border-color: #8b1f1f;
+	background: transparent;
+	color: #8b1f1f;
+}
+
+.dangerButton:hover {
+	background: #8b1f1f;
+	color: #fff;
+}

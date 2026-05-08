@@ -1,8 +1,8 @@
 export const QUESTIONS = [
-  { id: 'q1', text: "Digital art is 'real' art." },
-  { id: 'q2', text: "AI will eventually replace human creativity." },
-  { id: 'q3', text: "Streaming services are killing the music industry." },
-  { id: 'q4', text: "I prefer working in total silence." },
+  { id: 'q1', text: "Normalize Gatekeeping" },
+  { id: 'q2', text: "There is no such thing as a bad outfit" },
+  { id: 'q3', text: "You can seperate the art from the artist" },
+  { id: 'q4', text: "Awards like the Grammys and the Oscars don't actually matter." },
   { id: 'q5', text: "An artist's personal life shouldn't affect how we see their work." },
   { id: 'q6', text: "Social media is the most important tool for a modern creative." },
   { id: 'q7', text: "Mainstream success is better than 'underground' respect." },
