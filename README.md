@@ -32,18 +32,21 @@ The app is designed around three primary goals:
 ## Features
 
 ### Public Features
+
 - **Artist Profiles**: Dynamic pages showcasing artist information, bio, social links, and featured works.
 - **Project Archives**: Curated project pages with collaborators, causes, and recap media.
 - **Informational Pages**: Home, Manifesto, Guidelines, FAQ, and Linktree.
 - **Discovery Quiz**: Interactive quiz to help users find relevant artists.
 
 ### Artist Dashboard
+
 - **Profile Management**: Edit personal information, bio, social links, and status.
 - **Work Portfolio**: Add, edit, and delete featured works with images and descriptions.
 - **Media Upload**: Upload profile pictures and work images to Supabase Storage.
 - **Account Deletion**: Artists can delete their own profiles.
 
 ### Technical Features
+
 - **Authentication**: Google OAuth via Supabase Auth.
 - **Authorization**: Email-based allowlist for artist access.
 - **Responsive Design**: Mobile-first CSS Modules styling.
@@ -53,6 +56,7 @@ The app is designed around three primary goals:
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 - Supabase account and project
@@ -60,17 +64,20 @@ The app is designed around three primary goals:
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd my-next-app
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Create environment file:
+
 ```bash
 cp .env.example .env.local
 ```
@@ -78,6 +85,7 @@ cp .env.example .env.local
 4. Configure environment variables (see [Environment Variables](#environment-variables)).
 
 5. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -94,6 +102,7 @@ npm run start
 ## Architecture
 
 ### Tech Stack
+
 - **Framework**: Next.js 16 with App Router
 - **Runtime**: React 19
 - **Backend**: Supabase (PostgreSQL, Auth, Storage)
@@ -105,16 +114,19 @@ npm run start
 ### Application Structure
 
 #### Client-Server Split
+
 - **Server Components**: Public pages (artists, projects, informational)
 - **Client Components**: Authenticated pages (dashboard, login)
 
 #### Data Layer
+
 - **Queries**: Read operations in `lib/*/queries.ts`
 - **Mutations**: Write operations in `lib/*/mutations.ts`
 - **Auth**: Authorization helpers in `lib/auth/`
 - **Storage**: Media helpers in `lib/projects/media.ts`
 
 #### Styling Organization
+
 - Feature-based CSS Modules
 - Sectioned stylesheets for complex components
 - Responsive design with mobile-first approach
@@ -122,11 +134,13 @@ npm run start
 ### Database Schema
 
 #### Tables
+
 - `profiles`: Artist profile data
 - `artist_works`: Individual work items
 - `allowed_users`: Email allowlist for artist access
 
 #### Storage Buckets
+
 - `avatars`: Profile pictures
 - `works`: Artist work images
 - `projects`: Project recap media
@@ -136,6 +150,7 @@ npm run start
 ### Artist API
 
 #### Queries
+
 - `getArtistByUsername(username: string)`: Fetch artist by username
 - `getArtistByUserId(userId: string)`: Fetch artist by Supabase user ID
 - `getArtistByEmail(email: string)`: Fetch artist by email
@@ -143,6 +158,7 @@ npm run start
 - `isEmailAuthorized(email: string)`: Check if email is allowlisted
 
 #### Mutations
+
 - `updateArtistProfile(artistId, email, updates)`: Update profile fields
 - `deleteArtistProfile(artistId)`: Delete artist profile
 - `syncArtistWorks(profileId, works)`: Sync artist's work portfolio
@@ -150,13 +166,16 @@ npm run start
 ### Project API
 
 #### Queries
+
 - `getProjects()`: Fetch all projects
 - `getProjectBySlug(slug)`: Fetch project by slug
 
 #### Media
+
 - `getProjectMedia(slug)`: Fetch project media files
 
 ### Auth API
+
 - `isArtistAuthorized(user)`: Check user authorization
 
 ## Guidelines
@@ -175,6 +194,7 @@ For full guidelines, visit [thediasporaproject.org/guidelines](https://thediaspo
 ### Code Guidelines
 
 #### Development Practices
+
 - Use TypeScript for all new code
 - Follow Next.js App Router conventions
 - Keep data logic in `lib/` separate from UI
@@ -182,6 +202,7 @@ For full guidelines, visit [thediasporaproject.org/guidelines](https://thediaspo
 - Write tests for new features
 
 #### Code Style
+
 - camelCase for CSS class names
 - Descriptive component and function names
 - Comprehensive error handling
@@ -192,6 +213,7 @@ For full guidelines, visit [thediasporaproject.org/guidelines](https://thediaspo
 We welcome contributions from the community! Here's how to get involved:
 
 ### Development Workflow
+
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/your-feature`
 3. Make your changes
@@ -200,6 +222,7 @@ We welcome contributions from the community! Here's how to get involved:
 6. Submit a pull request
 
 ### Adding Features
+
 1. Create route/component in `app/`
 2. Add data logic in `lib/`
 3. Use CSS Modules for styling
@@ -207,14 +230,17 @@ We welcome contributions from the community! Here's how to get involved:
 5. Update documentation
 
 ### Testing
+
 - Write unit tests for utilities and hooks
-- Add integration tests for API functions
+- Add integration tests for API functions and protected UI flows
+- Include white-box tests for internal logic and black-box tests for end-to-end behavior
 - Test UI components with Testing Library
-- Maintain 90%+ code coverage
+- Maintain 90%+ code coverage, including high branch coverage
 
 ## Testing
 
 ### Test Scripts
+
 ```bash
 # Run all tests
 npm test
@@ -228,6 +254,9 @@ npm run test:api
 # Run form tests
 npm run test:forms
 
+# Run integration tests
+npm run test:integration
+
 # Watch mode
 npm run test:watch
 
@@ -236,6 +265,7 @@ npm run test:ui
 ```
 
 ### Test Organization
+
 - `tests/api/`: API function tests
 - `tests/forms/`: Form and UI component tests
 - `tests/lib/`: Library utility tests
@@ -245,11 +275,13 @@ Coverage thresholds: 90%+ for statements, branches, functions, and lines.
 ## Deployment
 
 ### Prerequisites
+
 - Supabase project configured
 - Environment variables set
 - Domain configured for OAuth redirects
 
 ### Deployment Steps
+
 1. Build the application: `npm run build`
 2. Configure environment variables on hosting platform
 3. Set up Supabase Auth redirect URLs for deployed domain
@@ -257,7 +289,9 @@ Coverage thresholds: 90%+ for statements, branches, functions, and lines.
 5. Verify allowlist table contains artist emails
 
 ### Environment Setup
+
 Ensure these Supabase configurations:
+
 - Auth providers: Google OAuth enabled
 - Redirect URLs: Include production domain
 - Storage buckets: `avatars`, `works`, `projects` created
@@ -300,6 +334,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### Supabase Setup
+
 1. Create a new Supabase project
 2. Enable Google OAuth in Authentication settings
 3. Create storage buckets: `avatars`, `works`, `projects`

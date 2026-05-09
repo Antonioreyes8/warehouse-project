@@ -984,6 +984,7 @@ export default function ArtistProfilePage() {
 
 						<div className={styles.profileSection}>
 							<h2 className={styles.sectionTitle}>Featured Work</h2>
+							<div data-testid="artist-works-length">{artistWorks.length}</div>
 							<div className={styles.buttonGroup}>
 								<button
 									type="button"
@@ -1140,7 +1141,9 @@ export default function ArtistProfilePage() {
 							<button
 								onClick={handleSave}
 								className={styles.saveButton}
-								disabled={saving || deleting || avatarUploading || workUploading}
+								disabled={
+									saving || deleting || avatarUploading || workUploading
+								}
 							>
 								{avatarUploading || workUploading
 									? "Uploading..."
@@ -1152,7 +1155,9 @@ export default function ArtistProfilePage() {
 								type="button"
 								onClick={handleDeleteProfile}
 								className={`${styles.saveButton} ${styles.dangerButton}`}
-								disabled={saving || deleting || avatarUploading || workUploading}
+								disabled={
+									saving || deleting || avatarUploading || workUploading
+								}
 							>
 								{deleting ? "Deleting..." : "Delete Profile"}
 							</button>

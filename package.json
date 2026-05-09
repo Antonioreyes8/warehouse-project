@@ -19,7 +19,8 @@
 		"test:api:edge-cases": "vitest run tests/api/edge-cases",
 		"test:forms": "vitest run tests/forms",
 		"test:forms:black-box": "vitest run tests/forms/black-box",
-		"test:forms:edge-cases": "vitest run tests/forms/edge-cases"
+		"test:forms:edge-cases": "vitest run tests/forms/edge-cases",
+		"test:integration": "vitest run tests/api/integration tests/integration"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^7.2.0",
