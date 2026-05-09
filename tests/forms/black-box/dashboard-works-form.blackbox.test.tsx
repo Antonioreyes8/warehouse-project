@@ -262,7 +262,7 @@ describe("Dashboard Works — Add Work button", () => {
 
 describe("Dashboard Works — Delete Work button", () => {
 	it("removes work from form and shows confirmation message when user confirms", async () => {
-		vi.spyOn(window, "confirm").mockReturnValueOnce(true);
+		const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
 		const user = userEvent.setup();
 		render(<ArtistProfilePage />);
 
@@ -286,10 +286,15 @@ describe("Dashboard Works — Delete Work button", () => {
 				),
 			).toBeInTheDocument();
 		});
+
+		expect(confirmSpy).toHaveBeenCalledWith(
+			"Delete this work from your profile? Click Save Changes to make it permanent.",
+		);
+		confirmSpy.mockRestore();
 	});
 
 	it("keeps the work when user cancels the confirmation dialog", async () => {
-		vi.spyOn(window, "confirm").mockReturnValueOnce(false);
+		const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(false);
 		const user = userEvent.setup();
 		render(<ArtistProfilePage />);
 
@@ -303,6 +308,11 @@ describe("Dashboard Works — Delete Work button", () => {
 
 		// Work form should still be present
 		expect(screen.getByLabelText("Work Title")).toHaveValue("Untitled No. 1");
+
+		expect(confirmSpy).toHaveBeenCalledWith(
+			"Delete this work from your profile? Click Save Changes to make it permanent.",
+		);
+		confirmSpy.mockRestore();
 	});
 });
 

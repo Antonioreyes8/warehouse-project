@@ -1,27 +1,27 @@
-# The Diaspora Project Web App
+# The Diaspora Project
 
-Community-first artist platform built with Next.js App Router and Supabase.
+**Website:** [thediasporaproject.org](https://thediasporaproject.org)
 
-This repository hosts the public website, artist profiles, project archives, and a protected artist dashboard for editing profile and work content.
+A community-first artist platform built with Next.js App Router and Supabase. This repository hosts the public website, artist profiles, project archives, and a protected artist dashboard for editing profile and work content.
 
-## Contents
+## Table of Contents
 
-1. Project Overview
-2. Core Product Areas
-3. Architecture
-4. Routing and Rendering Strategy
-5. Data Layer and Supabase Model
-6. Authentication and Authorization
-7. Storage and Media
-8. Styling and CSS Organization
-9. Repository Structure
-10. Local Development
-11. Environment Variables
-12. Testing Strategy
-13. How to Add or Extend Features
-14. Deployment Checklist
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Getting Started](#getting-started)
+4. [Architecture](#architecture)
+5. [API Documentation](#api-documentation)
+6. [Guidelines](#guidelines)
+7. [Contributing](#contributing)
+8. [Testing](#testing)
+9. [Deployment](#deployment)
+10. [Repository Structure](#repository-structure)
+11. [Environment Variables](#environment-variables)
+12. [License](#license)
 
-## Project Overview
+## Introduction
+
+The Diaspora Project is dedicated to creating a safe, inclusive space for artists from marginalized communities. Our platform empowers artists to showcase their work, connect with collaborators, and build meaningful relationships in the creative industry.
 
 The app is designed around three primary goals:
 
@@ -29,278 +29,287 @@ The app is designed around three primary goals:
 2. Let approved artists sign in and manage their own profile/work metadata.
 3. Keep content architecture simple enough for non-engineer collaborators to maintain.
 
-## Core Product Areas
+## Features
 
-1. Home and informational routes:
-   - Home, Manifesto, Guidelines, FAQ, Linktree
-2. Public artist pages:
-   - Dynamic route at /artists/[slug]
-   - Displays profile identity, optional details, bio, links, and works
-3. Public project pages:
-   - Dynamic route at /projects/[slug]
-   - Displays context (cause), collaborators, and recap media
-4. Protected artist dashboard:
-   - Route at /dashboard/profile
-   - Edits profile metadata and artist works
+### Public Features
+- **Artist Profiles**: Dynamic pages showcasing artist information, bio, social links, and featured works.
+- **Project Archives**: Curated project pages with collaborators, causes, and recap media.
+- **Informational Pages**: Home, Manifesto, Guidelines, FAQ, and Linktree.
+- **Discovery Quiz**: Interactive quiz to help users find relevant artists.
 
-## Architecture
+### Artist Dashboard
+- **Profile Management**: Edit personal information, bio, social links, and status.
+- **Work Portfolio**: Add, edit, and delete featured works with images and descriptions.
+- **Media Upload**: Upload profile pictures and work images to Supabase Storage.
+- **Account Deletion**: Artists can delete their own profiles.
 
-High-level stack:
+### Technical Features
+- **Authentication**: Google OAuth via Supabase Auth.
+- **Authorization**: Email-based allowlist for artist access.
+- **Responsive Design**: Mobile-first CSS Modules styling.
+- **Server-Side Rendering**: Optimized for public pages with Next.js App Router.
+- **Type Safety**: Full TypeScript implementation.
 
-1. Framework: Next.js 16 App Router
-2. Runtime split:
-   - Server components for public content pages
-   - Client components for auth/dashboard interactions
-3. Backend platform: Supabase
-   - Auth (Google OAuth)
-   - Postgres data tables
-   - Storage buckets for media
-4. Styling approach:
-   - CSS Modules for route/component-level styles
-   - Minimal global baseline in app/globals.css
+## Getting Started
 
-## Routing and Rendering Strategy
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Supabase account and project
 
-Public pages are mostly server-rendered from static data and Supabase reads:
+### Installation
 
-1. /artists/[slug]
-   - Resolves slug
-   - Fetches profile + works
-   - Renders fallback empty-state if no profile exists
-2. /projects/[slug]
-   - Resolves slug from Supabase project catalog
-   - Fetches project media from storage helper
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd my-next-app
+```
 
-Protected pages are client-rendered due to session/auth state needs:
-
-1. /login
-   - Starts Google OAuth flow
-2. /auth/callback
-   - Completes OAuth exchange and redirects on success
-   - Shows explicit UI only on actual error
-3. /dashboard/profile
-   - Session + allowlist gate
-   - Profile and work editing workflow
-
-## Data Layer and Supabase Model
-
-Code organization in lib/:
-
-1. lib/artists/queries.ts
-   - Profile and works reads
-2. lib/artists/mutations.ts
-   - Profile updates and works synchronization
-3. lib/auth/authorization.ts
-   - Allowlist checks
-4. lib/projects/media.ts
-   - Project media retrieval helpers
-5. lib/supabase/client.ts
-   - Browser Supabase client
-6. lib/supabase/server.ts
-   - Server-side Supabase client helper
-
-Main tables and resources used by the app:
-
-1. profiles
-   - public artist profile fields
-2. artist_works
-   - per-profile work items
-3. allowed_users and/or authorized_artists
-   - allowlist for dashboard access (environment-dependent table naming exists in current code)
-4. Storage buckets
-   - avatars for profile images
-   - projects (or project-specific storage paths) for recap media
-
-## Authentication and Authorization
-
-Current login behavior:
-
-1. User initiates Google OAuth on /login
-2. Redirect returns to /auth/callback
-3. Callback verifies/loads session and routes to /dashboard/profile
-4. Dashboard checks allowlist by normalized email before loading editable content
-
-Important implementation details:
-
-1. Supabase client is configured for PKCE and URL session detection.
-2. Callback flow avoids false-positive early error flashes by checking session state before failing.
-3. Unauthorized users see a dedicated access denied state instead of editable UI.
-
-## Storage and Media
-
-Artist avatar upload flow:
-
-1. File selected in dashboard
-2. Client-side validation for size/type
-3. Upload to avatars bucket
-4. Public URL stored in profile row
-
-Project recap media flow:
-
-1. Route identifies project slug
-2. Media helper loads items from storage
-3. Recap section renders image/video tiles with type-based output
-
-## Styling and CSS Organization
-
-The codebase has been normalized to use sectioned CSS modules for larger features.
-
-Patterns used:
-
-1. Keep a feature entry stylesheet as an import hub.
-2. Split long styles by concern: shell, sections, buttons/states, responsive overrides.
-3. Prefer camelCase class names in CSS Modules.
-
-Examples of current organization:
-
-1. artists/
-   - page-layout.module.css
-   - empty-state.module.css
-   - about-section.module.css
-   - works-section.module.css
-2. dashboard/profile/
-   - profile.module.css (import hub)
-   - profile-shell.module.css
-   - profile-form.module.css
-   - profile-buttons.module.css
-   - profile-states.module.css
-   - profile-responsive.module.css
-3. home/
-   - home.module.css (import hub)
-   - home-rules.module.css
-   - home-projects.module.css
-4. linktree/
-   - linktree.module.css (import hub)
-   - linktree-layout.module.css
-   - linktree-links.module.css
-5. projects/
-   - project.module.css (import hub)
-   - project-layout.module.css
-   - project-sections.module.css
-
-## Repository Structure
-
-Top-level functional map:
-
-1. app/
-   - Route handlers, page components, and CSS modules
-2. lib/
-   - Data/query/mutation/auth/storage helpers
-3. tests/
-   - API and form tests (black-box, white-box, edge cases)
-4. public/
-   - Static assets and fonts
-
-## Local Development
-
-1. Install dependencies:
-
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Create local env file:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+3. Create environment file:
+```bash
+cp .env.example .env.local
 ```
 
-3. Start development server:
+4. Configure environment variables (see [Environment Variables](#environment-variables)).
 
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Build and run production mode locally:
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Build for Production
 
 ```bash
 npm run build
 npm run start
 ```
 
+## Architecture
+
+### Tech Stack
+- **Framework**: Next.js 16 with App Router
+- **Runtime**: React 19
+- **Backend**: Supabase (PostgreSQL, Auth, Storage)
+- **Styling**: CSS Modules
+- **Testing**: Vitest with Testing Library
+- **Linting**: ESLint
+- **Type Checking**: TypeScript
+
+### Application Structure
+
+#### Client-Server Split
+- **Server Components**: Public pages (artists, projects, informational)
+- **Client Components**: Authenticated pages (dashboard, login)
+
+#### Data Layer
+- **Queries**: Read operations in `lib/*/queries.ts`
+- **Mutations**: Write operations in `lib/*/mutations.ts`
+- **Auth**: Authorization helpers in `lib/auth/`
+- **Storage**: Media helpers in `lib/projects/media.ts`
+
+#### Styling Organization
+- Feature-based CSS Modules
+- Sectioned stylesheets for complex components
+- Responsive design with mobile-first approach
+
+### Database Schema
+
+#### Tables
+- `profiles`: Artist profile data
+- `artist_works`: Individual work items
+- `allowed_users`: Email allowlist for artist access
+
+#### Storage Buckets
+- `avatars`: Profile pictures
+- `works`: Artist work images
+- `projects`: Project recap media
+
+## API Documentation
+
+### Artist API
+
+#### Queries
+- `getArtistByUsername(username: string)`: Fetch artist by username
+- `getArtistByUserId(userId: string)`: Fetch artist by Supabase user ID
+- `getArtistByEmail(email: string)`: Fetch artist by email
+- `getArtistWorksByProfileId(profileId: string)`: Fetch artist's works
+- `isEmailAuthorized(email: string)`: Check if email is allowlisted
+
+#### Mutations
+- `updateArtistProfile(artistId, email, updates)`: Update profile fields
+- `deleteArtistProfile(artistId)`: Delete artist profile
+- `syncArtistWorks(profileId, works)`: Sync artist's work portfolio
+
+### Project API
+
+#### Queries
+- `getProjects()`: Fetch all projects
+- `getProjectBySlug(slug)`: Fetch project by slug
+
+#### Media
+- `getProjectMedia(slug)`: Fetch project media files
+
+### Auth API
+- `isArtistAuthorized(user)`: Check user authorization
+
+## Guidelines
+
+### Community Guidelines
+
+The Diaspora Project maintains strict community guidelines to ensure a safe and respectful environment. Key principles include:
+
+1. **Respect and Responsibility**: All participants must actively uphold community values.
+2. **Privacy and Consent**: Public environment with documented media policies.
+3. **Inclusivity**: Commitment to marginalized voices and anti-discrimination.
+4. **Collaboration**: Emphasis on cross-disciplinary networking.
+
+For full guidelines, visit [thediasporaproject.org/guidelines](https://thediasporaproject.org/guidelines).
+
+### Code Guidelines
+
+#### Development Practices
+- Use TypeScript for all new code
+- Follow Next.js App Router conventions
+- Keep data logic in `lib/` separate from UI
+- Use CSS Modules for styling
+- Write tests for new features
+
+#### Code Style
+- camelCase for CSS class names
+- Descriptive component and function names
+- Comprehensive error handling
+- Clear documentation comments
+
+## Contributing
+
+We welcome contributions from the community! Here's how to get involved:
+
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes
+4. Add tests for new functionality
+5. Run the test suite: `npm run test:coverage`
+6. Submit a pull request
+
+### Adding Features
+1. Create route/component in `app/`
+2. Add data logic in `lib/`
+3. Use CSS Modules for styling
+4. Add comprehensive tests
+5. Update documentation
+
+### Testing
+- Write unit tests for utilities and hooks
+- Add integration tests for API functions
+- Test UI components with Testing Library
+- Maintain 90%+ code coverage
+
+## Testing
+
+### Test Scripts
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Run API tests
+npm run test:api
+
+# Run form tests
+npm run test:forms
+
+# Watch mode
+npm run test:watch
+
+# UI mode
+npm run test:ui
+```
+
+### Test Organization
+- `tests/api/`: API function tests
+- `tests/forms/`: Form and UI component tests
+- `tests/lib/`: Library utility tests
+
+Coverage thresholds: 90%+ for statements, branches, functions, and lines.
+
+## Deployment
+
+### Prerequisites
+- Supabase project configured
+- Environment variables set
+- Domain configured for OAuth redirects
+
+### Deployment Steps
+1. Build the application: `npm run build`
+2. Configure environment variables on hosting platform
+3. Set up Supabase Auth redirect URLs for deployed domain
+4. Deploy to hosting platform (Vercel, Netlify, etc.)
+5. Verify allowlist table contains artist emails
+
+### Environment Setup
+Ensure these Supabase configurations:
+- Auth providers: Google OAuth enabled
+- Redirect URLs: Include production domain
+- Storage buckets: `avatars`, `works`, `projects` created
+- Database tables: `profiles`, `artist_works`, `allowed_users` exist
+
+## Repository Structure
+
+```
+my-next-app/
+├── app/                    # Next.js App Router pages and components
+│   ├── artists/           # Artist profile pages
+│   ├── auth/              # Authentication pages
+│   ├── components/        # Shared UI components
+│   ├── dashboard/         # Protected artist dashboard
+│   ├── discovery/         # Discovery features
+│   ├── home/              # Home page sections
+│   └── ...
+├── lib/                   # Data layer and utilities
+│   ├── artists/           # Artist-related functions
+│   ├── auth/              # Authentication helpers
+│   ├── projects/          # Project-related functions
+│   ├── supabase/          # Supabase clients
+│   └── ui/                # UI utilities
+├── public/                # Static assets
+├── tests/                 # Test suites
+│   ├── api/               # API tests
+│   ├── forms/             # Form tests
+│   └── lib/               # Library tests
+├── coverage/              # Test coverage reports
+└── ...
+```
+
 ## Environment Variables
 
-Required:
+Required environment variables:
 
-1. NEXT_PUBLIC_SUPABASE_URL
-2. NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-## Testing Strategy
-
-Available scripts:
-
-1. npm test
-2. npm run test:coverage
-3. npm run test:watch
-4. npm run test:ui
-5. npm run test:api
-6. npm run test:api:coverage
-7. npm run test:api:black-box
-8. npm run test:api:white-box
-9. npm run test:api:edge-cases
-10. npm run test:forms
-11. npm run test:forms:black-box
-12. npm run test:forms:edge-cases
-
-Recommended test commands:
-
-1. Fast API sanity run:
-
-```bash
-npm run test:api
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-2. API + lib coverage run (branch-focused quality gate):
+### Supabase Setup
+1. Create a new Supabase project
+2. Enable Google OAuth in Authentication settings
+3. Create storage buckets: `avatars`, `works`, `projects`
+4. Set up database tables as defined in the schema
+5. Configure redirect URLs for your domain
 
-```bash
-npm run test:api:coverage
-```
+## License
 
-3. Full repository coverage run:
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-```bash
-npm run test:coverage
-```
+---
 
-Coverage notes:
-
-1. Coverage is configured in vitest.config.ts for API-layer modules under lib/artists, lib/auth, and lib/projects.
-2. Thresholds are enforced at 90%+ for statements, lines, functions, and branches.
-3. HTML coverage report is generated in the default coverage output folder after coverage runs.
-
-Current suites cover:
-
-1. API behavior under expected and edge inputs
-2. Dashboard form behavior and input-level edge cases
-3. Query/mutation-level helper correctness
-
-## How to Add or Extend Features
-
-Recommended workflow for new pages/features:
-
-1. Create route and component in app/
-2. Keep data logic in lib/ (do not embed query logic deeply in UI)
-3. Start with one feature stylesheet, then split into sectioned modules if it grows
-4. Use camelCase module class naming
-5. Add tests in matching tests/ subtree
-
-When adding a new style-heavy route:
-
-1. Create feature-name.module.css as import hub
-2. Create companion files like:
-   - feature-name-shell.module.css
-   - feature-name-sections.module.css
-   - feature-name-responsive.module.css
-
-## Deployment Checklist
-
-1. Configure environment variables on host
-2. Configure Supabase Auth redirect URLs for deployed domain
-3. Verify allowlist table contains expected artist emails
-4. Verify storage policies for avatars/projects buckets
-5. Smoke test:
-   - login
-   - callback redirect
-   - dashboard edit/save
-   - public artist/project pages
+For more information, visit [thediasporaproject.org](https://thediasporaproject.org) or contact the development team.
