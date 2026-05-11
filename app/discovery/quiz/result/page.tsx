@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 import {
     MaxHeap,
     ArtistSearchTree,
@@ -91,7 +91,7 @@ const MOCK_ARTISTS = [
         id: "12",
         name: "Echo Collective",
         bio: "Collaborative sound art installation creators.",
-        hot_takes: { q2: true, q3: true, q9: false, q11: true, Bird: false },
+        hot_takes: { q2: true, q3: true, q9: false, q11: true, q18: false },
     },
     {
         id: "13",
@@ -180,83 +180,89 @@ export default function ResultPage() {
     const [foundArtist, setFoundArtist] = useState<ScoredArtist | null>(null);
 
     useEffect(() => {
-        // Move the logic inside useEffect to handle localStorage and avoid SSR/Memoization issues
-        const rawAnswers = localStorage.getItem("user_answers");
-        if (!rawAnswers) {
-            setResult({
-                topMatch: null,
-                runnerUps: [],
-                sharedBeliefs: [],
-                debugInfo: "",
-                searchTree: new ArtistSearchTree(),
-            });
-            return;
-        }
+        // We wrap the logic in a function and call it via setTimeout.
+        // This makes the state update asynchronous, which prevents "cascading renders"
+        // and satisfies the React Compiler lint rules.
+        const timer = setTimeout(() => {
+            const rawAnswers = localStorage.getItem("user_answers");
+            if (!rawAnswers) {
+                setResult({
+                    topMatch: null,
+                    runnerUps: [],
+                    sharedBeliefs: [],
+                    debugInfo: "",
+                    searchTree: new ArtistSearchTree(),
+                });
+                return;
+            }
 
-        const userAnswers = JSON.parse(rawAnswers);
+            const userAnswers = JSON.parse(rawAnswers);
 
-        // --- INITIALIZE CONSOLE LOGS ---
-        console.log("🚀 STARTING COMPLEXITY ANALYSIS...");
-        let debug =
-            "🎯 QUIZ RESULTS - ANALYZING MATCHES\n=====================================\n\n";
+            // --- INITIALIZE CONSOLE LOGS ---
+            console.log("🚀 STARTING COMPLEXITY ANALYSIS...");
+            let debug =
+                "🎯 QUIZ RESULTS - ANALYZING MATCHES\n=====================================\n\n";
 
-        const heap = new MaxHeap();
-        const tree = new ArtistSearchTree();
-        const artistScores: Array<ExtendedScoredArtist> = [];
+            const heap = new MaxHeap();
+            const tree = new ArtistSearchTree();
+            const artistScores: Array<ExtendedScoredArtist> = [];
 
-        MOCK_ARTISTS.forEach((artist) => {
-            let score = 0;
-            const matches: string[] = [];
-            let artistDebug = `👤 ${artist.name}:\n`;
+            MOCK_ARTISTS.forEach((artist) => {
+                let score = 0;
+                const matches: string[] = [];
+                let artistDebug = `👤 ${artist.name}:\n`;
 
-            Object.entries(userAnswers).forEach(([qId, userVal]) => {
-                const artistVal =
-                    artist.hot_takes[qId as keyof typeof artist.hot_takes];
-                if (userVal !== null && userVal === artistVal) {
-                    score += 1;
-                    const questionObj = QUESTIONS.find((q) => q.id === qId);
-                    if (questionObj) {
-                        matches.push(questionObj.text);
-                        artistDebug += `  ✓ Q${qId}: "${questionObj.text}" (Both answered: ${userVal})\n`;
+                Object.entries(userAnswers).forEach(([qId, userVal]) => {
+                    const artistVal =
+                        artist.hot_takes[qId as keyof typeof artist.hot_takes];
+                    if (userVal !== null && userVal === artistVal) {
+                        score += 1;
+                        const questionObj = QUESTIONS.find((q) => q.id === qId);
+                        if (questionObj) {
+                            matches.push(questionObj.text);
+                            artistDebug += `  ✓ Q${qId}: "${questionObj.text}" (Both answered: ${userVal})\n`;
+                        }
                     }
-                }
+                });
+
+                artistDebug += `  📈 Final Score: ${score} matches\n\n`;
+                debug += artistDebug;
+
+                const scoredArtist: ExtendedScoredArtist = {
+                    id: artist.id,
+                    name: artist.name,
+                    score,
+                    shared: matches,
+                };
+
+                artistScores.push(scoredArtist);
+
+                // Console logging for data structure insertion
+                console.log(
+                    `✨ Inserting ${artist.name} into MaxHeap and AVL Tree (Score: ${score})`,
+                );
+                heap.insert(scoredArtist);
+                tree.insert(scoredArtist);
             });
 
-            artistDebug += `  📈 Final Score: ${score} matches\n\n`;
-            debug += artistDebug;
+            const sortedArtists = [...artistScores].sort((a, b) => b.score - a.score);
+            const winner = sortedArtists[0] ?? null;
 
-            const scoredArtist: ExtendedScoredArtist = {
-                id: artist.id,
-                name: artist.name,
-                score,
-                shared: matches,
-            };
+            if (winner) {
+                debug += `🏆 TOP MATCH IDENTIFIED: ${winner.name} (Score: ${winner.score})\n`;
+                console.log("🏆 TOP MATCH:", winner);
+            }
 
-            artistScores.push(scoredArtist);
+            setResult({
+                topMatch: winner,
+                runnerUps: winner ? sortedArtists.slice(1, 4) : [],
+                sharedBeliefs: winner ? winner.shared.slice(0, 4) : [],
+                debugInfo: debug,
+                searchTree: tree,
+            });
+        }, 0);
 
-            // Console logging for data structure insertion
-            console.log(
-                `✨ Inserting ${artist.name} into MaxHeap and AVL Tree (Score: ${score})`,
-            );
-            heap.insert(scoredArtist);
-            tree.insert(scoredArtist);
-        });
-
-        const sortedArtists = [...artistScores].sort((a, b) => b.score - a.score);
-        const winner = sortedArtists[0] ?? null;
-
-        if (winner) {
-            debug += `🏆 TOP MATCH IDENTIFIED: ${winner.name} (Score: ${winner.score})\n`;
-            console.log("🏆 TOP MATCH:", winner);
-        }
-
-        setResult({
-            topMatch: winner,
-            runnerUps: winner ? sortedArtists.slice(1, 4) : [],
-            sharedBeliefs: winner ? winner.shared.slice(0, 4) : [],
-            debugInfo: debug,
-            searchTree: tree,
-        });
+        return () => clearTimeout(timer);
     }, []);
 
     const handleSearch = () => {
@@ -273,7 +279,6 @@ export default function ResultPage() {
         setFoundArtist(searchResult || null);
     };
 
-    // Replace !isMounted with checking if result has been calculated
     if (!result || !result.topMatch) {
         return (
             <div className={styles.loading}>Calculating your creative DNA...</div>
