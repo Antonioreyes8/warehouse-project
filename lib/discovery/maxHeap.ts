@@ -1,6 +1,5 @@
 /**
  * Represents an artist with a numerical score.
- * The MaxHeap will prioritize artists with the HIGHEST scores.
  */
 export interface ScoredArtist {
 	id: string;
@@ -9,49 +8,31 @@ export interface ScoredArtist {
 	hotTakes?: string[];
 }
 
-/**
- * MaxHeap Implementation
- * * CONCEPT:
- * A Max Heap is a Complete Binary Tree where the parent node is always
- * greater than or equal to its children.
- * * DECISION: Array Representation
- * We use an array instead of a linked tree structure because it is
- * memory-efficient and allows for mathematical index calculation:
- * - Parent: Math.floor((i - 1) / 2)
- * - Left Child: (2 * i) + 1
- * - Right Child: (2 * i) + 2
- */
+// --- DATA STRUCTURE 1: MAX HEAP (For Ranking) ---
+
+// --- DATA STRUCTURE 1: MAX HEAP (For Ranking) ---
+
 export class MaxHeap {
 	private heap: ScoredArtist[] = [];
 
 	/**
-	 * Adds a new artist to the heap.
-	 * Time Complexity: O(log n)
+	 * WHAT: Adds a new artist and restores order.
+	 * LOG: Shows the state after bubbleUp.
 	 */
 	insert(node: ScoredArtist) {
-		// 1. Add to the end of the array to maintain the "Complete Tree" property
 		this.heap.push(node);
-		// 2. Move the element up to its correct position to restore the "Heap" property
 		this.bubbleUp();
-		// 3. Log for debugging
+
+		// Log the state for debugging and demo purposes
 		console.log(`✨ Inserted: ${node.name} (Score: ${node.score})`);
 		this.printHeap();
 	}
 
-	/**
-	 * Restores the Max Heap property by moving the last element UP
-	 * until it is no longer larger than its parent.
-	 */
 	private bubbleUp() {
 		let index = this.heap.length - 1;
-
 		while (index > 0) {
 			const parentIndex = Math.floor((index - 1) / 2);
-
-			// If the current node's score is less than or equal to parent, we are done.
 			if (this.heap[index].score <= this.heap[parentIndex].score) break;
-
-			// Otherwise, swap them and continue moving up
 			[this.heap[index], this.heap[parentIndex]] = [
 				this.heap[parentIndex],
 				this.heap[index],
@@ -61,69 +42,50 @@ export class MaxHeap {
 	}
 
 	/**
-	 * Removes and returns the artist with the highest score.
-	 * Time Complexity: O(log n)
+	 * WHAT: Removes the top match and restores order.
+	 * LOG: Shows how the last element "sinks" to the correct spot.
 	 */
 	extractMax(): ScoredArtist | null {
 		if (this.heap.length === 0) return null;
 		if (this.heap.length === 1) return this.heap.pop() || null;
 
 		const max = this.heap[0];
-
-		// 1. Move the last element to the root.
-		// This is more efficient than shifting the whole array.
 		this.heap[0] = this.heap.pop()!;
-
-		// 2. Sink the new root down to its correct position.
 		this.sinkDown();
 
-		// 3. Log for debugging
-		console.log(`🏆 TOP MATCH: ${max.name} with score ${max.score}`);
+		// Log the new state after the top match is removed
+		console.log(`🏆 Extracted Max: ${max.name}`);
+		this.printHeap();
 
 		return max;
 	}
 
-	/**
-	 * Restores the Max Heap property by moving the root element DOWN
-	 * until it is larger than both of its children.
-	 */
 	private sinkDown() {
 		let index = 0;
 		const length = this.heap.length;
 		const element = this.heap[0];
-
 		while (true) {
 			const leftChildIdx = 2 * index + 1;
 			const rightChildIdx = 2 * index + 2;
-			let leftChild, rightChild;
-			let swap = null;
+			let leftChild,
+				rightChild,
+				swap = null;
 
-			// Check if left child exists and is larger than the current element
 			if (leftChildIdx < length) {
 				leftChild = this.heap[leftChildIdx];
-				if (leftChild.score > element.score) {
-					swap = leftChildIdx;
-				}
+				if (leftChild.score > element.score) swap = leftChildIdx;
 			}
-
-			// Check if right child exists
 			if (rightChildIdx < length) {
 				rightChild = this.heap[rightChildIdx];
 				if (
-					// If we haven't swapped with left and right is bigger than root...
 					(swap === null && rightChild.score > element.score) ||
-					// ...OR if we were going to swap with left, but right is even BIGGER than left.
 					(swap !== null &&
 						rightChild.score > (leftChild as ScoredArtist).score)
 				) {
 					swap = rightChildIdx;
 				}
 			}
-
-			// If no swaps were needed, the element is in its correct place
 			if (swap === null) break;
-
-			// Perform the swap and update index to continue sinking
 			this.heap[index] = this.heap[swap];
 			this.heap[swap] = element;
 			index = swap;
@@ -131,12 +93,146 @@ export class MaxHeap {
 	}
 
 	/**
-	 * Prints the current heap state to console for debugging
+	 * WHAT: Prints the current array representation of the heap.
+	 * WHY: Crucial for the "Engineering Explanation" requirement in your presentation.
+	 * WHEN: Called after any operation that modifies the heap structure.
 	 */
 	private printHeap() {
 		const heapDisplay = this.heap
-			.map((artist) => `${artist.name} (${artist.score})`)
-			.join(" → ");
-		console.log(`📊 Heap State: [${heapDisplay}]`);
+			.map((artist) => `${artist.name}(${artist.score})`)
+			.join(" | ");
+		console.log(`📊 Current Heap State: [ ${heapDisplay} ]`);
+	}
+}
+
+// --- DATA STRUCTURE 2: AVL TREE (For Balanced Search) ---
+
+class AVLNode {
+	height: number = 1;
+	left: AVLNode | null = null;
+	right: AVLNode | null = null;
+	constructor(public data: ScoredArtist) {}
+}
+
+export class ArtistSearchTree {
+	private root: AVLNode | null = null;
+
+	/**
+	 * WHAT: Traverses the tree to find an artist by their name.
+	 * WHY: Provides a $O(\log n)$ search, which is much faster than searching a standard list.
+	 * WHEN: Used when the user types into the "Check Other Artist Scores" search bar.
+	 */
+	search(name: string): ScoredArtist | null {
+		let current = this.root;
+		const searchName = name.toLowerCase();
+
+		while (current) {
+			const currentName = current.data.name.toLowerCase();
+			if (searchName === currentName) return current.data;
+			current = searchName < currentName ? current.left : current.right;
+		}
+		return null;
+	}
+
+	/**
+	 * WHAT: Public entry point to add an artist to the search tree.
+	 * WHY: Encapsulates the complex recursive logic and updates the root of the tree.
+	 * WHEN: Used during initial data processing to mirror all artists into the search engine.
+	 */
+	insert(artist: ScoredArtist) {
+		this.root = this._insert(this.root, artist);
+	}
+
+	/**
+	 * WHAT: Recursively finds the correct leaf for a new artist and triggers rebalancing.
+	 * WHY: Ensures the tree remains a valid Binary Search Tree (ordered by name).
+	 * WHEN: Called internally by the public insert method.
+	 */
+	private _insert(node: AVLNode | null, artist: ScoredArtist): AVLNode {
+		if (!node) return new AVLNode(artist);
+
+		if (artist.name.toLowerCase() < node.data.name.toLowerCase()) {
+			node.left = this._insert(node.left, artist);
+		} else {
+			node.right = this._insert(node.right, artist);
+		}
+
+		// Update height and rebalance
+		node.height =
+			1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
+		return this.rebalance(node);
+	}
+
+	/**
+	 * WHAT: Checks the balance factor and performs rotations if necessary.
+	 * WHY: This is the core of the AVL logic; it prevents the tree from becoming "skewed" or unbalanced.
+	 * WHEN: Executed after every insertion to maintain $O(\log n)$ performance[cite: 1].
+	 */
+	private rebalance(node: AVLNode): AVLNode {
+		const balance = this.getBalance(node);
+
+		// Left Heavy - requires right rotation
+		if (balance > 1) {
+			if (this.getBalance(node.left!) < 0) {
+				node.left = this.rotateLeft(node.left!);
+			}
+			return this.rotateRight(node);
+		}
+		// Right Heavy - requires left rotation
+		if (balance < -1) {
+			if (this.getBalance(node.right!) > 0) {
+				node.right = this.rotateRight(node.right!);
+			}
+			return this.rotateLeft(node);
+		}
+		return node;
+	}
+
+	/**
+	 * WHAT: Performs a right rotation around a node.
+	 * WHY: To fix "Left-Left" or "Left-Right" imbalances in the tree.
+	 * WHEN: Used internally during the rebalance process.
+	 */
+	private rotateRight(y: AVLNode): AVLNode {
+		const x = y.left!;
+		const T2 = x.right;
+		x.right = y;
+		y.left = T2;
+		y.height = Math.max(this.getHeight(y.left), this.getHeight(y.right)) + 1;
+		x.height = Math.max(this.getHeight(x.left), this.getHeight(x.right)) + 1;
+		return x;
+	}
+
+	/**
+	 * WHAT: Performs a left rotation around a node.
+	 * WHY: To fix "Right-Right" or "Right-Left" imbalances in the tree.
+	 * WHEN: Used internally during the rebalance process.
+	 */
+	private rotateLeft(x: AVLNode): AVLNode {
+		const y = x.right!;
+		const T2 = y.left;
+		y.left = x;
+		x.right = T2;
+		x.height = Math.max(this.getHeight(x.left), this.getHeight(x.right)) + 1;
+		y.height = Math.max(this.getHeight(y.left), this.getHeight(y.right)) + 1;
+		return y;
+	}
+
+	/**
+	 * WHAT: Safely returns the height of a node.
+	 * WHY: Prevents null-pointer errors when calculating balance factors of leaf nodes.
+	 * WHEN: Used during every insertion and rebalance check.
+	 */
+	private getHeight(node: AVLNode | null): number {
+		return node ? node.height : 0;
+	}
+
+	/**
+	 * WHAT: Calculates the difference in height between left and right subtrees.
+	 * WHY: To determine if the tree is tilting too far in one direction (imbalance > 1 or < -1).
+	 * WHEN: Called by the rebalance method to decide if rotations are needed.
+	 */
+	private getBalance(node: AVLNode | null): number {
+		return node ? this.getHeight(node.left) - this.getHeight(node.right) : 0;
 	}
 }
