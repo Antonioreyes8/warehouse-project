@@ -10,8 +10,6 @@ export interface ScoredArtist {
 
 // --- DATA STRUCTURE 1: MAX HEAP (For Ranking) ---
 
-// --- DATA STRUCTURE 1: MAX HEAP (For Ranking) ---
-
 export class MaxHeap {
 	private heap: ScoredArtist[] = [];
 
