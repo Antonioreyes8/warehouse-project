@@ -5,15 +5,12 @@ import {
 	mockMaybeSingle,
 	mockSelect,
 	mockEq,
-	mockIlike,
-	mockUpdate,
-	mockDelete,
 	resetSupabaseMocks,
 } from "../__mocks__/supabase";
 
 vi.mock("@/lib/supabase/client", () => ({ supabase: mockSupabase }));
 
-import { getArtistByUsername, isEmailAuthorized } from "@/lib/artists/queries";
+import { getArtistByUsername } from "@/lib/artists/queries";
 import {
 	updateArtistProfile,
 	deleteArtistProfile,

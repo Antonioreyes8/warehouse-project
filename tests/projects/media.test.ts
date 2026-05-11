@@ -1,11 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { User } from "@supabase/supabase-js";
 import {
 	mockSupabase,
-	mockMaybeSingle,
-	mockSelect,
-	mockEq,
-	mockIlike,
 	resetSupabaseMocks,
 } from "../__mocks__/supabase";
 
@@ -32,7 +27,7 @@ describe("File Upload Failures: Media Retrieval Errors", () => {
 				}),
 			}),
 		};
-		mockSupabase.storage = mockStorage as any;
+		mockSupabase.storage = mockStorage;
 
 		const result = await getProjectMedia("test-project");
 		expect(result).toEqual([]);
@@ -45,7 +40,7 @@ describe("File Upload Failures: Media Retrieval Errors", () => {
 				list: vi.fn().mockRejectedValue(new Error("Network timeout")),
 			}),
 		};
-		mockSupabase.storage = mockStorage as any;
+		mockSupabase.storage = mockStorage;
 
 		// The function doesn't handle promise rejections, so we expect it to throw
 		await expect(getProjectMedia("test-project")).rejects.toThrow(
@@ -63,14 +58,14 @@ describe("File Upload Failures: Media Retrieval Errors", () => {
 				}),
 			}),
 		};
-		mockSupabase.storage = mockStorage as any;
+		mockSupabase.storage = mockStorage;
 
 		const result = await getProjectMedia("empty-project");
 		expect(result).toEqual([]);
 	});
 
 	it("filters out invalid file types from media results", async () => {
-		// Mock files - the function treats everything as image except video extensions
+		// Mock files with invalid extensions - Factory pattern filters these out
 		const mockStorage = {
 			from: vi.fn().mockReturnValue({
 				list: vi.fn().mockResolvedValue({
@@ -83,12 +78,11 @@ describe("File Upload Failures: Media Retrieval Errors", () => {
 				}),
 			}),
 		};
-		mockSupabase.storage = mockStorage as any;
+		mockSupabase.storage = mockStorage;
 
 		const result = await getProjectMedia("mixed-files");
-		// All non-video files are treated as images by the function
-		expect(result).toHaveLength(3);
-		expect(result[0].type).toBe("image");
+		// Invalid file types are filtered out by MediaFactory.isValidMediaFile()
+		expect(result).toHaveLength(0);
 	});
 
 	it("successfully processes valid image files", async () => {
@@ -105,7 +99,7 @@ describe("File Upload Failures: Media Retrieval Errors", () => {
 				}),
 			}),
 		};
-		mockSupabase.storage = mockStorage as any;
+		mockSupabase.storage = mockStorage;
 
 		const result = await getProjectMedia("valid-media");
 		expect(result).toHaveLength(3);

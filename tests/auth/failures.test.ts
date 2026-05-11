@@ -41,13 +41,12 @@ describe("Authentication Failures: OAuth and Session Issues", () => {
 	});
 
 	it("handles database connection failure during authorization", async () => {
-		// Mock database connection failure - function currently throws on rejection
+		// Mock database connection failure - Strategy pattern should catch and continue
 		mockMaybeSingle.mockRejectedValue(new Error("Database connection failed"));
 
 		const user = { id: "user-123", email: "test@example.com" } as User;
-		await expect(isArtistAuthorized(user)).rejects.toThrow(
-			"Database connection failed",
-		);
+		const result = await isArtistAuthorized(user);
+		expect(result).toBe(false); // Should return false when all strategies fail
 	});
 
 	it("handles timeout during authorization check", async () => {

@@ -17,6 +17,7 @@
  */
 
 // app/projects/[slug]/page.tsx
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProjectMedia } from "@/lib/projects/media";
 import { getProjectBySlug } from "@/lib/projects/queries";
@@ -64,10 +65,14 @@ export default async function ProjectPage(props: ProjectPageProps) {
 	return (
 		<main className={styles.projectMain}>
 			<h1>{project.title}</h1>
-			<img
+			<Image
 				src={project.img}
 				alt={project.title}
 				className={styles.projectPoster}
+				width={1200}
+				height={800}
+				unoptimized
+				priority
 			/>
 			<p>
 				<strong>Date:</strong> {project.date}

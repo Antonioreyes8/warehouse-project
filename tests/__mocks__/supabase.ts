@@ -38,9 +38,12 @@ mockFrom.mockReturnValue({
 	delete: mockDelete,
 });
 
-export const mockSupabase = {
+export const mockSupabase: {
+	from: typeof mockFrom;
+	storage: { from: typeof mockFrom };
+} = {
 	from: mockFrom,
-	storage: mockStorage,
+	storage: { from: mockFrom },
 };
 
 /** Call this in beforeEach to reset all mocks between tests. */

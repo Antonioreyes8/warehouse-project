@@ -14,6 +14,7 @@
  *   - Serves as the project's evidence/archive section after descriptive context
  */
 
+import Image from "next/image";
 import type { Media } from "@/lib/projects/types";
 import styles from "./project.module.css";
 
@@ -37,7 +38,14 @@ export default function RecapSection({
                   item.type is prepared upstream so the section can stay focused on display.
               */}
 							{item.type === "image" ? (
-								<img src={item.src} alt={`Recap ${i + 1}`} loading="lazy" />
+								<Image
+									src={item.src}
+									alt={`Recap ${i + 1}`}
+									width={480}
+									height={270}
+									loading="lazy"
+									unoptimized
+								/>
 							) : (
 								<video controls playsInline>
 									<source src={item.src} />

@@ -56,7 +56,7 @@ describe("Form Validation Errors: Input Validation", () => {
 		it("rejects empty required fields", () => {
 			const requiredFields = ["name", "email", "username"];
 
-			requiredFields.forEach((field) => {
+			requiredFields.forEach(() => {
 				const value = ""; // empty
 				expect(value.trim().length > 0).toBe(false);
 			});

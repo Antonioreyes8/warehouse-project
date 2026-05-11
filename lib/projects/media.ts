@@ -21,6 +21,53 @@ import { supabase } from "@/lib/supabase/client";
 import type { Media } from "@/lib/projects/types";
 
 /**
+ * Factory Pattern: Media Object Creation
+ * Creates different types of media objects based on file extensions
+ */
+class MediaFactory {
+	private static readonly VIDEO_EXTENSIONS = [
+		"mp4",
+		"mov",
+		"avi",
+		"mkv",
+		"webm",
+	];
+	private static readonly IMAGE_EXTENSIONS = [
+		"jpg",
+		"jpeg",
+		"png",
+		"gif",
+		"webp",
+		"svg",
+	];
+
+	static createMedia(fileName: string, projectSlug: string): Media {
+		const extension = fileName.split(".").pop()?.toLowerCase() || "";
+
+		if (this.VIDEO_EXTENSIONS.includes(extension)) {
+			return {
+				type: "video",
+				src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${projectSlug}/${fileName}`,
+			};
+		}
+
+		// Default to image for all other files (including unknown extensions)
+		return {
+			type: "image",
+			src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${projectSlug}/${fileName}`,
+		};
+	}
+
+	static isValidMediaFile(fileName: string): boolean {
+		const extension = fileName.split(".").pop()?.toLowerCase() || "";
+		return (
+			this.VIDEO_EXTENSIONS.includes(extension) ||
+			this.IMAGE_EXTENSIONS.includes(extension)
+		);
+	}
+}
+
+/**
  * Description: Retrieves all media files for a project from Supabase Storage and transforms them into Media objects.
  * Parameters:
  *   - slug: string - The project slug used as the storage folder name
@@ -48,10 +95,8 @@ export async function getProjectMedia(slug: string): Promise<Media[]> {
 	}
 
 	// Transformation phase
-	// Convert storage objects into UI-ready media descriptors with a best-effort
-	// type check based on common video extensions.
-	return data.map((file) => ({
-		type: file.name.match(/\.(mp4|webm|mov)$/i) ? "video" : "image",
-		src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${slug}/${file.name}`,
-	}));
+	// Use Factory Pattern to create appropriate Media objects based on file type
+	return data
+		.filter((file) => MediaFactory.isValidMediaFile(file.name))
+		.map((file) => MediaFactory.createMedia(file.name, slug));
 }
