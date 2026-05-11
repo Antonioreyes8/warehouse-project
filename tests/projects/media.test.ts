@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-	mockSupabase,
-	resetSupabaseMocks,
-} from "../__mocks__/supabase";
+import { mockSupabase, resetSupabaseMocks } from "../__mocks__/supabase";
 
 vi.mock("@/lib/supabase/client", () => ({ supabase: mockSupabase }));
 
