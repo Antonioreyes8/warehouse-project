@@ -38,8 +38,8 @@ export default function QuizPage() {
 					</header>
 					<p className={styles.description}>
 						It&apos;s time to find your perfect match.
-						<br /> <br /> If you can agree with most of their hot takes, there&apos;s
-						definitely chemistry there.
+						<br /> <br /> If you can agree with most of their hot takes,
+						there&apos;s definitely chemistry there.
 					</p>
 					<button
 						onClick={() => setIsStarted(true)}

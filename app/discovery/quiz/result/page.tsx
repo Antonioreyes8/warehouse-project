@@ -97,7 +97,10 @@ export default function ResultPage() {
 			};
 		}
 
-		const userAnswers = JSON.parse(rawAnswers) as Record<string, boolean | null>;
+		const userAnswers = JSON.parse(rawAnswers) as Record<
+			string,
+			boolean | null
+		>;
 		let debug = "🎯 QUIZ RESULTS - ANALYZING MATCHES\n";
 		debug += "=====================================\n\n";
 

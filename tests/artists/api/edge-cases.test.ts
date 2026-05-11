@@ -22,7 +22,13 @@ beforeEach(() => {
 	resetSupabaseMocks();
 });
 
+// This file contains black-box edge-case tests for API functions.
+// Black-box testing: Tests the external behavior of functions without knowledge of internal implementation.
+// Edge-case testing: Focuses on boundary conditions, error handling, and unusual inputs.
+// These are unit tests (isolated function testing with mocked dependencies).
+
 describe("API Edge Cases: email normalization and blanks", () => {
+	// Black-box unit test: Tests input sanitization and handling of whitespace in email queries.
 	it("trims whitespace in getArtistByEmail", async () => {
 		mockMaybeSingle.mockResolvedValueOnce({ data: null, error: null });
 		await getArtistByEmail("   F2ARC.8@gmail.com   ");
@@ -36,6 +42,7 @@ describe("API Edge Cases: email normalization and blanks", () => {
 });
 
 describe("API Edge Cases: mutation fallbacks and failures", () => {
+	// Black-box unit test: Tests error handling and fallback logic in update operations.
 	it("returns DB error when id update fails immediately", async () => {
 		mockSelect.mockResolvedValueOnce({
 			data: null,
@@ -74,6 +81,7 @@ describe("API Edge Cases: mutation fallbacks and failures", () => {
 });
 
 describe("API Edge Cases: authorization loops", () => {
+	// Black-box unit test: Tests authorization failure handling when all database checks fail.
 	it("returns false when all allowlist table checks return errors", async () => {
 		mockMaybeSingle.mockResolvedValue({
 			data: null,

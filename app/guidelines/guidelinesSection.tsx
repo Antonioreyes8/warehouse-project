@@ -18,11 +18,11 @@ export default function GuidelinesSection() {
 							Article I. Our Mission & Shared Responsibility
 						</h3>
 						<p className={styles.text}>
-							The Diaspora Project&apos;s community shares its commitment to offering
-							a safe space for its performers, organizers, and audience. By
-							choosing to attend any events you must actively take on the
-							responsiblity of upholding the values of this community and by
-							respecting others and the space itself.
+							The Diaspora Project&apos;s community shares its commitment to
+							offering a safe space for its performers, organizers, and
+							audience. By choosing to attend any events you must actively take
+							on the responsiblity of upholding the values of this community and
+							by respecting others and the space itself.
 						</p>
 					</article>
 

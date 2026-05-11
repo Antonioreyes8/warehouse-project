@@ -30,7 +30,12 @@ beforeEach(() => {
 	resetSupabaseMocks();
 });
 
+// This file contains white-box unit tests for API functions.
+// White-box testing: Tests the internal implementation details, method calls, and code paths.
+// These are unit tests (isolated function testing with mocked dependencies), verifying the correct database queries and logic flow.
+
 describe("API White-Box: queries.ts behavior", () => {
+	// White-box unit test: Verifies the exact database query structure for username lookup.
 	it("targets profiles.username when fetching by username", async () => {
 		mockMaybeSingle.mockResolvedValueOnce({ data: null, error: null });
 		await getArtistByUsername("antonioreyes");
@@ -60,6 +65,7 @@ describe("API White-Box: queries.ts behavior", () => {
 });
 
 describe("API White-Box: mutations.ts fallback logic", () => {
+	// White-box unit test: Verifies the fallback mechanism from ID to email update.
 	it("tries id update first, then email fallback if id returns no rows", async () => {
 		mockSelect
 			.mockResolvedValueOnce({ data: [], error: null })
@@ -88,6 +94,7 @@ describe("API White-Box: mutations.ts fallback logic", () => {
 });
 
 describe("API White-Box: authorization.ts table order", () => {
+	// White-box unit test: Verifies the order of table checks in authorization logic.
 	it("tries authorized_artists, then authorized, then allowed_users", async () => {
 		mockMaybeSingle
 			.mockResolvedValueOnce({ data: null, error: { message: "missing" } })

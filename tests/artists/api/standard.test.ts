@@ -35,7 +35,12 @@ beforeEach(() => {
 	resetSupabaseMocks();
 });
 
+// This file contains black-box tests for API functions.
+// Black-box testing: Tests the external behavior and outputs of functions without knowledge of internal implementation.
+// These are unit tests (isolated function testing with mocked dependencies), focusing on happy path and standard scenarios.
+
 describe("API Black-Box: Artist Queries", () => {
+	// Black-box unit test: Tests successful profile retrieval by username.
 	it("returns a profile by username", async () => {
 		mockMaybeSingle.mockResolvedValueOnce({ data: artist, error: null });
 		await expect(getArtistByUsername("antonioreyes")).resolves.toEqual(artist);
@@ -68,6 +73,7 @@ describe("API Black-Box: Artist Queries", () => {
 });
 
 describe("API Black-Box: Artist Mutations", () => {
+	// Black-box unit test: Tests successful profile update operation.
 	it("updates a profile successfully", async () => {
 		mockSelect.mockResolvedValueOnce({ data: [{ id: 42 }], error: null });
 		await expect(
