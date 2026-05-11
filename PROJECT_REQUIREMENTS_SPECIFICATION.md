@@ -106,7 +106,6 @@ The Diaspora Project addresses the critical need for a safe, inclusive platform 
 - **Edge-Case Tests**: Boundary condition and error handling tests (subset of black-box)
 - **Coverage Requirements**: 78% branches, 77% functions, 25% lines/statements
 
-
 - **REQ-TEST-001**: White-box unit tests for React components, business logic, and helper functions using Vitest and Testing Library
 - **REQ-TEST-002**: Integration tests combining UI components with backend flows, including authentication, profile CRUD, media upload, and public page rendering
 - **REQ-TEST-003**: Black-box API and functional tests for user-facing behavior, including auth flow, protected dashboard access, form submission, and guest discovery flows

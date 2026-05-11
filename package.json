@@ -21,7 +21,10 @@
 		"test:api:black-box": "vitest run tests/artists/api/standard.test.ts",
 		"test:api:white-box": "vitest run tests/artists/unit",
 		"test:api:edge-cases": "vitest run tests/artists/api/edge-cases.test.ts",
-		"test:integration": "vitest run tests/integration"
+		"test:integration": "vitest run tests/integration",
+		"test:media": "vitest run tests/projects/media.test.ts",
+		"test:auth": "vitest run tests/auth/failures.test.ts",
+		"test:forms": "vitest run tests/forms/validation.test.ts"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^7.2.0",

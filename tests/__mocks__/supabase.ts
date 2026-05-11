@@ -20,6 +20,7 @@ export const mockSelect = vi.fn();
 export const mockEq = vi.fn();
 export const mockIlike = vi.fn();
 export const mockFrom = vi.fn();
+export const mockStorage = vi.fn();
 
 // Wire up the chainable query builder
 mockIlike.mockReturnValue({ maybeSingle: mockMaybeSingle, select: mockSelect });
@@ -39,6 +40,7 @@ mockFrom.mockReturnValue({
 
 export const mockSupabase = {
 	from: mockFrom,
+	storage: mockStorage,
 };
 
 /** Call this in beforeEach to reset all mocks between tests. */
@@ -50,6 +52,7 @@ export function resetSupabaseMocks() {
 	mockEq.mockReset();
 	mockIlike.mockReset();
 	mockFrom.mockReset();
+	mockStorage.mockReset();
 
 	mockIlike.mockReturnValue({
 		maybeSingle: mockMaybeSingle,
