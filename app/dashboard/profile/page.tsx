@@ -39,6 +39,7 @@ import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import styles from "./profile.module.css";
+import { PROFILE_FIELD_DESCRIPTIONS } from "@/lib/artists/profileFieldDescriptions";
 
 const STATUS_OPTIONS = [
 	"Open for Work",
@@ -666,6 +667,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="avatar_upload">
 										Profile Picture
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.avatar.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.avatar.hint}
+									</div>
 									<div className={styles.avatarField}>
 										{formData.avatar_url ? (
 											<Image
@@ -699,6 +706,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="name">
 										Name *
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.name.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.name.hint}
+									</div>
 									<input
 										type="text"
 										id="name"
@@ -714,6 +727,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="username">
 										Username *
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.username.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.username.hint}
+									</div>
 									<input
 										type="text"
 										id="username"
@@ -729,6 +748,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="bio">
 										Bio
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.bio.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.bio.hint}
+									</div>
 									<textarea
 										id="bio"
 										name="bio"
@@ -743,6 +768,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="birthday">
 										Birth Date
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.birthday.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.birthday.hint}
+									</div>
 									<input
 										type="date"
 										id="birthday"
@@ -756,6 +787,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="based_in">
 										Based In
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.basedIn.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.basedIn.hint}
+									</div>
 									<input
 										type="text"
 										id="based_in"
@@ -770,6 +807,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="mediums">
 										Mediums
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.mediums.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.mediums.hint}
+									</div>
 									<textarea
 										id="mediums"
 										name="mediums"
@@ -784,6 +827,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="past_projects">
 										Past Projects
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.pastProjects.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.pastProjects.hint}
+									</div>
 									<textarea
 										id="past_projects"
 										name="past_projects"
@@ -801,6 +850,12 @@ export default function ArtistProfilePage() {
 									>
 										Ethnic Background
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.ethnicBackground.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.ethnicBackground.hint}
+									</div>
 									<input
 										type="text"
 										id="ethnic_background"
@@ -815,6 +870,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="contact">
 										Contact
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.contact.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.contact.hint}
+									</div>
 									<input
 										type="text"
 										id="contact"
@@ -829,6 +890,12 @@ export default function ArtistProfilePage() {
 									<label className={styles.formLabel} htmlFor="status">
 										Status
 									</label>
+									<div className={styles.fieldDescription}>
+										{PROFILE_FIELD_DESCRIPTIONS.status.description}
+									</div>
+									<div className={styles.fieldHint}>
+										{PROFILE_FIELD_DESCRIPTIONS.status.hint}
+									</div>
 									<select
 										id="status"
 										name="status"
@@ -849,6 +916,11 @@ export default function ArtistProfilePage() {
 
 						<div className={styles.profileSection}>
 							<h2 className={styles.sectionTitle}>Social Links</h2>
+							<div className={styles.fieldDescription}>
+								Add your social media links to connect with collectors and fans.
+								The more platforms you include, the more ways people can
+								discover and follow your work.
+							</div>
 							<div className={styles.formGrid}>
 								<div className={styles.formGroup}>
 									<label className={styles.formLabel} htmlFor="instagram">
@@ -984,6 +1056,12 @@ export default function ArtistProfilePage() {
 
 						<div className={styles.profileSection}>
 							<h2 className={styles.sectionTitle}>Featured Work</h2>
+							<div className={styles.fieldDescription}>
+								Showcase your best work! Featured pieces appear prominently on
+								your public profile and help collectors understand your artistic
+								style and capabilities. Add 3-5 pieces that represent your range
+								and expertise.
+							</div>
 							<div data-testid="artist-works-length">{artistWorks.length}</div>
 							<div className={styles.buttonGroup}>
 								<button
@@ -1009,6 +1087,12 @@ export default function ArtistProfilePage() {
 											>
 												Work Image
 											</label>
+											<div className={styles.fieldDescription}>
+												{PROFILE_FIELD_DESCRIPTIONS.workImage.description}
+											</div>
+											<div className={styles.fieldHint}>
+												{PROFILE_FIELD_DESCRIPTIONS.workImage.hint}
+											</div>
 											<div className={styles.workPreview}>
 												{work.image_url ? (
 													<Image
@@ -1046,6 +1130,12 @@ export default function ArtistProfilePage() {
 											>
 												Work Title
 											</label>
+											<div className={styles.fieldDescription}>
+												{PROFILE_FIELD_DESCRIPTIONS.workTitle.description}
+											</div>
+											<div className={styles.fieldHint}>
+												{PROFILE_FIELD_DESCRIPTIONS.workTitle.hint}
+											</div>
 											<input
 												type="text"
 												id={`work_title_${index}`}
@@ -1063,6 +1153,12 @@ export default function ArtistProfilePage() {
 											>
 												Medium
 											</label>
+											<div className={styles.fieldDescription}>
+												{PROFILE_FIELD_DESCRIPTIONS.workMedium.description}
+											</div>
+											<div className={styles.fieldHint}>
+												{PROFILE_FIELD_DESCRIPTIONS.workMedium.hint}
+											</div>
 											<input
 												type="text"
 												id={`work_medium_${index}`}
@@ -1080,6 +1176,12 @@ export default function ArtistProfilePage() {
 											>
 												Work Link
 											</label>
+											<div className={styles.fieldDescription}>
+												{PROFILE_FIELD_DESCRIPTIONS.workLink.description}
+											</div>
+											<div className={styles.fieldHint}>
+												{PROFILE_FIELD_DESCRIPTIONS.workLink.hint}
+											</div>
 											<input
 												type="url"
 												id={`work_link_${index}`}
@@ -1101,6 +1203,12 @@ export default function ArtistProfilePage() {
 											>
 												Work Description
 											</label>
+											<div className={styles.fieldDescription}>
+												{PROFILE_FIELD_DESCRIPTIONS.workDescription.description}
+											</div>
+											<div className={styles.fieldHint}>
+												{PROFILE_FIELD_DESCRIPTIONS.workDescription.hint}
+											</div>
 											<textarea
 												id={`work_description_${index}`}
 												value={work.description}

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { User } from "@supabase/supabase-js";
 import {
 	mockSupabase,
 	mockFrom,
@@ -40,7 +41,7 @@ describe("API Integration Tests", () => {
 		const authorized = await isArtistAuthorized({
 			id: "uid-1",
 			email: artist.email,
-		} as any);
+		} as User);
 
 		expect(authorized).toBe(true);
 		expect(mockFrom).toHaveBeenCalledWith("authorized_artists");

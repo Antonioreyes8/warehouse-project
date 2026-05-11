@@ -33,12 +33,12 @@ export default function QuizPage() {
 					<header className={styles.header}>
 						<p className={styles.count}>Matchmaker Quiz</p>
 						<h1 className={styles.heroTitle}>
-							Let’s play <br /> 21 Questions.
+							Let&apos;s play <br /> 21 Questions.
 						</h1>
 					</header>
 					<p className={styles.description}>
-						It's time to find your perfect match.
-						<br /> <br /> If you can agree with most of their hot takes, there's
+						It&apos;s time to find your perfect match.
+						<br /> <br /> If you can agree with most of their hot takes, there&apos;s
 						definitely chemistry there.
 					</p>
 					<button
@@ -46,7 +46,7 @@ export default function QuizPage() {
 						className={styles.agreeBtn}
 						style={{ marginTop: "20px" }}
 					>
-						Let's Get Started
+						Let&apos;s Get Started
 					</button>
 				</main>
 			</div>
