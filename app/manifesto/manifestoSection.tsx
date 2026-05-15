@@ -19,7 +19,7 @@ export default function ManifestoSection() {
 						us artistic expression is far from neutral, it's a form of
 						resistence. We use our spaces to hold solidarity with oppressed
 						communities and give a voice to marginalized communities. We are
-						committed to building a digital and ambulant space Our main
+						committed to building a digital and ambulant space. Our main
 						objective is to set an initiative to focus on the often less
 						represented voices within our community. We organize more than just
 						events we curate experiences.
