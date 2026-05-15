@@ -4,7 +4,7 @@ export const QUESTIONS = [
   { id: 'q3', text: "You can seperate the art from the artist" },
   { id: 'q4', text: "Awards like the Grammys and the Oscars don't actually matter." },
   { id: 'q5', text: "There is a space for ai in art" },
-  { id: 'q6', text: "Social media is the most important tool for a modern creative." },
+  { id: 'q6', text: "Talent usually always beats hard work" },
   { id: 'q7', text: "Mainstream success is better than 'underground' respect." },
   { id: 'q8', text: "Vinyl sounds better than high-res digital audio." },
   { id: 'q9', text: "Collaborating is harder than working solo." },

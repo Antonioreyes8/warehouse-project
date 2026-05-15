@@ -14,27 +14,15 @@ export default function ManifestoSection() {
 					<h1 className={styles.mainTitle}>Our Manifesto</h1>
 
 					<p className={`${styles.text} ${styles.dropCap}`}>
-						We want to be part of a movement that reclaims social spaces from
-						systems that extract, isolate, and commodify human expression. This
-						is our chance to create change and to be part of something bigger
-						than ourselves. Artistic expression is fundamental to unification,
-						healing, and growth. We believe in the power of art to build
-						community and to create meaningful change. We are committed to
-						building a digital and ambulant space to function as the medium that
-						grows alongside our community and acts as the vessel for artistic
-						expression.
+						For us artistic expression is far from neutral, it's a form of
+						resistence. We use our spaces to hold solidarity with oppressed
+						communities and give a voice to marginalized communities. Our main
+						objective is to set an initiative to focus on the often less
+						represented voices within our community.
 					</p>
 
 					<p className={`${styles.text} ${styles.emphasis}`}>
-						We want to build a community that sees its members as real people.
-					</p>
-
-					<p className={styles.text}>
-						Technofeudalism makes the path to an audience increasingly isolating
-						and dehumanizing. At the same time, gentrification has dismantled
-						many of the physical spaces where artists and subcultures once
-						gathered. As creative work becomes shaped by market demands, art
-						risks losing the freedom and meaning that give it power.
+						Unification, healing, and empowerment.
 					</p>
 
 					<p className={styles.text}>
@@ -43,21 +31,24 @@ export default function ManifestoSection() {
 					</p>
 
 					<p className={`${styles.text} ${styles.emphasis}`}>
-						In this space, respect is not passive. It is an active choice.
+						Respect is an active choice.
 					</p>
 
 					<p className={styles.text}>
 						We believe art and artist are inseparable. The art you support
 						exists within a broader context, one that is often abstracted or
 						erased. We believe we have a responsibility to be clear about who
-						and what we support.
+						and what we support. Who makes the art we consume and how do we feel
+						about the art we consume?
 					</p>
 
 					<p className={styles.text}>
-						Neutrality and complicity allow harmful cycles to continue. In our
-						effort to create change, we acknowledge our duty not only to be
-						transparent and speak out, but to actively participate in the change
-						we want to see.
+						Take an effort to reject your biases, put yourself in the context of
+						another. It's often times those closest to us that we forget to make an effort for.
+					</p>
+
+					<p className={`${styles.text} ${styles.emphasis}`}>
+						Support local art
 					</p>
 				</div>
 			</div>
