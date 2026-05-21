@@ -526,7 +526,7 @@ export default function InteractiveCanvas(): React.JSX.Element {
 					width: "100%",
 					maxWidth: "900px",
 					background: "transparent",
-					touchAction: "none",
+					touchAction: activeStarId !== null ? "none" : "manipulation",
 				}}
 			/>
 		</div>
