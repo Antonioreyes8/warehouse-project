@@ -27,6 +27,7 @@
 		"test:forms": "vitest run tests/forms/validation.test.ts"
 	},
 	"dependencies": {
+		"@chenglou/pretext": "^0.0.7",
 		"@fortawesome/fontawesome-svg-core": "^7.2.0",
 		"@fortawesome/free-brands-svg-icons": "^7.2.0",
 		"@fortawesome/free-regular-svg-icons": "^7.2.0",
