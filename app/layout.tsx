@@ -26,9 +26,9 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "../lib/ui/icons";
 
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 
 // FontAwesome setup section
-// Disables auto CSS injection because styles are imported manually above.
 config.autoAddCss = false;
 
 export default function RootLayout({
@@ -36,16 +36,29 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	// Route-aware shell behavior section
-	// The linktree page intentionally hides footer to keep a compact, mobile-friendly hub.
 	const pathname = usePathname();
 
 	const hideFooter = pathname === "/linktree";
 
-	// Root application shell
-	// Header is always shown, footer is conditional, and child route content is injected in <main>.
 	return (
 		<html lang="en">
+			<head>
+				{/* Google Analytics */}
+				<Script
+					src="https://www.googletagmanager.com/gtag/js?id=G-6P7ELV8Z82"
+					strategy="afterInteractive"
+				/>
+				<Script id="google-analytics" strategy="afterInteractive">
+					{`
+						window.dataLayer = window.dataLayer || [];
+						function gtag(){dataLayer.push(arguments);}
+						gtag('js', new Date());
+
+						gtag('config', 'G-6P7ELV8Z82');
+					`}
+				</Script>
+			</head>
+
 			<body>
 				<Header />
 				<main>{children}</main>
