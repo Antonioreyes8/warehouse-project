@@ -30,6 +30,7 @@ import {
     faStar,
     faCrown,
     faCoins,
+    faHome
 } from "@fortawesome/free-solid-svg-icons";
 
 type LinkItem = {
@@ -39,6 +40,7 @@ type LinkItem = {
 };
 
 const aboutLinks: LinkItem[] = [
+    { title: "Check out the website", url: "/", icon: faHome },
     { title: "Manifesto", url: "/manifesto", icon: faHeart },
     { title: "Community Guidelines", url: "/guidelines", icon: faCrown },
     { title: "Financial Breakdown", url: "/financial", icon: faCoins },
@@ -47,7 +49,7 @@ const aboutLinks: LinkItem[] = [
 
 const contactLinks: LinkItem[] = [
     {
-        title: "Application to join",
+        title: "Join the movement !!!",
         url: "https://docs.google.com/forms/d/...",
         icon: faStar,
     },
@@ -61,7 +63,7 @@ const contactLinks: LinkItem[] = [
 const socialLinks: LinkItem[] = [
     {
         title: "Instagram",
-        url: "https://www.instagram.com/diaspora.sound",
+        url: "https://www.instagram.com/diasporaprojects/",
         icon: faInstagram,
     },
     // Add future socials here
@@ -109,10 +111,7 @@ export default function LinksPage() {
                         </a>
                     ))}
                 </div>
-
-                <p className={styles.subtitle}>About</p>
                 <div className={styles.links}>{renderLinks(aboutLinks)}</div>
-
                 <p className={styles.subtitle}>Forms</p>
                 <div className={styles.links}>{renderLinks(contactLinks)}</div>
             </div>

@@ -17,7 +17,7 @@ export const QUESTIONS = [
   { id: 'q16', text: "Consistency is more important than raw talent." },
   { id: 'q17', text: "Most of the music I listen to was made after I was born." },
   { id: 'q18', text: "Film is better than digital" },
-  { id: 'q19', text: "Records are better than CD's" },
-  { id: 'q20', text: "My favorite artists are from where I grew up (City/Town)" },
-  { id: 'q21', text: "Art should be allowed to be worth millions of dollars" }
+  { id: 'q19', text: "Records are better than CD's." },
+  { id: 'q20', text: "My favorite artists are from where I grew up (City/Town)." },
+  { id: 'q21', text: "I prefer minimalism over maximalism." }
 ];
