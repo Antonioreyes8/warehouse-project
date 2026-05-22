@@ -112,7 +112,7 @@ export default function LinksPage() {
                     ))}
                 </div>
                 <div className={styles.links}>{renderLinks(aboutLinks)}</div>
-                <p className={styles.subtitle}>Forms</p>
+                <h3 className={styles.subtitle}>Forms</h3>
                 <div className={styles.links}>{renderLinks(contactLinks)}</div>
             </div>
         </div>

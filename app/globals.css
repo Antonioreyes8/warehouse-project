@@ -46,19 +46,13 @@ How It Fits:
 
 @font-face {
 	font-family: "HelveticaNeue";
-	src: url("/fonts/helvetica-neue-5/HelveticaNeueMedium.otf") format("opentype");
+	src: url("/fonts/loos-extended-regular.otf") format("opentype");
 	font-weight: 500;
 }
 
 @font-face {
 	font-family: "HelveticaNeue";
-	src: url("/fonts/helvetica-neue-5/HelveticaNeueBold.otf") format("opentype");
-	font-weight: 700;
-}
-
-@font-face {
-	font-family: "HelveticaNeue";
-	src: url("/fonts/helvetica-neue-5/HelveticaNeueHeavy.otf") format("opentype");
+	src: url("/fonts/loos-extended-bold.otf") format("opentype");
 	font-weight: 800;
 }
 
