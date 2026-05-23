@@ -26,12 +26,15 @@ export default function Header() {
     return (
         <header className={styles.header}>
             <div className={styles.inner}>
-                {/* Intro text added above the main title */}
+                {/* Intro text keeps original styling */}
                 <p className={styles.welcomeText}>welcome to</p>
+                
                 <h1 className={styles.title}>
+                    <span className={styles.sideText}>The </span>
                     <Link href="/" className={styles.titleLink}>
-                        The Diaspora project
+                        diaspora
                     </Link>
+                    <span className={styles.sideText}> project</span>
                 </h1>
             </div>
         </header>
