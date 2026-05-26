@@ -35,12 +35,21 @@
 }
 
 .profileGreeting {
-	font-size: 1rem;
-	font-weight: 300;
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 1.05rem;
+	font-weight: 500;
 	color: #d3d3d3;
 	margin: 0;
 	max-width: 62ch;
-	line-height: 1.5;
+	line-height: 1.7;
+}
+
+.profileContainer p,
+.profileSection p {
+	font-family: "HelveticaNeue", sans-serif;
+	font-weight: 500;
+	font-size: 1rem;
+	line-height: 1.7;
 }
 
 .headerActions {

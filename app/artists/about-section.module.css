@@ -4,6 +4,7 @@
 	background-color: #2a2a2a;
 	padding: 32px;
 	gap: 32px;
+	font-family: "HelveticaNeue", sans-serif;
 }
 
 .headerContainer {
@@ -40,9 +41,16 @@
 
 .bioContainer h3 {
 	font-size: 1.3rem;
-	font-weight: 600;
+	font-weight: 700;
 	line-height: 1.2;
 	margin-bottom: 4px;
+}
+
+.bioContainer p {
+	font-family: "HelveticaNeue", sans-serif;
+	font-weight: 500;
+	font-size: 1rem;
+	line-height: 1.75;
 }
 
 .infoContainer {
@@ -81,13 +89,16 @@
 
 .infoRow h3 {
 	font-size: 1.3rem;
-	font-weight: 600;
+	font-weight: 700;
 	line-height: 1.2;
 	margin-bottom: 4px;
 }
 
 .infoRow p {
 	margin: 0;
+	font-weight: 500;
+	font-size: 1rem;
+	line-height: 1.7;
 }
 
 .linksContainer {
@@ -221,13 +232,15 @@
 .hotTakeText {
 	margin: 0;
 	font-family: "HelveticaNeue", sans-serif;
-	font-weight: 200;
-	font-size: 1rem;
-	line-height: 1.5;
+	font-weight: 700;
+	font-size: 1.05rem;
+	line-height: 1.6;
 	color: #222;
 }
 
 .hotTakeResult {
-	font-weight: 700;
+	font-family: "HelveticaNeue", sans-serif;
+	font-weight: 800;
+	font-size: 1rem;
 	color: #444;
 }

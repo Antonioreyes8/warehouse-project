@@ -1,8 +1,9 @@
 /* Feedback + access states */
 .message {
 	padding: 0.75rem 1rem;
-	font-size: 0.9rem;
-	font-weight: 300;
+	font-size: 1rem;
+	font-weight: 400;
+	font-family: "HelveticaNeue", sans-serif;
 }
 
 .success {
@@ -52,6 +53,9 @@
 }
 
 .unauthorized p {
-	font-weight: 300;
+	font-family: "HelveticaNeue", sans-serif;
+	font-weight: 400;
+	font-size: 1rem;
+	line-height: 1.7;
 	color: #aaa;
 }

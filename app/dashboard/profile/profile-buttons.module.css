@@ -96,8 +96,19 @@
 
 .hotTakeText {
 	margin: 0;
-	font-weight: 600;
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 1.05rem;
+	font-weight: 700;
+	line-height: 1.6;
 	color: #222;
+}
+
+.hotTakeResult {
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 1rem;
+	font-weight: 800;
+	line-height: 1.4;
+	color: #444;
 }
 
 .hotTakeControls {
@@ -167,9 +178,4 @@
 .removeBtn:focus-visible {
 	outline: 3px solid rgba(42, 42, 42, 0.12);
 	outline-offset: 2px;
-}
-
-.hotTakeResult {
-	font-weight: 700;
-	color: #444;
 }

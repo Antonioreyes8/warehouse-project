@@ -668,9 +668,6 @@ export default function ArtistProfilePage() {
 					</p>
 				</div>
 				<div className={styles.headerActions}>
-					<Link href="/discovery/quiz" className={styles.sectionButton}>
-						Take Discovery Quiz
-					</Link>
 					<div style={{ display: "flex", gap: 12 }}>
 						{!editing && (
 							<button
@@ -1643,7 +1640,7 @@ export default function ArtistProfilePage() {
 													{number ? `${number}. ${q.text}` : q.text}
 												</p>
 												<p className={styles.hotTakeResult}>
-													{artist.hot_takes?.[q.id] ? "Agreed" : "Disagreed"}
+													{artist.hot_takes?.[q.id] ? "Agree" : "Disagree"}
 												</p>
 											</div>
 										);

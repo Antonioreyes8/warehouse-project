@@ -1,154 +1,161 @@
 .worksSection {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    padding: 32px;
-    background-color: #2a2a2a;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding: 32px;
+	background-color: #2a2a2a;
 }
 
 .workSection {
-    display: flex;
-    width: 100%;
+	display: flex;
+	width: 100%;
 }
 
 .workInner {
-    display: flex;
-    background-color: #d3d3d3;
-    color: #2a2a2a;
-    gap: 32px;
-    align-items: flex-start;
-    max-width: 100%;
-    padding: 36px;
-    width: 100%;
+	display: flex;
+	background-color: #d3d3d3;
+	color: #2a2a2a;
+	gap: 32px;
+	align-items: flex-start;
+	max-width: 100%;
+	padding: 36px;
+	width: 100%;
 }
 
 .workList {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	width: 100%;
 }
 
 .workHeading {
-    margin: 0;
-    padding: 0;
-    color: #d3d3d3;
-    text-transform: uppercase;
+	margin: 0;
+	padding: 0;
+	color: #d3d3d3;
+	text-transform: uppercase;
 }
 
 /* Styled to match the instruction text on other pages */
 .instruction {
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #666;
-    margin-bottom: 8px;
-    margin-top: -16px; /* Pull it closer to the heading */
+	font-size: 14px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	color: #666;
+	margin-bottom: 8px;
+	margin-top: -16px; /* Pull it closer to the heading */
 }
 
 .workArtwork {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .workImage {
-    width: auto;
-    height: 250px;
-    object-fit: cover;
-    display: block;
+	width: auto;
+	height: 250px;
+	object-fit: cover;
+	display: block;
 }
 
 .workImageLink {
-    display: inline-flex;
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+	display: inline-flex;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
 .workImageLink:hover {
-    transform: scale(1.03);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+	transform: scale(1.03);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .workCopy {
-    flex: 0 1 620px;
-    min-width: 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 14px;
-    text-align: left;
-    color: #2a2a2a;
+	flex: 0 1 620px;
+	min-width: 220px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 14px;
+	text-align: left;
+	color: #2a2a2a;
 }
 
 .workRow h3 {
-    margin-bottom: 4px;
+	margin-bottom: 4px;
+	font-family: "HelveticaNeue", sans-serif;
+	font-weight: 700;
+	font-size: 1rem;
 }
 
 .workRow p {
-    margin: 0;
+	margin: 0;
+	font-family: "HelveticaNeue", sans-serif;
+	font-weight: 500;
+	font-size: 1rem;
+	line-height: 1.6;
 }
 
 .workLink {
-    text-decoration: underline;
-    color: #d3d3d3;
+	text-decoration: underline;
+	color: #d3d3d3;
 }
 
 @media (max-width: 1024px) {
-    .worksSection,
-    .workSection {
-        min-width: 0;
-        width: 100%;
-    }
+	.worksSection,
+	.workSection {
+		min-width: 0;
+		width: 100%;
+	}
 
-    .worksSection {
-        padding: 20px;
-    }
+	.worksSection {
+		padding: 20px;
+	}
 
-    .workSection {
-        padding: 0;
-    }
+	.workSection {
+		padding: 0;
+	}
 
-    .workHeading {
-        padding: 0;
-    }
+	.workHeading {
+		padding: 0;
+	}
 
-    .instruction {
-        font-size: 12px;
-        margin-top: -12px;
-    }
+	.instruction {
+		font-size: 12px;
+		margin-top: -12px;
+	}
 
-    .workInner {
-        display: grid;
-        grid-template-columns: 1fr;
-        justify-items: center;
-        width: 100%;
-        padding: 16px;
-        gap: 16px;
-        overflow: hidden;
-    }
+	.workInner {
+		display: grid;
+		grid-template-columns: 1fr;
+		justify-items: center;
+		width: 100%;
+		padding: 16px;
+		gap: 16px;
+		overflow: hidden;
+	}
 
-    .workArtwork {
-        width: 100%;
-        max-width: 250px;
-        margin: 0 auto;
-    }
+	.workArtwork {
+		width: 100%;
+		max-width: 250px;
+		margin: 0 auto;
+	}
 
-    .workImageLink {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
+	.workImageLink {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
 
-    .workImage {
-        width: 100%;
-        max-width: 250px;
-        height: auto;
-    }
+	.workImage {
+		width: 100%;
+		max-width: 250px;
+		height: auto;
+	}
 
-    .workCopy {
-        min-width: 0;
-        width: 100%;
-    }
+	.workCopy {
+		min-width: 0;
+		width: 100%;
+	}
 }
