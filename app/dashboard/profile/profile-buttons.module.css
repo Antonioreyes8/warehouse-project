@@ -179,3 +179,29 @@
 	outline: 3px solid rgba(42, 42, 42, 0.12);
 	outline-offset: 2px;
 }
+
+@media (max-width: 768px) {
+	.hotTakeRow {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+		padding: 14px 16px;
+	}
+
+	.hotTakeText {
+		font-size: 1rem;
+	}
+
+	.hotTakeControls {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 100%;
+	}
+
+	.hotTakeButton,
+	.removeBtn {
+		width: 100%;
+		min-width: 0;
+	}
+}
