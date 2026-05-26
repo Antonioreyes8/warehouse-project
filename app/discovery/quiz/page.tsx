@@ -68,7 +68,9 @@ export default function QuizPage() {
 					<span className={styles.count}>
 						Question {currentStep + 1} / {QUESTIONS.length}
 					</span>
-					<h2 className={styles.questionText}>{QUESTIONS[currentStep].text}</h2>
+					<h2
+						className={styles.questionText}
+					>{`${currentStep + 1}. ${QUESTIONS[currentStep].text}`}</h2>
 				</header>
 
 				<div className={styles.buttonGroup}>

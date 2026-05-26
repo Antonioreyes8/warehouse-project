@@ -40,7 +40,7 @@ export default function Footer() {
 					</p>
 					<p>
 						<Link href="/financial" className={styles.link}>
-						Financial Breakdown
+							Financial Breakdown
 						</Link>
 					</p>
 					<p>
@@ -66,16 +66,13 @@ export default function Footer() {
 							Linktree
 						</Link>
 					</p>
-					{/*<p>
-						<Link
-							href="/discovery/quiz"
-							className={styles.link}
-						>
+					<p>
+						<Link href="/discovery/quiz" className={styles.link}>
 							Artist Discovery
 						</Link>
-					</p>*/}
+					</p>
 					<br />
-										<p>
+					<p>
 						<Link
 							href="https://docs.google.com/forms/d/e/1FAIpQLSc0Tp1bWgY8WFA_bSfUcB0zr-i36YX3UZIeUikCoGd10MlD_A/viewform?usp=header"
 							className={styles.link}

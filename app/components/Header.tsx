@@ -30,11 +30,11 @@ export default function Header() {
                 <p className={styles.welcomeText}>welcome to</p>
                 
                 <h1 className={styles.title}>
-                    <span className={styles.sideText}>The </span>
                     <Link href="/" className={styles.titleLink}>
+                        <span className={styles.sideText}>The </span>
                         diaspora
+                        <span className={styles.sideText}> project</span>
                     </Link>
-                    <span className={styles.sideText}> project</span>
                 </h1>
             </div>
         </header>

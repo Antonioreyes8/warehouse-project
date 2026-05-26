@@ -77,3 +77,99 @@
 	background: #8b1f1f;
 	color: #fff;
 }
+
+/* Hot Takes editor styles */
+.hotTakesList {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 12px;
+}
+
+.hotTakeRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 16px;
+	background: #f5f5f5;
+	border-radius: 8px;
+}
+
+.hotTakeText {
+	margin: 0;
+	font-weight: 600;
+	color: #222;
+}
+
+.hotTakeControls {
+	display: flex;
+	gap: 8px;
+}
+
+.hotTakeButton,
+.removeBtn {
+	font-family: "HelveticaNeue", sans-serif;
+	padding: 0 16px;
+	border-radius: 999px;
+	cursor: pointer;
+	border: 1px solid #2a2a2a;
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 92px;
+	height: 36px;
+	line-height: 1;
+	white-space: nowrap;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	user-select: none;
+	transition:
+		background-color 0.16s ease,
+		border-color 0.16s ease,
+		color 0.16s ease;
+}
+
+.hotTakeButton {
+	background: transparent;
+	color: #2a2a2a;
+}
+
+.hotTakeButtonAgree {
+	background: #0b6b35;
+	color: #fff;
+	border-color: #0b6b35;
+}
+
+.hotTakeButtonDisagree {
+	background: #b02a2a;
+	color: #fff;
+	border-color: #b02a2a;
+}
+
+.removeBtn {
+	background: transparent;
+	color: #8b1f1f;
+	border-color: #e6bdbd;
+}
+
+.hotTakeButton:hover,
+.removeBtn:hover {
+	filter: brightness(0.95);
+}
+
+.hotTakeButton:active,
+.removeBtn:active {
+	transform: none !important;
+}
+
+.hotTakeButton:focus-visible,
+.removeBtn:focus-visible {
+	outline: 3px solid rgba(42, 42, 42, 0.12);
+	outline-offset: 2px;
+}
+
+.hotTakeResult {
+	font-weight: 700;
+	color: #444;
+}

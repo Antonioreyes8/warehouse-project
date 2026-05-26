@@ -53,6 +53,12 @@ export type Artist = {
 	soundcloud?: string | null;
 	bandcamp?: string | null;
 	email?: string | null;
+	/**
+	 * Hot takes saved by the artist. Stored as a JSON object mapping question id
+	 * to a boolean: `true` = agreed, `false` = disagreed. Keys that are absent
+	 * mean the artist skipped/removed that question.
+	 */
+	hot_takes?: Record<string, boolean> | null;
 };
 
 export type ArtistWork = {

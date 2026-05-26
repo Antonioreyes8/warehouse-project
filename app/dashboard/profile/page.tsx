@@ -27,6 +27,7 @@ import {
 	type Artist,
 	type ArtistWork,
 } from "@/lib/artists/queries";
+import { QUESTIONS } from "@/lib/discovery/questions";
 import {
 	syncArtistWorks,
 	updateArtistProfile,
@@ -254,6 +255,9 @@ export default function ArtistProfilePage() {
 	const [avatarUploading, setAvatarUploading] = useState(false);
 	const [workUploading, setWorkUploading] = useState(false);
 	const [artistWorks, setArtistWorks] = useState<EditableWork[]>([]);
+	const [hotTakes, setHotTakes] = useState<Record<string, boolean | undefined>>(
+		{},
+	);
 	const [message, setMessage] = useState("");
 
 	const [formData, setFormData] = useState<ArtistProfileFormData>(
@@ -302,6 +306,11 @@ export default function ArtistProfilePage() {
 					setArtist(profile);
 					setFormData(ArtistProfileFactory.createFormDataFromArtist(profile));
 
+					// Initialize hotTakes state from profile JSON column
+					setHotTakes(
+						(profile.hot_takes as Record<string, boolean> | null) ?? {},
+					);
+
 					const works = await getArtistWorksByProfileId(profile.id);
 					setArtistWorks(toEditableWorks(works));
 				}
@@ -342,6 +351,19 @@ export default function ArtistProfilePage() {
 		setMessage("");
 
 		const payload = ArtistProfileFactory.createProfileUpdatePayload(formData);
+
+		// Clean hotTakes by removing unanswered entries
+		const cleanedHotTakes = Object.fromEntries(
+			Object.entries(hotTakes).filter(([, v]) => v === true || v === false),
+		) as Record<string, boolean>;
+
+		if (Object.keys(cleanedHotTakes).length > 0) {
+			// attach hot_takes to payload when there are answers
+			Object.assign(payload, { hot_takes: cleanedHotTakes }) as unknown;
+		} else {
+			// explicitly clear when no answers
+			Object.assign(payload, { hot_takes: null }) as unknown;
+		}
 
 		const profileResult = await updateArtistProfile(
 			artist.id,
@@ -568,6 +590,9 @@ export default function ArtistProfilePage() {
 		if (artist) {
 			setFormData(ArtistProfileFactory.createFormDataFromArtist(artist));
 
+			// restore hot takes from profile
+			setHotTakes((artist.hot_takes as Record<string, boolean> | null) ?? {});
+
 			const resetWorks = async () => {
 				const works = await getArtistWorksByProfileId(artist.id);
 				setArtistWorks(toEditableWorks(works));
@@ -643,17 +668,22 @@ export default function ArtistProfilePage() {
 					</p>
 				</div>
 				<div className={styles.headerActions}>
-					{!editing && (
-						<button
-							onClick={() => setEditing(true)}
-							className={styles.viewPublicButton}
-						>
-							Edit Profile
+					<Link href="/discovery/quiz" className={styles.sectionButton}>
+						Take Discovery Quiz
+					</Link>
+					<div style={{ display: "flex", gap: 12 }}>
+						{!editing && (
+							<button
+								onClick={() => setEditing(true)}
+								className={styles.viewPublicButton}
+							>
+								Edit Profile
+							</button>
+						)}
+						<button onClick={handleSignOut} className={styles.signOutButton}>
+							Sign Out
 						</button>
-					)}
-					<button onClick={handleSignOut} className={styles.signOutButton}>
-						Sign Out
-					</button>
+					</div>
 				</div>
 			</header>
 
@@ -1238,6 +1268,62 @@ export default function ArtistProfilePage() {
 							)}
 						</div>
 
+						<div className={styles.profileSection}>
+							<h2 className={styles.sectionTitle}>Hot Takes</h2>
+							<div className={styles.fieldDescription}>
+								Answer a few quick prompts about your tastes. Only answered
+								prompts will be shown on your public profile.
+							</div>
+							<div className={styles.hotTakesList}>
+								{QUESTIONS.map((q, i) => {
+									const val = hotTakes[q.id];
+									const number = i + 1;
+									return (
+										<div key={q.id} className={styles.hotTakeRow}>
+											<p
+												className={styles.hotTakeText}
+											>{`${number}. ${q.text}`}</p>
+											<div className={styles.hotTakeControls}>
+												<button
+													type="button"
+													onClick={() =>
+														setHotTakes((prev) => ({ ...prev, [q.id]: true }))
+													}
+													className={`${styles.hotTakeButton} ${
+														val === true ? styles.hotTakeButtonAgree : ""
+													}`}
+												>
+													Agree
+												</button>
+												<button
+													type="button"
+													onClick={() =>
+														setHotTakes((prev) => ({ ...prev, [q.id]: false }))
+													}
+													className={`${styles.hotTakeButton} ${
+														val === false ? styles.hotTakeButtonDisagree : ""
+													}`}
+												>
+													Disagree
+												</button>
+												<button
+													type="button"
+													onClick={() => {
+														const copy = { ...hotTakes };
+														delete copy[q.id];
+														setHotTakes(copy);
+													}}
+													className={styles.removeBtn}
+												>
+													Remove
+												</button>
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						</div>
+
 						<div className={styles.buttonGroup}>
 							<button
 								onClick={handleCancel}
@@ -1539,6 +1625,32 @@ export default function ArtistProfilePage() {
 								})
 							) : (
 								<p>No featured work added yet.</p>
+							)}
+						</div>
+
+						<div className={styles.profileSection}>
+							<h2 className={styles.sectionTitle}>Hot Takes</h2>
+							{artist.hot_takes && Object.keys(artist.hot_takes).length > 0 ? (
+								<div className={styles.hotTakesList}>
+									{QUESTIONS.filter(
+										(q) => artist.hot_takes && q.id in artist.hot_takes,
+									).map((q) => {
+										const idx = QUESTIONS.findIndex((qq) => qq.id === q.id);
+										const number = idx >= 0 ? idx + 1 : null;
+										return (
+											<div key={q.id} className={styles.hotTakeRow}>
+												<p className={styles.hotTakeText}>
+													{number ? `${number}. ${q.text}` : q.text}
+												</p>
+												<p className={styles.hotTakeResult}>
+													{artist.hot_takes?.[q.id] ? "Agreed" : "Disagreed"}
+												</p>
+											</div>
+										);
+									})}
+								</div>
+							) : (
+								<p>No hot takes answered yet.</p>
 							)}
 						</div>
 
