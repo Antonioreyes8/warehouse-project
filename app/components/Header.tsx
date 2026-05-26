@@ -23,20 +23,20 @@ import styles from "./header.module.css";
 // Displays a consistent title bar across the full application shell.
 // Keeping this component intentionally simple avoids route-specific logic in global chrome.
 export default function Header() {
-    return (
-        <header className={styles.header}>
-            <div className={styles.inner}>
-                {/* Intro text keeps original styling */}
-                <p className={styles.welcomeText}>welcome to</p>
-                
-                <h1 className={styles.title}>
-                    <Link href="/" className={styles.titleLink}>
-                        <span className={styles.sideText}>The </span>
-                        diaspora
-                        <span className={styles.sideText}> project</span>
-                    </Link>
-                </h1>
-            </div>
-        </header>
-    );
+	return (
+		<header className={styles.header}>
+			<div className={styles.inner}>
+				{/* Intro text keeps original styling */}
+				<p className={styles.welcomeText}>welcome to</p>
+
+				<h1 className={styles.title}>
+					<Link href="/" className={styles.titleLink}>
+						<span className={styles.sideText}>The </span>
+						diaspora
+						<span className={styles.sideText}> project</span>
+					</Link>
+				</h1>
+			</div>
+		</header>
+	);
 }
