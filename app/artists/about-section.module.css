@@ -65,4 +65,9 @@
 	.detailsGrid {
 		grid-template-columns: 1fr;
 	}
+
+	.socialRow {
+		justify-content: center;
+		align-items: center;
+	}
 }
