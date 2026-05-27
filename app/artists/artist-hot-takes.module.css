@@ -1,0 +1,58 @@
+.hotTakesContainer {
+	width: 100%;
+	padding: 16px;
+	background: #d3d3d3;
+	border-radius: 10px;
+	font-family: inherit;
+	color: #111;
+}
+
+.hotTakesList {
+	display: grid;
+	gap: 10px;
+	margin-top: 8px;
+}
+
+.hotTakeRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	background: #fff;
+	border-radius: 8px;
+}
+
+.hotTakeText {
+	margin: 0;
+	font-weight: 700;
+	font-size: 1rem;
+	line-height: 1.5;
+	color: #222;
+}
+
+.hotTakeResult {
+	font-weight: 700;
+	font-size: 1rem;
+	color: #444;
+}
+
+@media (max-width: 1024px) {
+	.hotTakesContainer {
+		padding: 16px;
+	}
+
+	.hotTakeRow {
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		gap: 8px;
+	}
+
+	.hotTakeText {
+		font-size: 0.95rem;
+		font-weight: 700;
+	}
+
+	.hotTakeResult {
+		font-size: 0.9rem;
+	}
+}

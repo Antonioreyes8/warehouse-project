@@ -4,6 +4,8 @@
 	gap: 24px;
 	padding: 32px;
 	background-color: #2a2a2a;
+	font-family: "HelveticaNeue", sans-serif;
+	color: #fff;
 }
 
 .workSection {
@@ -33,7 +35,10 @@
 	margin: 0;
 	padding: 0;
 	color: #d3d3d3;
+	font-size: 1.15rem;
+	font-weight: 700;
 	text-transform: uppercase;
+	letter-spacing: 0.12em;
 }
 
 /* Styled to match the instruction text on other pages */

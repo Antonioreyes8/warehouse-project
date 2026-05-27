@@ -1,246 +1,68 @@
 .aboutSection {
 	display: flex;
-	flex-wrap: wrap;
-	background-color: #2a2a2a;
-	padding: 32px;
-	gap: 32px;
-	font-family: "HelveticaNeue", sans-serif;
-}
-
-.headerContainer {
-	padding: 32px;
-	background-color: #d3d3d3;
-	flex: 1;
-	min-width: 300px;
-}
-
-.headerContainer img {
-	width: 300px;
-	height: 300px;
-	object-fit: cover;
-}
-
-.headerContainer h2 {
-	font-size: 2rem;
-	line-height: 1.1;
-}
-
-.infoAndLinksContainer {
-	display: flex;
 	flex-direction: column;
 	gap: 32px;
-	flex: 2;
-	min-width: 300px;
-}
-
-.bioContainer {
+	background-color: #2a2a2a;
 	padding: 32px;
-	background-color: #d3d3d3;
-	min-width: 300px;
-}
-
-.bioContainer h3 {
-	font-size: 1.3rem;
-	font-weight: 700;
-	line-height: 1.2;
-	margin-bottom: 4px;
-}
-
-.bioContainer p {
 	font-family: "HelveticaNeue", sans-serif;
-	font-weight: 500;
 	font-size: 1rem;
-	line-height: 1.75;
+	line-height: 1.6;
+	font-weight: 400;
+	color: #111;
 }
 
-.infoContainer {
+.profileTop {
+	display: grid;
+	grid-template-columns: minmax(260px, 360px) minmax(320px, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+
+.detailsGrid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(280px, 1fr));
+	gap: 32px;
+}
+
+.socialRow {
 	display: flex;
-	padding: 32px;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	gap: 16px;
+	padding: 18px 22px;
 	background-color: #d3d3d3;
-	gap: 16px;
-	flex-wrap: wrap;
-}
-
-.leftColumn {
-	flex: 1;
-	padding-right: 8px;
-	border-right: 2px solid #aaa;
-	min-width: 150px;
-}
-
-.singleColumn {
-	border-right: none;
-	padding-right: 0;
-}
-
-.rightColumn {
-	flex: 1;
-	padding-left: 8px;
-	min-width: 150px;
-}
-
-.infoRow {
-	margin-bottom: 14px;
-}
-
-.infoRow:last-child {
-	margin-bottom: 0;
-}
-
-.infoRow h3 {
-	font-size: 1.3rem;
-	font-weight: 700;
-	line-height: 1.2;
-	margin-bottom: 4px;
-}
-
-.infoRow p {
-	margin: 0;
-	font-weight: 500;
-	font-size: 1rem;
-	line-height: 1.7;
-}
-
-.linksContainer {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	padding: 32px;
-	width: 100%;
-	background-color: #444;
-	border-radius: 16px;
-	color: #d3d3d3;
-	gap: 16px;
+	border-radius: 14px;
 }
 
 .socialLink {
-	color: #d3d3d3;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 96px;
+	height: 96px;
+	color: #111;
 	text-decoration: none;
-	transition: color 0.3s ease;
+	border-radius: 12px;
+	transition: transform 0.16s ease, background-color 0.16s ease;
 }
 
 .socialLink:hover {
-	color: #fff;
+	transform: translateY(-2px);
+	background-color: rgba(255, 255, 255, 0.12);
+}
+
+.socialLink svg {
+	width: 2.6rem;
+	height: 2.6rem;
 }
 
 @media (max-width: 1024px) {
 	.aboutSection {
 		padding: 20px;
-		gap: 20px;
-		flex-direction: column;
 	}
 
-	.headerContainer,
-	.infoAndLinksContainer,
-	.bioContainer,
-	.infoContainer,
-	.linksContainer {
-		min-width: 0;
-		width: 100%;
+	.profileTop,
+	.detailsGrid {
+		grid-template-columns: 1fr;
 	}
-
-	.headerContainer,
-	.bioContainer,
-	.infoContainer,
-	.linksContainer {
-		padding: 20px;
-	}
-
-	.headerContainer {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 12px;
-	}
-
-	.headerContainer img {
-		width: min(100%, 280px);
-		height: auto;
-		max-height: 360px;
-	}
-
-	.infoContainer {
-		flex-direction: column;
-	}
-
-	.leftColumn {
-		border-right: none;
-		border-bottom: 2px solid #aaa;
-		padding-right: 0;
-		padding-bottom: 8px;
-	}
-
-	.rightColumn {
-		padding-left: 0;
-		padding-top: 8px;
-	}
-
-	.linksContainer {
-		justify-content: flex-start;
-	}
-
-	.socialLink svg {
-		width: 2.25rem;
-		height: 2.25rem;
-	}
-
-	.hotTakesContainer {
-		padding: 16px;
-	}
-
-	.hotTakesContainer .hotTakeRow {
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		gap: 8px;
-	}
-
-	.hotTakesContainer .hotTakeText {
-		font-size: 0.95rem;
-		font-family: "HelveticaNeue", sans-serif;
-		font-weight: 200;
-	}
-
-	.hotTakesContainer .hotTakeResult {
-		font-size: 0.9rem;
-		font-family: "HelveticaNeue", sans-serif;
-	}
-}
-
-/* Hot Takes display on public profile */
-.hotTakesContainer {
-	width: 100%;
-	padding: 16px;
-	background: #d3d3d3;
-	border-radius: 10px;
-}
-
-.hotTakesList {
-	display: grid;
-	gap: 10px;
-	margin-top: 8px;
-}
-
-.hotTakeRow {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 10px;
-	background: #fff;
-	border-radius: 8px;
-}
-
-.hotTakeText {
-	margin: 0;
-	font-family: "HelveticaNeue", sans-serif;
-	font-weight: 700;
-	font-size: 1.05rem;
-	line-height: 1.6;
-	color: #222;
-}
-
-.hotTakeResult {
-	font-family: "HelveticaNeue", sans-serif;
-	font-weight: 800;
-	font-size: 1rem;
-	color: #444;
 }
