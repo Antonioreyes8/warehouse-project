@@ -16,7 +16,7 @@ export default function ArtistHotTakes({ hotTakes }: ArtistHotTakesProps) {
 
 	return (
 		<div className={styles.hotTakesContainer}>
-			<h3>Hot Takes</h3>
+			<h3>Hot Takes:</h3>
 			<div className={styles.hotTakesList}>
 				{visibleQuestions.map((question) => (
 					<div key={question.id} className={styles.hotTakeRow}>

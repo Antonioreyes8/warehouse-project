@@ -7,6 +7,14 @@
 	color: #111;
 }
 
+.hotTakesContainer h3 {
+	margin: 0;
+	font-weight: 700;
+	font-size: 1.5rem;
+	line-height: 1.5;
+	padding-bottom: 8px;
+}
+
 .hotTakesList {
 	display: grid;
 	gap: 10px;
@@ -54,5 +62,9 @@
 
 	.hotTakeResult {
 		font-size: 0.9rem;
+	}
+
+	.hotTakesContainer h3 {
+        font-size: 1.25rem;
 	}
 }
