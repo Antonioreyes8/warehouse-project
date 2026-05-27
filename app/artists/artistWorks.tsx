@@ -17,8 +17,8 @@ function normalizeExternalUrl(value?: string | null): string | null {
 	const trimmedValue = value.trim();
 	return trimmedValue.startsWith("http://") ||
 		trimmedValue.startsWith("https://")
-			? trimmedValue
-			: `https://${trimmedValue}`;
+		? trimmedValue
+		: `https://${trimmedValue}`;
 }
 
 export default function ArtistWorks({ profile, works }: ArtistWorksProps) {
@@ -27,7 +27,9 @@ export default function ArtistWorks({ profile, works }: ArtistWorksProps) {
 	return (
 		<section className={styles.worksSection}>
 			<h2 className={styles.workHeading}>Works</h2>
-			<p className={styles.instruction}>Select an image to check out the work</p>
+			<p className={styles.instruction}>
+				Select an image to check out the work
+			</p>
 			<div className={styles.workList}>
 				{works.map((work) => {
 					const workLinkUrl = normalizeExternalUrl(work.link_url);
@@ -53,12 +55,12 @@ export default function ArtistWorks({ profile, works }: ArtistWorksProps) {
 											</a>
 										) : (
 											<Image
-													src={work.image_url}
-													alt={work.title || `${profile.name} featured work`}
-													width={320}
-													height={320}
-													className={styles.workImage}
-												/>
+												src={work.image_url}
+												alt={work.title || `${profile.name} featured work`}
+												width={320}
+												height={320}
+												className={styles.workImage}
+											/>
 										))}
 								</div>
 								<div className={styles.workCopy}>
@@ -74,9 +76,7 @@ export default function ArtistWorks({ profile, works }: ArtistWorksProps) {
 									)}
 									<div className={styles.workRow}>
 										<h3>Description:</h3>
-										<p>
-											{hasText(work.description) ? work.description : "—"}
-										</p>
+										<p>{hasText(work.description) ? work.description : "—"}</p>
 									</div>
 									{workLinkUrl && (
 										<a

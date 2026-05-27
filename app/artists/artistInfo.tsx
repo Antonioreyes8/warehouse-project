@@ -13,18 +13,21 @@ function hasText(value: unknown): boolean {
 export default function ArtistInfo({ profile }: ArtistInfoProps) {
 	const age = hasText(profile.birthday)
 		? (() => {
-			const birth = new Date(profile.birthday as string);
-			if (Number.isNaN(birth.getTime())) return null;
-			const today = new Date();
-			let value = today.getFullYear() - birth.getFullYear();
-			const monthDiff = today.getMonth() - birth.getMonth();
+				const birth = new Date(profile.birthday as string);
+				if (Number.isNaN(birth.getTime())) return null;
+				const today = new Date();
+				let value = today.getFullYear() - birth.getFullYear();
+				const monthDiff = today.getMonth() - birth.getMonth();
 
-			if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-				value -= 1;
-			}
+				if (
+					monthDiff < 0 ||
+					(monthDiff === 0 && today.getDate() < birth.getDate())
+				) {
+					value -= 1;
+				}
 
-			return value >= 0 ? String(value) : null;
-		})()
+				return value >= 0 ? String(value) : null;
+			})()
 		: null;
 
 	const hasBasedIn = hasText(profile.based_in);
@@ -35,14 +38,20 @@ export default function ArtistInfo({ profile }: ArtistInfoProps) {
 	const hasStatus = hasText(profile.status);
 	const hasMemberSince = hasText(profile.member_since);
 
-	const hasLeftColumn = Boolean(age || hasBasedIn || hasMediums || hasPastProjects);
-	const hasRightColumn = Boolean(hasEthnicBackground || hasContact || hasStatus || hasMemberSince);
+	const hasLeftColumn = Boolean(
+		age || hasBasedIn || hasMediums || hasPastProjects,
+	);
+	const hasRightColumn = Boolean(
+		hasEthnicBackground || hasContact || hasStatus || hasMemberSince,
+	);
 	if (!hasLeftColumn && !hasRightColumn) return null;
 
 	return (
 		<div className={styles.infoContainer}>
 			{hasLeftColumn && (
-				<div className={`${styles.leftColumn} ${!hasRightColumn ? styles.singleColumn : ""}`}>
+				<div
+					className={`${styles.leftColumn} ${!hasRightColumn ? styles.singleColumn : ""}`}
+				>
 					{age && (
 						<div className={styles.infoRow}>
 							<h3>Age:</h3>

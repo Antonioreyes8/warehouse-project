@@ -8,8 +8,8 @@ interface ArtistHotTakesProps {
 }
 
 export default function ArtistHotTakes({ hotTakes }: ArtistHotTakesProps) {
-	const visibleQuestions = QUESTIONS.filter((question) =>
-		hotTakes?.[question.id] !== undefined,
+	const visibleQuestions = QUESTIONS.filter(
+		(question) => hotTakes?.[question.id] !== undefined,
 	);
 
 	if (visibleQuestions.length === 0) return null;

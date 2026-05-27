@@ -84,7 +84,10 @@
 	text-decoration: none;
 	background: #ffffff;
 	border-radius: 12px;
-	transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		color 0.2s ease,
+		background-color 0.2s ease;
 }
 
 .socialLink:hover {
