@@ -10,15 +10,17 @@ export default function ArtistHeader({ profile }: ArtistHeaderProps) {
 	return (
 		<div className={styles.headerWrapper}>
 			<div className={styles.headerContainer}>
-				{profile.avatar_url && (
-					<Image
-						src={profile.avatar_url}
-						alt={profile.name || "Artist"}
-						width={180}
-						height={180}
-						className={styles.avatar}
-					/>
-				)}
+				<div className={styles.avatarSection}>
+					{profile.avatar_url && (
+						<Image
+							src={profile.avatar_url}
+							alt={profile.name || "Artist"}
+							width={180}
+							height={180}
+							className={styles.avatar}
+						/>
+					)}
+				</div>
 
 				<div className={styles.headerBody}>
 					<div className={styles.headerCopy}>
