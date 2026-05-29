@@ -1,7 +1,7 @@
 export const QUESTIONS = [
   { id: 'q1', text: "Normalize Gatekeeping" },
   { id: 'q2', text: "There is no such thing as a bad outfit" },
-  { id: 'q3', text: "You can seperate the art from the artist" },
+  { id: 'q3', text: "You can separate the art from the artist" },
   { id: 'q4', text: "Awards like the Grammys and the Oscars don't actually matter." },
   { id: 'q5', text: "There is a space for ai in art" },
   { id: 'q6', text: "Talent usually always beats hard work" },
