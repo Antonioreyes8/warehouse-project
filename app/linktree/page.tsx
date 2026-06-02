@@ -51,12 +51,12 @@ const aboutLinks: LinkItem[] = [
 const contactLinks: LinkItem[] = [
     {
         title: "Join the movement !!!",
-        url: "https://docs.google.com/forms/d/...",
+        url: "https://forms.gle/7qShMJE2fFR8DSar5",
         icon: faPeopleGroup,
     },
     {
         title: "Tip line",
-        url: "https://docs.google.com/forms/d/...",
+        url: "https://forms.gle/zdE6ALdcdLsGzVYr6",
         icon: faCircleExclamation,
     },
 ];
