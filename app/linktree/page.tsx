@@ -31,6 +31,7 @@ import {
     faCrown,
     faCoins,
     faHome,
+    faPeopleGroup,
 } from "@fortawesome/free-solid-svg-icons";
 
 type LinkItem = {
@@ -51,7 +52,7 @@ const contactLinks: LinkItem[] = [
     {
         title: "Join the movement !!!",
         url: "https://docs.google.com/forms/d/...",
-        icon: faStar,
+        icon: faPeopleGroup,
     },
     {
         title: "Tip line",
