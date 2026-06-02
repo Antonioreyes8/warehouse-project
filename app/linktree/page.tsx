@@ -30,7 +30,7 @@ import {
     faStar,
     faCrown,
     faCoins,
-    faHome
+    faHome,
 } from "@fortawesome/free-solid-svg-icons";
 
 type LinkItem = {
@@ -69,6 +69,12 @@ const socialLinks: LinkItem[] = [
     // Add future socials here
 ];
 
+const RSVP_LINK : LinkItem = {
+    title: "RSVP for Never Ending Summer",
+    url: "https://partiful.com/e/GH91VqxHhmBn3zuxDuuz?",
+    icon: faStar,
+};
+
 export default function LinksPage() {
     const handleShare = (url: string) => {
         const fullUrl = url.startsWith("http") ? url : window.location.origin + url;
@@ -95,7 +101,6 @@ export default function LinksPage() {
         <div className={styles.container}>
             <div className={styles.card}>
                 <h1 className={styles.title}>LinkTree</h1>
-
                 {/* Social Icons Section */}
                 <div className={styles.socialHeader}>
                     {socialLinks.map((social, i) => (
@@ -111,6 +116,9 @@ export default function LinksPage() {
                         </a>
                     ))}
                 </div>
+                <h3 className={styles.subtitle}>Events</h3>
+                <div className={styles.links}>{renderLinks([RSVP_LINK])}</div>
+                <h3 className={styles.subtitle}>Learn more</h3>
                 <div className={styles.links}>{renderLinks(aboutLinks)}</div>
                 <h3 className={styles.subtitle}>Forms</h3>
                 <div className={styles.links}>{renderLinks(contactLinks)}</div>
