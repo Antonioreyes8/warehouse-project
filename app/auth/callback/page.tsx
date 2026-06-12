@@ -1,3 +1,18 @@
+/**
+ * File: app/auth/callback/page.tsx
+ * Purpose: Completes the OAuth sign-in flow for Supabase Google login.
+ * Responsibilities:
+ *   - Handle redirect callback from Google OAuth
+ *   - Exchange auth code for a Supabase session
+ *   - Validate session and redirect to the protected dashboard
+ * Key Concepts:
+ *   - OAuth callback handling in client-side React effect
+ *   - Supabase session exchange and session retrieval
+ *   - Graceful fallback when PKCE/code exchange has already occurred
+ * How It Fits:
+ *   - Required by the login flow to complete authentication before protected routes
+ */
+
 "use client";
 
 import { supabase } from "@/lib/supabase/client";

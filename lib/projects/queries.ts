@@ -1,3 +1,15 @@
+/**
+ * File: lib/projects/queries.ts
+ * Purpose: Fetches and normalizes project data from Supabase.
+ * Responsibilities:
+ *   - Load project rows from Supabase projects table
+ *   - Normalize legacy and structured JSON fields safely
+ *   - Enrich collaborator entries with live profile metadata
+ * Key Concepts:
+ *   - Data normalization and type guarding for untyped DB rows
+ *   - Combining structured and legacy database shapes
+ *   - Server-side Supabase client creation for secure data fetching
+ */
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type {
 	CauseSectionType,

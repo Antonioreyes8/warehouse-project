@@ -1,3 +1,13 @@
+/**
+ * File: tests/integration/profile-flow.test.ts
+ * Purpose: Integration tests for artist profile API workflows.
+ * Responsibilities:
+ *   - Verify profile fetch, update, and delete flows together
+ *   - Cover authorization and query/mutation interaction paths
+ * Key Concepts:
+ *   - Multiple helper functions working in concert
+ *   - System-level behavior with mocked dependencies
+ */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { User } from "@supabase/supabase-js";
 import {

@@ -1,3 +1,13 @@
+/**
+ * File: tests/forms/validation.test.ts
+ * Purpose: Validates client-side form input formatting and sanitization rules.
+ * Responsibilities:
+ *   - Test email and input pattern validation logic
+ *   - Provide coverage for common invalid user entries
+ * Key Concepts:
+ *   - Regex-based validation tests
+ *   - Client-side form constraint expectations
+ */
 import { describe, expect, it } from "vitest";
 
 // This file contains tests for form validation errors.

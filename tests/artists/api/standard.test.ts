@@ -1,3 +1,12 @@
+/**
+ * File: tests/artists/api/standard.test.ts
+ * Purpose: Standard behavior tests for artist API functions.
+ * Responsibilities:
+ *   - Confirm expected query and mutation success paths
+ *   - Verify that normal user flows work correctly
+ * Key Concepts:
+ *   - Mocked database responses for happy-path scenarios
+ */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { User } from "@supabase/supabase-js";
 import {

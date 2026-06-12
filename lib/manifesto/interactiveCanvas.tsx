@@ -1,3 +1,15 @@
+/**
+ * File: lib/manifesto/interactiveCanvas.tsx
+ * Purpose: Renders an interactive canvas-driven manifesto text layout.
+ * Responsibilities:
+ *   - Manage responsive canvas rendering for rich typography
+ *   - Create movable star objects that influence text wrapping
+ *   - Use pretext layout utilities for custom line breaks
+ * Key Concepts:
+ *   - Client-only rendering with Canvas and React hooks
+ *   - Procedural graphical layout and collision-based text flow
+ */
+
 "use client"; // Instructs Next.js to compile and execute this file purely on the client side (browser) to support Canvas rendering and React state hooks
 
 import React, { useEffect, useRef, useState } from "react";

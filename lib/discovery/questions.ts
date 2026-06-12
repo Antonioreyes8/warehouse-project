@@ -1,23 +1,48 @@
+/**
+ * File: lib/discovery/questions.ts
+ * Purpose: Defines the fixed set of discovery quiz questions used by the app.
+ * Responsibilities:
+ *   - Provide shared quiz metadata for question rendering and scoring
+ *   - Keep the question set centralized for easy updates
+ * Key Concepts:
+ *   - Shared static data structure used by multiple components
+ */
+
 export const QUESTIONS = [
-  { id: 'q1', text: "Normalize Gatekeeping" },
-  { id: 'q2', text: "There is no such thing as a bad outfit" },
-  { id: 'q3', text: "You can separate the art from the artist" },
-  { id: 'q4', text: "Awards like the Grammys and the Oscars don't actually matter." },
-  { id: 'q5', text: "There is a space for ai in art" },
-  { id: 'q6', text: "Talent usually always beats hard work" },
-  { id: 'q7', text: "My Zodiac sign is a true representation of my character" },
-  { id: 'q8', text: "To be Art it should have a deeper meaning" },
-  { id: 'q9', text: "I reinvent myself often" },
-  { id: 'q10', text: "Art should challenge people more than comfort them" },
-  { id: 'q11', text: "Social media is an artists best tool to grow today" },
-  { id: 'q12', text: "I find inspiration in nature more than in cities." },
-  { id: 'q13', text: "Some art is better than others" },
-  { id: 'q14', text: "I prefer dark, moody aesthetics over bright and colorful ones." },
-  { id: 'q15', text: "The journey is more important than the finished product." },
-  { id: 'q16', text: "Consistency is more important than raw talent." },
-  { id: 'q17', text: "Most of the music I listen to was made after I was born." },
-  { id: 'q18', text: "Film is better than digital" },
-  { id: 'q19', text: "Records are better than CD's." },
-  { id: 'q20', text: "My favorite artists are from where I grew up (City/Town)." },
-  { id: 'q21', text: "I prefer minimalism over maximalism." }
+	{ id: "q1", text: "Normalize Gatekeeping" },
+	{ id: "q2", text: "There is no such thing as a bad outfit" },
+	{ id: "q3", text: "You can separate the art from the artist" },
+	{
+		id: "q4",
+		text: "Awards like the Grammys and the Oscars don't actually matter.",
+	},
+	{ id: "q5", text: "There is a space for ai in art" },
+	{ id: "q6", text: "Talent usually always beats hard work" },
+	{ id: "q7", text: "My Zodiac sign is a true representation of my character" },
+	{ id: "q8", text: "To be Art it should have a deeper meaning" },
+	{ id: "q9", text: "I reinvent myself often" },
+	{ id: "q10", text: "Art should challenge people more than comfort them" },
+	{ id: "q11", text: "Social media is an artists best tool to grow today" },
+	{ id: "q12", text: "I find inspiration in nature more than in cities." },
+	{ id: "q13", text: "Some art is better than others" },
+	{
+		id: "q14",
+		text: "I prefer dark, moody aesthetics over bright and colorful ones.",
+	},
+	{
+		id: "q15",
+		text: "The journey is more important than the finished product.",
+	},
+	{ id: "q16", text: "Consistency is more important than raw talent." },
+	{
+		id: "q17",
+		text: "Most of the music I listen to was made after I was born.",
+	},
+	{ id: "q18", text: "Film is better than digital" },
+	{ id: "q19", text: "Records are better than CD's." },
+	{
+		id: "q20",
+		text: "My favorite artists are from where I grew up (City/Town).",
+	},
+	{ id: "q21", text: "I prefer minimalism over maximalism." },
 ];

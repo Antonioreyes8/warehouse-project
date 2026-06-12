@@ -1,4 +1,17 @@
 /**
+ * File: lib/discovery/maxHeap.ts
+ * Purpose: Custom ranking and search data structures for the discovery quiz.
+ * Responsibilities:
+ *   - Maintain a max heap for scoring artist matches
+ *   - Provide an AVL-based search tree for artist name searches
+ * Key Concepts:
+ *   - Heap insert/extract operations for ordered leaderboards
+ *   - AVL tree rotations for balanced searches
+ * How It Fits:
+ *   - Used by the quiz result page to identify top matches and support live search
+ */
+
+/**
  * Represents an artist with a numerical score.
  */
 export interface ScoredArtist {

@@ -1,3 +1,13 @@
+/**
+ * File: tests/artists/unit/queries.test.ts
+ * Purpose: White-box unit tests for artist query helpers.
+ * Responsibilities:
+ *   - Validate internal query logic and database parameter construction
+ *   - Catch regressions in artist retrieval functions
+ * Key Concepts:
+ *   - Mocked Supabase query builder chain
+ *   - Verification of correct table and filter usage
+ */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { User } from "@supabase/supabase-js";
 import {

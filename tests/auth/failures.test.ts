@@ -1,3 +1,13 @@
+/**
+ * File: tests/auth/failures.test.ts
+ * Purpose: Authorization and authentication failure tests.
+ * Responsibilities:
+ *   - Ensure unauthorized users are rejected correctly
+ *   - Validate handling of invalid or missing session data
+ * Key Concepts:
+ *   - Authorization guard behavior
+ *   - Supabase user object edge-case coverage
+ */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { User } from "@supabase/supabase-js";
 import {

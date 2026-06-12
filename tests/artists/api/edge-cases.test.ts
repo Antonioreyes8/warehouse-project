@@ -1,3 +1,13 @@
+/**
+ * File: tests/artists/api/edge-cases.test.ts
+ * Purpose: Edge-case tests for artist API helpers and authorization paths.
+ * Responsibilities:
+ *   - Validate how the system behaves with invalid and boundary inputs
+ *   - Ensure email normalization and error handling are robust
+ * Key Concepts:
+ *   - Mocked Supabase client behavior
+ *   - Input sanitization and failure paths
+ */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { User } from "@supabase/supabase-js";
 import {

@@ -1,3 +1,14 @@
+/**
+ * File: lib/projects/types.ts
+ * Purpose: Shared data type definitions for project-related pages and helpers.
+ * Responsibilities:
+ *   - Define structured types for project content, media, and collaborators
+ *   - Provide a single source of truth for project data shapes
+ * Key Concepts:
+ *   - TypeScript type annotations for improved IDE and compile-time safety
+ *   - Shared model definitions used across query helpers and React components
+ */
+
 export type Source = {
 	title: string;
 	url: string;
@@ -21,11 +32,11 @@ export type CollaboratorRole =
 	| "Technical Production";
 
 export type Collaborator = {
-    profile_id?: string;
-    role?: CollaboratorRole;
-    name?: string;
-    username?: string;
-    slug?: string;
+	profile_id?: string;
+	role?: CollaboratorRole;
+	name?: string;
+	username?: string;
+	slug?: string;
 };
 
 export type Project = {

@@ -1,3 +1,13 @@
+/**
+ * File: app/artists/artistHeader.tsx
+ * Purpose: Displays the artist hero section with avatar, name, and username.
+ * Responsibilities:
+ *   - Render an artist profile image when available
+ *   - Present artist name and social handle clearly
+ * Key Concepts:
+ *   - Image component rendering with accessibility alt text
+ *   - Reusable presentational component for public artist page
+ */
 import Image from "next/image";
 import { Artist } from "../../lib/artists/queries";
 import styles from "./artist-header.module.css";

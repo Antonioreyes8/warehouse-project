@@ -1,3 +1,13 @@
+/**
+ * File: app/artists/artistWorks.tsx
+ * Purpose: Renders a gallery of an artist's works with links and metadata.
+ * Responsibilities:
+ *   - Show artwork thumbnails and work details
+ *   - Normalize external URLs for safe linking
+ * Key Concepts:
+ *   - Conditional rendering for images and links
+ *   - Handles optional metadata gracefully
+ */
 import Image from "next/image";
 import { Artist, ArtistWork } from "../../lib/artists/queries";
 import styles from "./works-section.module.css";

@@ -1,3 +1,13 @@
+/**
+ * File: vitest.config.ts
+ * Purpose: Configures the Vitest test runner for this Next.js project.
+ * Responsibilities:
+ *   - Set the jsdom environment for component-like tests
+ *   - Load shared setup files and enable global test APIs
+ *   - Configure coverage reporting and file alias resolution
+ * Key Concepts:
+ *   - Central test environment configuration for consistent test execution
+ */
 import { defineConfig } from "vitest/config";
 import path from "path";
 

@@ -1,3 +1,13 @@
+/**
+ * File: app/artists/artistInfo.tsx
+ * Purpose: Displays structured profile metadata for an artist.
+ * Responsibilities:
+ *   - Compute derived values like age and membership year
+ *   - Render optional artist profile fields only when present
+ * Key Concepts:
+ *   - Conditional UI based on available data
+ *   - Normalization of optional text fields to avoid empty render blocks
+ */
 import { Artist } from "../../lib/artists/queries";
 import styles from "./artist-info.module.css";
 

@@ -1,3 +1,15 @@
+/**
+ * File: app/discovery/quiz/page.tsx
+ * Purpose: Presents the discovery quiz UI for matching artists.
+ * Responsibilities:
+ *   - Manage quiz progress and answer selection
+ *   - Store answers locally and navigate to results
+ * Key Concepts:
+ *   - Client-side React state for flow control
+ *   - Quiz navigation and progress feedback
+ *   - Local storage persistence for quiz answers
+ */
+
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,6 +22,8 @@ export default function QuizPage() {
 	const [answers, setAnswers] = useState<Record<string, boolean | null>>({});
 	const router = useRouter();
 
+	// Answer handler: records the user's response and advances the quiz.
+	// Saves the final answer set to localStorage before navigating to the result page.
 	const handleAnswer = (value: boolean | null) => {
 		const qId = QUESTIONS[currentStep].id;
 		const newAnswers = { ...answers, [qId]: value };
@@ -23,6 +37,7 @@ export default function QuizPage() {
 		}
 	};
 
+	// Progress percentage used to render the quiz progress bar.
 	const progress = ((currentStep + 1) / QUESTIONS.length) * 100;
 
 	// INITIAL "GET STARTED" VIEW

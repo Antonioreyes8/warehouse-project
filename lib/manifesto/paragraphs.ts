@@ -1,3 +1,13 @@
+/**
+ * File: lib/manifesto/paragraphs.ts
+ * Purpose: Stores the structured manifesto text content used by the interactive canvas.
+ * Responsibilities:
+ *   - Define paragraph types for the manifesto layout system
+ *   - Provide a central source of truth for manifesto copy
+ * Key Concepts:
+ *   - Structured content drives presentation and typography logic
+ */
+
 export interface ManifestoParagraph {
 	type: "body" | "emphasis" | "questions" | "radical-title";
 	text: string;

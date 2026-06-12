@@ -1,19 +1,20 @@
 /**
- * File: lib/authorization.ts
+ * File: lib/auth/authorization.ts
  * Purpose: Centralized authorization logic for artist access control.
  *
  * Responsibilities:
  *   - Check if a Supabase authenticated user is allowed access
- *   - Query "authorized_artists" allowlist table
+ *   - Query allowlist and authorization tables
  *   - Provide reusable auth guard function across app
  *
  * Key Concepts:
- *   - Separation of concerns (auth logic not inside UI components)
+ *   - Separation of concerns (auth logic outside UI components)
  *   - Allowlist-based access control (manual admin approval system)
- *   - Supabase queries for verification
+ *   - Multiple table fallback strategies for schema evolution
+ *   - Supabase query error resilience
  *
  * How It Fits:
- *   - Used in protected pages like /artists/profile
+ *   - Used in protected pages like /dashboard/profile
  *   - Replaces repeated isEmailAuthorized calls in components
  */
 

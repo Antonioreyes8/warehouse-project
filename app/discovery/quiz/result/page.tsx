@@ -1,3 +1,16 @@
+/**
+ * File: app/discovery/quiz/result/page.tsx
+ * Purpose: Calculates and displays the quiz match results.
+ * Responsibilities:
+ *   - Load user answers from localStorage
+ *   - Compute artist match scores using comparison logic
+ *   - Provide live search over artist results using a search tree
+ * Key Concepts:
+ *   - Asynchronous data loading and state initialization
+ *   - Custom data structures (MaxHeap and AVL tree) for scoring and search
+ *   - Graceful fallback when answers or artist data are missing
+ */
+
 "use client";
 import { useState, useEffect, useRef, startTransition } from "react";
 import {

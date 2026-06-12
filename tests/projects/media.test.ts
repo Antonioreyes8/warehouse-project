@@ -1,3 +1,13 @@
+/**
+ * File: tests/projects/media.test.ts
+ * Purpose: Test Supabase Storage media retrieval and upload error handling.
+ * Responsibilities:
+ *   - Validate failure modes for media listing and storage operations
+ *   - Confirm the getProjectMedia helper handles errors safely
+ * Key Concepts:
+ *   - Mocked storage bucket responses
+ *   - Graceful fallback to empty results on failure
+ */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockSupabase, resetSupabaseMocks } from "../__mocks__/supabase";
 

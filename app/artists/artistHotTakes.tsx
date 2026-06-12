@@ -1,3 +1,13 @@
+/**
+ * File: app/artists/artistHotTakes.tsx
+ * Purpose: Shows the artist's hot takes in a public-facing format.
+ * Responsibilities:
+ *   - Map saved quiz answers to question text
+ *   - Render agree/disagree badges for each answered item
+ * Key Concepts:
+ *   - Conditional rendering when no hot takes are available
+ *   - Uses shared quiz question definitions for consistency
+ */
 import { QUESTIONS } from "@/lib/discovery/questions";
 import styles from "./artist-hot-takes.module.css";
 

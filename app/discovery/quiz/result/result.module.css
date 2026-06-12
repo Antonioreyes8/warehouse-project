@@ -141,3 +141,47 @@
     letter-spacing: 2px;
     background-color: #d3d3d3;
 }
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    .container {
+        padding: 60px 5% 80px 5%;
+    }
+
+    .title {
+        font-size: 12px;
+    }
+
+    .winnerName {
+        font-size: 36px;
+    }
+
+    .winnerCard {
+        padding: 28px;
+    }
+
+    .winnerBio {
+        font-size: 16px;
+    }
+
+    .beliefsTitle {
+        font-size: 22px;
+    }
+
+    .beliefsIntro {
+        font-size: 14px;
+    }
+
+    .beliefItem {
+        font-size: 14px;
+    }
+
+    .profileBtn, .retryBtn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .loading {
+        font-size: 16px;
+    }
+}
