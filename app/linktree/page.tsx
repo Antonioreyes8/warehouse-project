@@ -77,7 +77,7 @@ const socialLinks: LinkItem[] = [
 
 const RSVP_LINK: LinkItem = {
 	title: "RSVP for Never Ending Summer",
-	url: "https://partiful.com/e/GH91VqxHhmBn3zuxDuuz?",
+	url: "https://partiful.com/e/TMbiai50r62bvoly2dQW",
 	icon: faStar,
 };
 
