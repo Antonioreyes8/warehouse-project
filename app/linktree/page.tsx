@@ -60,6 +60,11 @@ const contactLinks: LinkItem[] = [
 		url: "https://forms.gle/zdE6ALdcdLsGzVYr6",
 		icon: faCircleExclamation,
 	},
+    {
+        title: "Participate in ICE investigation",
+        url: "https://docs.google.com/forms/d/e/1FAIpQLSeM7YdfM0-1d29ejPfDun8vYpO1pgwqtmbipIS2UTVOzGIpqA/viewform?usp=header",
+        icon: faCircleExclamation,
+    }
 ];
 
 const socialLinks: LinkItem[] = [
@@ -68,7 +73,6 @@ const socialLinks: LinkItem[] = [
 		url: "https://www.instagram.com/diasporaprojects/",
 		icon: faInstagram,
 	},
-	// Add future socials here
 ];
 
 const RSVP_LINK: LinkItem = {
@@ -140,10 +144,10 @@ export default function LinksPage() {
 				<div className={styles.links}>{renderLinks([RSVP_LINK])}</div>
 				<h3 className={styles.subtitle}>Learn more</h3>
 				<div className={styles.links}>{renderLinks(aboutLinks)}</div>
-				<h3 className={styles.subtitle}>Forms</h3>
-				<div className={styles.links}>{renderLinks(contactLinks)}</div>
 				<h3 className={styles.subtitle}>Donations</h3>
 				<div className={styles.links}>{renderLinks(donationLinks)}</div>
+				<h3 className={styles.subtitle}>Forms</h3>
+				<div className={styles.links}>{renderLinks(contactLinks)}</div>
 			</div>
 		</div>
 	);
