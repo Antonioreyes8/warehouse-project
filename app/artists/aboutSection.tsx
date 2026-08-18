@@ -4,7 +4,7 @@
  */
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+import { faGlobe, faRss } from "@fortawesome/free-solid-svg-icons";
 import {
 	faInstagram,
 	faYoutube,
@@ -14,6 +14,7 @@ import {
 	faEtsy,
 	faSoundcloud,
 	faBandcamp,
+	faSubstack,
 } from "@fortawesome/free-brands-svg-icons";
 import { Artist } from "../../lib/artists/queries";
 import styles from "./about-section.module.css";
@@ -62,6 +63,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 		{ val: profile.etsy, dom: "etsy.com", icon: faEtsy },
 		{ val: profile.soundcloud, dom: "soundcloud.com", icon: faSoundcloud },
 		{ val: profile.bandcamp, dom: "bandcamp.com", icon: faBandcamp },
+		{ val: profile.substack, dom: "substack.com", icon: faRss },
 	];
 
 	const socialLinks = socialItems

@@ -52,6 +52,7 @@ export type Artist = {
 	personal_website?: string | null;
 	soundcloud?: string | null;
 	bandcamp?: string | null;
+	substack?: string | null;
 	email?: string | null;
 	/**
 	 * Hot takes saved by the artist. Stored as a JSON object mapping question id

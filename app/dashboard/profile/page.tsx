@@ -136,6 +136,7 @@ type ArtistProfileFormData = {
 	personal_website: string;
 	soundcloud: string;
 	bandcamp: string;
+	substack: string;
 };
 
 // Original creation problem:
@@ -167,6 +168,7 @@ const ArtistProfileFactory = {
 			personal_website: "",
 			soundcloud: "",
 			bandcamp: "",
+			substack: "",
 		};
 	},
 
@@ -192,6 +194,7 @@ const ArtistProfileFactory = {
 			personal_website: artist.personal_website || "",
 			soundcloud: artist.soundcloud || "",
 			bandcamp: artist.bandcamp || "",
+			substack: artist.substack || "",
 		};
 	},
 
@@ -1078,6 +1081,20 @@ export default function ArtistProfilePage() {
 										className={styles.formInput}
 									/>
 								</div>
+								<div className={styles.formGroup}>
+									<label className={styles.formLabel} htmlFor="substack">
+										Substack
+									</label>
+									<input
+										type="url"
+										id="substack"
+										name="substack"
+										value={formData.substack}
+										placeholder={artist.substack || ""}
+										onChange={handleInputChange}
+										className={styles.formInput}
+									/>
+								</div>
 							</div>
 						</div>
 
@@ -1542,6 +1559,20 @@ export default function ArtistProfilePage() {
 											rel="noopener noreferrer"
 										>
 											{artist.bandcamp}
+										</a>
+									) : (
+										"Not set"
+									)}
+								</div>
+								<div>
+									<strong>Substack:</strong>{" "}
+									{artist.substack ? (
+										<a
+											href={artist.substack}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{artist.substack}
 										</a>
 									) : (
 										"Not set"

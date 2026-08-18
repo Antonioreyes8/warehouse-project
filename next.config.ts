@@ -12,10 +12,12 @@
  *   - Used by Next.js build system for application configuration
  */
 
+import path from "path";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	turbopack: {
-		root: process.cwd(),
+		root: path.resolve(__dirname),
 	},
 	images: {
 		remotePatterns: [
