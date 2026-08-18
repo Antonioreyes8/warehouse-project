@@ -12,7 +12,7 @@
  */
 
 "use client";
-import { useState, useEffect, useRef, startTransition } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
 	MaxHeap,
 	ArtistSearchTree,
@@ -30,7 +30,6 @@ interface QuizResult {
 	topMatch: ExtendedScoredArtist | null;
 	runnerUps: ExtendedScoredArtist[];
 	sharedBeliefs: string[];
-	debugInfo: string;
 	searchTree: ArtistSearchTree;
 }
 
@@ -62,7 +61,6 @@ export default function ResultPage() {
 					topMatch: null,
 					runnerUps: [],
 					sharedBeliefs: [],
-					debugInfo: "",
 					searchTree: new ArtistSearchTree(),
 				});
 				return;
@@ -72,8 +70,6 @@ export default function ResultPage() {
 
 			// --- INITIALIZE CONSOLE LOGS ---
 			console.log("🚀 STARTING COMPLEXITY ANALYSIS...");
-			let debug =
-				"🎯 QUIZ RESULTS - ANALYZING MATCHES\n=====================================\n\n";
 
 			const heap = new MaxHeap();
 			const tree = new ArtistSearchTree();
@@ -86,8 +82,6 @@ export default function ResultPage() {
 					const name = artist.name ?? "Unknown";
 					let score = 0;
 					const matches: string[] = [];
-					let artistDebug = `👤 ${name}:\\n`;
-
 					Object.entries(userAnswers).forEach(([qId, userVal]) => {
 						const artistVal =
 							artist.hot_takes?.[qId as keyof typeof artist.hot_takes];
@@ -96,13 +90,9 @@ export default function ResultPage() {
 							const questionObj = QUESTIONS.find((q) => q.id === qId);
 							if (questionObj) {
 								matches.push(questionObj.text);
-								artistDebug += `  ✓ Q${qId}: "${questionObj.text}" (Both answered: ${userVal})\\n`;
 							}
 						}
 					});
-
-					artistDebug += `  📈 Final Score: ${score} matches\\n\\n`;
-					debug += artistDebug;
 
 					const scoredArtist: ExtendedScoredArtist = {
 						id: String(artist.id),
@@ -130,7 +120,7 @@ export default function ResultPage() {
 				const artistsWithScores = fetched.map((a) => ({
 					id: String(a.id),
 					name: a.name,
-					username: (a as any).username ?? null,
+					username: a.username ?? null,
 					bio: a.bio,
 					hot_takes: a.hot_takes,
 					score: scoreById[String(a.id)] ?? 0,
@@ -144,7 +134,6 @@ export default function ResultPage() {
 				const winner = sortedArtists[0] ?? null;
 
 				if (winner) {
-					debug += `🏆 TOP MATCH IDENTIFIED: ${winner.name} (Score: ${winner.score})\\n`;
 					console.log("🏆 TOP MATCH:", winner);
 				}
 
@@ -152,7 +141,6 @@ export default function ResultPage() {
 					topMatch: winner,
 					runnerUps: winner ? sortedArtists.slice(1, 4) : [],
 					sharedBeliefs: winner ? winner.shared.slice(0, 4) : [],
-					debugInfo: debug,
 					searchTree: tree,
 				});
 			})();
@@ -204,7 +192,7 @@ export default function ResultPage() {
 		);
 	}
 
-	const { topMatch, runnerUps, sharedBeliefs, debugInfo } = result;
+	const { topMatch, runnerUps, sharedBeliefs } = result;
 
 	return (
 		<div className={styles.container}>
@@ -377,7 +365,7 @@ export default function ResultPage() {
 					) : (
 						searchTerm && (
 							<p style={{ fontSize: "14px", color: "#6c757d" }}>
-								No result found for "{searchTerm}".
+								No result found for &quot;{searchTerm}&quot;.
 							</p>
 						)
 					)}

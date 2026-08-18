@@ -12,7 +12,7 @@
 
 "use client"; // Instructs Next.js to compile and execute this file purely on the client side (browser) to support Canvas rendering and React state hooks
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MANIFESTO_PARAGRAPHS } from "@/lib/manifesto/paragraphs";
 
 // Import Pretext's layout and rendering mechanics alongside its structural tracking cursor type
@@ -140,6 +140,60 @@ export default function InteractiveCanvas(): React.JSX.Element {
 	// Low-level pointer mutable hook to monitor active star ID values securely across touch thread renders
 	const editingStarIdRef = useRef<number | null>(null);
 
+	const processInputStart = useCallback(
+		(clientX: number, clientY: number) => {
+			const canvas = canvasRef.current;
+			if (!canvas) return;
+
+			const rect = canvas.getBoundingClientRect();
+			const clickX = clientX - rect.left;
+			const clickY = clientY - rect.top;
+
+			const targetStar = stars.find((star) => {
+				const actualX = star.xRatio * lineWidthWidth;
+				const distance = Math.hypot(actualX - clickX, star.y - clickY);
+				return distance < star.outerRadius + 22;
+			});
+
+			if (targetStar) {
+				if (editingStarIdRef.current === targetStar.id) {
+					setEditingStarId(null);
+					editingStarIdRef.current = null;
+				} else {
+					setEditingStarId(targetStar.id);
+					editingStarIdRef.current = targetStar.id;
+				}
+			} else {
+				setEditingStarId(null);
+				editingStarIdRef.current = null;
+			}
+		},
+		[stars, lineWidthWidth],
+	);
+
+	const processInputMove = useCallback(
+		(clientX: number, clientY: number) => {
+			if (editingStarIdRef.current === null || !canvasRef.current) return;
+
+			const rect = canvasRef.current.getBoundingClientRect();
+			const currentX = clientX - rect.left;
+			const currentY = clientY - rect.top;
+
+			const boundedX = Math.max(20, Math.min(lineWidthWidth - 20, currentX));
+			const boundedY = Math.max(40, Math.min(1300, currentY));
+			const updatedXRatio = boundedX / lineWidthWidth;
+
+			setStars((prevStars) =>
+				prevStars.map((star) =>
+					star.id === editingStarIdRef.current
+						? { ...star, xRatio: updatedXRatio, y: boundedY }
+						: star,
+				),
+			);
+		},
+		[lineWidthWidth],
+	);
+
 	// Recalibrates container scales cleanly when viewports shift or mobile devices tilt
 	useEffect(() => {
 		function handleResize() {
@@ -171,7 +225,6 @@ export default function InteractiveCanvas(): React.JSX.Element {
 				return distance < star.outerRadius + 24; // Generous finger layout tap target buffers
 			});
 
-			// Prevent browser default actions if an element is clicked OR if a star is actively being dropped
 			if (targetStar || editingStarIdRef.current !== null) {
 				e.preventDefault();
 			}
@@ -181,7 +234,6 @@ export default function InteractiveCanvas(): React.JSX.Element {
 
 		const handleTouchMoveRaw = (e: TouchEvent) => {
 			if (editingStarIdRef.current !== null) {
-				// LOCK MOVE BEHAVIORS: Block mobile layout scrolling entirely ONLY while a star is caught in movable mode
 				e.preventDefault();
 				const touch = e.touches[0];
 				processInputMove(touch.clientX, touch.clientY);
@@ -199,7 +251,7 @@ export default function InteractiveCanvas(): React.JSX.Element {
 			canvas.removeEventListener("touchstart", handleTouchStartRaw);
 			canvas.removeEventListener("touchmove", handleTouchMoveRaw);
 		};
-	}, [stars, lineWidthWidth]);
+	}, [processInputMove, processInputStart, stars, lineWidthWidth]);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -448,64 +500,6 @@ export default function InteractiveCanvas(): React.JSX.Element {
 			);
 		});
 	}, [stars, lineWidthWidth, editingStarId]);
-
-	/**
-	 * Unified Selection Input Capturer (Touch + Mouse Unified)
-	 * UPDATE: Implemented pick-up / drop toggle parameters to isolate desktop and mobile flows cleanly
-	 */
-	const processInputStart = (clientX: number, clientY: number) => {
-		const canvas = canvasRef.current;
-		if (!canvas) return;
-
-		const rect = canvas.getBoundingClientRect();
-		const clickX = clientX - rect.left;
-		const clickY = clientY - rect.top;
-
-		const targetStar = stars.find((star) => {
-			const actualX = star.xRatio * lineWidthWidth;
-			const distance = Math.hypot(actualX - clickX, star.y - clickY);
-			return distance < star.outerRadius + 22;
-		});
-
-		if (targetStar) {
-			// TOGGLE ENTRY LOGIC: If you click the same star that is already red, drop it. Otherwise, select it.
-			if (editingStarIdRef.current === targetStar.id) {
-				setEditingStarId(null);
-				editingStarIdRef.current = null;
-			} else {
-				setEditingStarId(targetStar.id);
-				editingStarIdRef.current = targetStar.id;
-			}
-		} else {
-			// Clicked empty canvas space, drop any currently selected active star
-			setEditingStarId(null);
-			editingStarIdRef.current = null;
-		}
-	};
-
-	/**
-	 * Unified Transformation Move Capturer (Touch + Mouse Unified)
-	 */
-	const processInputMove = (clientX: number, clientY: number) => {
-		if (editingStarIdRef.current === null || !canvasRef.current) return;
-
-		const rect = canvasRef.current.getBoundingClientRect();
-		const currentX = clientX - rect.left;
-		const currentY = clientY - rect.top;
-
-		const boundedX = Math.max(20, Math.min(lineWidthWidth - 20, currentX));
-		const boundedY = Math.max(40, Math.min(1300, currentY));
-
-		const updatedXRatio = boundedX / lineWidthWidth;
-
-		setStars((prevStars) =>
-			prevStars.map((star) =>
-				star.id === editingStarIdRef.current
-					? { ...star, xRatio: updatedXRatio, y: boundedY }
-					: star,
-			),
-		);
-	};
 
 	// Desktop mouse events bridge to pick-up/drop controllers smoothly
 	const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) =>
