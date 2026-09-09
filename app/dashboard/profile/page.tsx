@@ -710,6 +710,7 @@ export default function ArtistProfilePage() {
 			</header>
 
 			<main className={styles.profileContent}>
+				<p className={styles.tabScrollHint}>Swipe to see all tabs →</p>
 				<nav className={styles.tabList} role="tablist">
 					{PROFILE_TABS.map((tab) => (
 						<button
