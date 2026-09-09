@@ -73,6 +73,13 @@
     background-attachment: local, local, scroll, scroll;
 }
 
+.scrollHint {
+    display: none;
+    font-size: 0.75rem;
+    color: #999;
+    margin: 0 0 8px;
+}
+
 .accountsTable {
     width: 100%;
     min-width: 720px;
@@ -118,4 +125,10 @@
 .errorText {
 	color: #e08080;
 	margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+    .scrollHint {
+        display: block;
+    }
 }

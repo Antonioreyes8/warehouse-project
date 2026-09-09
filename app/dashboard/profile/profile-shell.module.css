@@ -143,3 +143,16 @@
 .profileSection a:hover {
 	color: #555;
 }
+
+.tabScrollHint {
+    display: none;
+    font-size: 0.75rem;
+    color: #999;
+    margin: 0 0 4px;
+}
+
+@media (max-width: 768px) {
+    .tabScrollHint {
+        display: block;
+    }
+}

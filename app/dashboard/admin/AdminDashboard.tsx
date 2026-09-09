@@ -145,6 +145,7 @@ export default function AdminDashboard() {
 				<button type="submit">Invite</button>
 			</form>
 
+            <p className={styles.scrollHint}>Swipe to see more →</p>
             <div className={styles.tableScroll}>
 			<table className={styles.accountsTable}>
 				<thead>
