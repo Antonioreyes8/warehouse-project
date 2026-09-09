@@ -68,6 +68,44 @@
 	gap: 32px;
 }
 
+.tabList {
+	display: flex;
+	gap: 4px;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
+	border-bottom: 1px solid #444;
+}
+
+.tabList::-webkit-scrollbar {
+	display: none;
+}
+
+.tabButton {
+	flex: 0 0 auto;
+	font-family: "HelveticaNeue", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	white-space: nowrap;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid transparent;
+	color: #999;
+	padding: 12px 16px;
+	cursor: pointer;
+}
+
+.tabButton:hover {
+	color: #d3d3d3;
+}
+
+.tabButtonActive {
+	color: #d3d3d3;
+	border-bottom-color: #d3d3d3;
+}
+
 .profileSection {
 	background-color: #d3d3d3;
 	padding: 32px;

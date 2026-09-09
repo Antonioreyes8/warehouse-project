@@ -28,6 +28,18 @@ export default function LoginPage() {
 	const [message, setMessage] = useState("");
 
 	useEffect(() => {
+		// Surfaces OAuth errors forwarded here (from the callback page, or from
+		// app/layout.tsx's safety-net redirect when Supabase's Site URL sends an
+		// error to the wrong page).
+		const params = new URLSearchParams(window.location.search);
+		const oauthError = params.get("error_description") ?? params.get("error");
+		if (oauthError) {
+			setMessage("Error signing in: " + oauthError.replace(/\+/g, " "));
+			router.replace("/login");
+		}
+	}, [router]);
+
+	useEffect(() => {
 		// Session pre-check section
 		// If a valid session already exists, skip login UI and move user directly to dashboard.
 		// This prevents "login page flash" for already authenticated users.

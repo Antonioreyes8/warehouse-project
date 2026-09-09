@@ -1,0 +1,104 @@
+.adminContainer {
+	min-height: 100vh;
+	background-color: #2a2a2a;
+	font-family: "HelveticaNeue", sans-serif;
+	color: #d3d3d3;
+	padding: 32px;
+}
+
+.adminHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid #444;
+}
+
+.adminTitle {
+	font-size: 2rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	color: #d3d3d3;
+	margin: 0;
+}
+
+.inviteForm {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-bottom: 32px;
+	padding: 16px;
+	background-color: #333;
+	border-radius: 8px;
+}
+
+.inviteForm input,
+.inviteForm select {
+	background-color: #2a2a2a;
+	color: #d3d3d3;
+	border: 1px solid #555;
+	border-radius: 4px;
+	padding: 8px 10px;
+	font-family: "HelveticaNeue", sans-serif;
+}
+
+.inviteForm button {
+	background-color: #4a4a4a;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 16px;
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.inviteForm button:hover {
+	background-color: #5a5a5a;
+}
+
+.accountsTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.accountsTable th,
+.accountsTable td {
+	text-align: left;
+	padding: 10px 12px;
+	border-bottom: 1px solid #444;
+	font-size: 0.9rem;
+}
+
+.statusActive {
+	color: #7fd17f;
+}
+
+.statusSuspended {
+	color: #e0a96d;
+}
+
+.actionButton {
+	background: none;
+	border: 1px solid #666;
+	color: #d3d3d3;
+	border-radius: 4px;
+	padding: 4px 10px;
+	margin-right: 6px;
+	cursor: pointer;
+	font-size: 0.8rem;
+}
+
+.actionButton:hover {
+	background-color: #444;
+}
+
+.revokeButton {
+	border-color: #a55;
+	color: #e08080;
+}
+
+.errorText {
+	color: #e08080;
+	margin-bottom: 12px;
+}

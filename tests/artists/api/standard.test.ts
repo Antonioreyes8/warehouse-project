@@ -114,19 +114,10 @@ describe("API Black-Box: Artist Mutations", () => {
 
 describe("API Black-Box: Authorization", () => {
 	it("authorizes user with allowlisted email", async () => {
-		mockMaybeSingle
-			.mockResolvedValueOnce({
-				data: null,
-				error: { message: "missing table" },
-			})
-			.mockResolvedValueOnce({
-				data: null,
-				error: { message: "missing table" },
-			})
-			.mockResolvedValueOnce({
-				data: { email: "f2arc.8@gmail.com" },
-				error: null,
-			});
+		mockMaybeSingle.mockResolvedValueOnce({
+			data: { role: "artist", account_status: "active" },
+			error: null,
+		});
 
 		await expect(
 			isArtistAuthorized({

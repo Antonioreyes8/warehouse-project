@@ -104,23 +104,19 @@ describe("API White-Box: mutations.ts fallback logic", () => {
 });
 
 describe("API White-Box: authorization.ts table order", () => {
-	// White-box unit test: Verifies the order of table checks in authorization logic.
-	it("tries authorized_artists, then authorized, then allowed_users", async () => {
-		mockMaybeSingle
-			.mockResolvedValueOnce({ data: null, error: { message: "missing" } })
-			.mockResolvedValueOnce({ data: null, error: { message: "missing" } })
-			.mockResolvedValueOnce({
-				data: { email: "f2arc.8@gmail.com" },
-				error: null,
-			});
+	// White-box unit test: Verifies allowed_users is the single source of authorization truth.
+	it("checks allowed_users and rejects suspended accounts", async () => {
+		mockMaybeSingle.mockResolvedValueOnce({
+			data: { role: "artist", account_status: "suspended" },
+			error: null,
+		});
 
-		await isArtistAuthorized({
+		const result = await isArtistAuthorized({
 			id: "uid-1",
 			email: "f2arc.8@gmail.com",
 		} as unknown as User);
 
-		expect(mockFrom).toHaveBeenNthCalledWith(1, "authorized_artists");
-		expect(mockFrom).toHaveBeenNthCalledWith(2, "authorized");
-		expect(mockFrom).toHaveBeenNthCalledWith(3, "allowed_users");
+		expect(mockFrom).toHaveBeenNthCalledWith(1, "allowed_users");
+		expect(result).toBe(false);
 	});
 });

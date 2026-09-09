@@ -25,7 +25,8 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "../lib/ui/icons";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Script from "next/script";
 
 // FontAwesome setup section
@@ -37,11 +38,24 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	const pathname = usePathname();
+	const router = useRouter();
 
 	const hideFooter = pathname === "/linktree";
 
+	useEffect(() => {
+		// Supabase redirects OAuth errors to the project's configured Site URL,
+		// which can land on any page (not /auth/callback) if that setting is
+		// misconfigured. Forward stray error params to /login so they're handled.
+		if (pathname === "/auth/callback" || pathname === "/login") return;
+
+		const params = new URLSearchParams(window.location.search);
+		if (params.has("error")) {
+			router.replace(`/login?${params.toString()}`);
+		}
+	}, [pathname, router]);
+
 	return (
-		<html lang="en">
+		<html lang="en" data-scroll-behavior="smooth">
 			<head>
 				{/* Google Analytics */}
 				<Script

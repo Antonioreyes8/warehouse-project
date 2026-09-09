@@ -242,6 +242,15 @@ function createEmptyWork(sortOrder: number): EditableWork {
 	};
 }
 
+const PROFILE_TABS = [
+	{ id: "basic", label: "Basic Info" },
+	{ id: "social", label: "Social Links" },
+	{ id: "work", label: "Featured Work" },
+	{ id: "hotTakes", label: "Hot Takes" },
+] as const;
+
+type ProfileTabId = (typeof PROFILE_TABS)[number]["id"];
+
 export default function ArtistProfilePage() {
 	// Component state section
 	// - user/artist/authorized/loading control route protection and data readiness.
@@ -251,6 +260,7 @@ export default function ArtistProfilePage() {
 	const [user, setUser] = useState<User | null>(null);
 	const [artist, setArtist] = useState<Artist | null>(null);
 	const [authorized, setAuthorized] = useState<boolean | null>(null);
+	const [isAdmin, setIsAdmin] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [editing, setEditing] = useState(false);
 	const [saving, setSaving] = useState(false);
@@ -262,6 +272,7 @@ export default function ArtistProfilePage() {
 		{},
 	);
 	const [message, setMessage] = useState("");
+	const [activeTab, setActiveTab] = useState<ProfileTabId>("basic");
 
 	const [formData, setFormData] = useState<ArtistProfileFormData>(
 		// Form state mirrors editable profile columns.
@@ -299,6 +310,12 @@ export default function ArtistProfilePage() {
 			// Uses normalized email query to gate dashboard access.
 			const emailAuth = await isEmailAuthorized(session.user.email);
 			setAuthorized(emailAuth);
+
+			// Nav visibility check only; the admin page/API re-verify this server-side.
+			fetch("/api/admin/whoami")
+				.then((res) => res.json())
+				.then((data) => setIsAdmin(Boolean(data.isAdmin)))
+				.catch(() => setIsAdmin(false));
 
 			if (emailAuth) {
 				// Profile lookup strategy
@@ -672,6 +689,11 @@ export default function ArtistProfilePage() {
 				</div>
 				<div className={styles.headerActions}>
 					<div style={{ display: "flex", gap: 12 }}>
+						{isAdmin && (
+							<Link href="/dashboard/admin" className={styles.viewPublicButton}>
+								Admin
+							</Link>
+						)}
 						{!editing && (
 							<button
 								onClick={() => setEditing(true)}
@@ -688,655 +710,698 @@ export default function ArtistProfilePage() {
 			</header>
 
 			<main className={styles.profileContent}>
+				<nav className={styles.tabList} role="tablist">
+					{PROFILE_TABS.map((tab) => (
+						<button
+							key={tab.id}
+							type="button"
+							role="tab"
+							aria-selected={activeTab === tab.id}
+							className={`${styles.tabButton} ${activeTab === tab.id ? styles.tabButtonActive : ""}`}
+							onClick={() => setActiveTab(tab.id)}
+						>
+							{tab.label}
+						</button>
+					))}
+				</nav>
+
 				{editing ? (
 					<>
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Basic Information</h2>
-							<div className={styles.formGrid}>
-								<div className={`${styles.formGroup} ${styles.fullWidth}`}>
-									<label className={styles.formLabel} htmlFor="avatar_upload">
-										Profile Picture
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.avatar.description}
-									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.avatar.hint}
-									</div>
-									<div className={styles.avatarField}>
-										{formData.avatar_url ? (
-											<Image
-												src={formData.avatar_url}
-												alt={`${artist.name || "Artist"} profile picture`}
-												width={120}
-												height={120}
-												className={styles.avatarImage}
-											/>
-										) : (
-											<div className={styles.avatarPlaceholder}>
-												No image uploaded
+						{activeTab === "basic" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Basic Information</h2>
+								<div className={styles.formGrid}>
+									<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+										<label className={styles.formLabel} htmlFor="avatar_upload">
+											Profile Picture
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.avatar.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.avatar.hint}
+										</div>
+										<div className={styles.avatarField}>
+											{formData.avatar_url ? (
+												<Image
+													src={formData.avatar_url}
+													alt={`${artist.name || "Artist"} profile picture`}
+													width={120}
+													height={120}
+													className={styles.avatarImage}
+												/>
+											) : (
+												<div className={styles.avatarPlaceholder}>
+													No image uploaded
+												</div>
+											)}
+											<div className={styles.avatarControls}>
+												<input
+													type="file"
+													id="avatar_upload"
+													accept="image/png,image/jpeg,image/webp"
+													onChange={handleAvatarUpload}
+													disabled={avatarUploading || saving}
+													className={styles.formInput}
+												/>
+												<p className={styles.avatarHelpText}>
+													Max 5MB. Supported formats: JPG, PNG, WEBP.
+												</p>
 											</div>
-										)}
-										<div className={styles.avatarControls}>
-											<input
-												type="file"
-												id="avatar_upload"
-												accept="image/png,image/jpeg,image/webp"
-												onChange={handleAvatarUpload}
-												disabled={avatarUploading || saving}
-												className={styles.formInput}
-											/>
-											<p className={styles.avatarHelpText}>
-												Max 5MB. Supported formats: JPG, PNG, WEBP.
-											</p>
 										</div>
 									</div>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="name">
-										Name *
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.name.description}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="name">
+											Name *
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.name.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.name.hint}
+										</div>
+										<input
+											type="text"
+											id="name"
+											name="name"
+											value={formData.name}
+											placeholder={artist.name || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+											required
+										/>
 									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.name.hint}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="username">
+											Username *
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.username.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.username.hint}
+										</div>
+										<input
+											type="text"
+											id="username"
+											name="username"
+											value={formData.username}
+											placeholder={artist.username || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+											required
+										/>
 									</div>
-									<input
-										type="text"
-										id="name"
-										name="name"
-										value={formData.name}
-										placeholder={artist.name || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-										required
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="username">
-										Username *
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.username.description}
+									<div className={`${styles.formGroup} ${styles.fullWidth}`}>
+										<label className={styles.formLabel} htmlFor="bio">
+											Bio
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.bio.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.bio.hint}
+										</div>
+										<textarea
+											id="bio"
+											name="bio"
+											value={formData.bio}
+											placeholder={artist.bio || ""}
+											onChange={handleInputChange}
+											className={styles.formTextarea}
+											rows={4}
+										/>
 									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.username.hint}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="birthday">
+											Birth Date
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.birthday.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.birthday.hint}
+										</div>
+										<input
+											type="date"
+											id="birthday"
+											name="birthday"
+											value={formData.birthday}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
 									</div>
-									<input
-										type="text"
-										id="username"
-										name="username"
-										value={formData.username}
-										placeholder={artist.username || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-										required
-									/>
-								</div>
-								<div className={`${styles.formGroup} ${styles.fullWidth}`}>
-									<label className={styles.formLabel} htmlFor="bio">
-										Bio
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.bio.description}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="based_in">
+											Based In
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.basedIn.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.basedIn.hint}
+										</div>
+										<input
+											type="text"
+											id="based_in"
+											name="based_in"
+											value={formData.based_in}
+											placeholder={artist.based_in || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
 									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.bio.hint}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="mediums">
+											Mediums
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.mediums.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.mediums.hint}
+										</div>
+										<textarea
+											id="mediums"
+											name="mediums"
+											value={formData.mediums}
+											placeholder={artist.mediums || ""}
+											onChange={handleInputChange}
+											className={styles.formTextarea}
+											rows={2}
+										/>
 									</div>
-									<textarea
-										id="bio"
-										name="bio"
-										value={formData.bio}
-										placeholder={artist.bio || ""}
-										onChange={handleInputChange}
-										className={styles.formTextarea}
-										rows={4}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="birthday">
-										Birth Date
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.birthday.description}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="past_projects">
+											Past Projects
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.pastProjects.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.pastProjects.hint}
+										</div>
+										<textarea
+											id="past_projects"
+											name="past_projects"
+											value={formData.past_projects}
+											placeholder={artist.past_projects || ""}
+											onChange={handleInputChange}
+											className={styles.formTextarea}
+											rows={2}
+										/>
 									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.birthday.hint}
+									<div className={styles.formGroup}>
+										<label
+											className={styles.formLabel}
+											htmlFor="ethnic_background"
+										>
+											Ethnic Background
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.ethnicBackground.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.ethnicBackground.hint}
+										</div>
+										<input
+											type="text"
+											id="ethnic_background"
+											name="ethnic_background"
+											value={formData.ethnic_background}
+											placeholder={artist.ethnic_background || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
 									</div>
-									<input
-										type="date"
-										id="birthday"
-										name="birthday"
-										value={formData.birthday}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="based_in">
-										Based In
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.basedIn.description}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="contact">
+											Contact
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.contact.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.contact.hint}
+										</div>
+										<input
+											type="text"
+											id="contact"
+											name="contact"
+											value={formData.contact}
+											placeholder={artist.contact || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
 									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.basedIn.hint}
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="status">
+											Status
+										</label>
+										<div className={styles.fieldDescription}>
+											{PROFILE_FIELD_DESCRIPTIONS.status.description}
+										</div>
+										<div className={styles.fieldHint}>
+											{PROFILE_FIELD_DESCRIPTIONS.status.hint}
+										</div>
+										<select
+											id="status"
+											name="status"
+											value={formData.status}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										>
+											<option value="">Select status</option>
+											{STATUS_OPTIONS.map((option) => (
+												<option key={option} value={option}>
+													{option}
+												</option>
+											))}
+										</select>
 									</div>
-									<input
-										type="text"
-										id="based_in"
-										name="based_in"
-										value={formData.based_in}
-										placeholder={artist.based_in || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="mediums">
-										Mediums
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.mediums.description}
-									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.mediums.hint}
-									</div>
-									<textarea
-										id="mediums"
-										name="mediums"
-										value={formData.mediums}
-										placeholder={artist.mediums || ""}
-										onChange={handleInputChange}
-										className={styles.formTextarea}
-										rows={2}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="past_projects">
-										Past Projects
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.pastProjects.description}
-									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.pastProjects.hint}
-									</div>
-									<textarea
-										id="past_projects"
-										name="past_projects"
-										value={formData.past_projects}
-										placeholder={artist.past_projects || ""}
-										onChange={handleInputChange}
-										className={styles.formTextarea}
-										rows={2}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label
-										className={styles.formLabel}
-										htmlFor="ethnic_background"
-									>
-										Ethnic Background
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.ethnicBackground.description}
-									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.ethnicBackground.hint}
-									</div>
-									<input
-										type="text"
-										id="ethnic_background"
-										name="ethnic_background"
-										value={formData.ethnic_background}
-										placeholder={artist.ethnic_background || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="contact">
-										Contact
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.contact.description}
-									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.contact.hint}
-									</div>
-									<input
-										type="text"
-										id="contact"
-										name="contact"
-										value={formData.contact}
-										placeholder={artist.contact || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="status">
-										Status
-									</label>
-									<div className={styles.fieldDescription}>
-										{PROFILE_FIELD_DESCRIPTIONS.status.description}
-									</div>
-									<div className={styles.fieldHint}>
-										{PROFILE_FIELD_DESCRIPTIONS.status.hint}
-									</div>
-									<select
-										id="status"
-										name="status"
-										value={formData.status}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									>
-										<option value="">Select status</option>
-										{STATUS_OPTIONS.map((option) => (
-											<option key={option} value={option}>
-												{option}
-											</option>
-										))}
-									</select>
 								</div>
 							</div>
-						</div>
+						)}
 
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Social Links</h2>
-							<div className={styles.fieldDescription}>
-								Add your social media links to connect with collectors and fans.
-								The more platforms you include, the more ways people can
-								discover and follow your work.
+						{activeTab === "social" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Social Links</h2>
+								<div className={styles.fieldDescription}>
+									Add your social media links to connect with collectors and
+									fans. The more platforms you include, the more ways people can
+									discover and follow your work.
+								</div>
+								<div className={styles.formGrid}>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="instagram">
+											Instagram
+										</label>
+										<input
+											type="url"
+											id="instagram"
+											name="instagram"
+											value={formData.instagram}
+											placeholder={artist.instagram || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="youtube">
+											YouTube
+										</label>
+										<input
+											type="url"
+											id="youtube"
+											name="youtube"
+											value={formData.youtube}
+											placeholder={artist.youtube || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="patreon">
+											Patreon
+										</label>
+										<input
+											type="url"
+											id="patreon"
+											name="patreon"
+											value={formData.patreon}
+											placeholder={artist.patreon || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="facebook">
+											Facebook
+										</label>
+										<input
+											type="url"
+											id="facebook"
+											name="facebook"
+											value={formData.facebook}
+											placeholder={artist.facebook || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="tik_tok">
+											TikTok
+										</label>
+										<input
+											type="url"
+											id="tik_tok"
+											name="tik_tok"
+											value={formData.tik_tok}
+											placeholder={artist.tik_tok || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="etsy">
+											Etsy
+										</label>
+										<input
+											type="url"
+											id="etsy"
+											name="etsy"
+											value={formData.etsy}
+											placeholder={artist.etsy || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label
+											className={styles.formLabel}
+											htmlFor="personal_website"
+										>
+											Personal Website
+										</label>
+										<input
+											type="url"
+											id="personal_website"
+											name="personal_website"
+											value={formData.personal_website}
+											placeholder={artist.personal_website || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="soundcloud">
+											SoundCloud
+										</label>
+										<input
+											type="url"
+											id="soundcloud"
+											name="soundcloud"
+											value={formData.soundcloud}
+											placeholder={artist.soundcloud || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="bandcamp">
+											Bandcamp
+										</label>
+										<input
+											type="url"
+											id="bandcamp"
+											name="bandcamp"
+											value={formData.bandcamp}
+											placeholder={artist.bandcamp || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+									<div className={styles.formGroup}>
+										<label className={styles.formLabel} htmlFor="substack">
+											Substack
+										</label>
+										<input
+											type="url"
+											id="substack"
+											name="substack"
+											value={formData.substack}
+											placeholder={artist.substack || ""}
+											onChange={handleInputChange}
+											className={styles.formInput}
+										/>
+									</div>
+								</div>
 							</div>
-							<div className={styles.formGrid}>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="instagram">
-										Instagram
-									</label>
-									<input
-										type="url"
-										id="instagram"
-										name="instagram"
-										value={formData.instagram}
-										placeholder={artist.instagram || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="youtube">
-										YouTube
-									</label>
-									<input
-										type="url"
-										id="youtube"
-										name="youtube"
-										value={formData.youtube}
-										placeholder={artist.youtube || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="patreon">
-										Patreon
-									</label>
-									<input
-										type="url"
-										id="patreon"
-										name="patreon"
-										value={formData.patreon}
-										placeholder={artist.patreon || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="facebook">
-										Facebook
-									</label>
-									<input
-										type="url"
-										id="facebook"
-										name="facebook"
-										value={formData.facebook}
-										placeholder={artist.facebook || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="tik_tok">
-										TikTok
-									</label>
-									<input
-										type="url"
-										id="tik_tok"
-										name="tik_tok"
-										value={formData.tik_tok}
-										placeholder={artist.tik_tok || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="etsy">
-										Etsy
-									</label>
-									<input
-										type="url"
-										id="etsy"
-										name="etsy"
-										value={formData.etsy}
-										placeholder={artist.etsy || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label
-										className={styles.formLabel}
-										htmlFor="personal_website"
-									>
-										Personal Website
-									</label>
-									<input
-										type="url"
-										id="personal_website"
-										name="personal_website"
-										value={formData.personal_website}
-										placeholder={artist.personal_website || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="soundcloud">
-										SoundCloud
-									</label>
-									<input
-										type="url"
-										id="soundcloud"
-										name="soundcloud"
-										value={formData.soundcloud}
-										placeholder={artist.soundcloud || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="bandcamp">
-										Bandcamp
-									</label>
-									<input
-										type="url"
-										id="bandcamp"
-										name="bandcamp"
-										value={formData.bandcamp}
-										placeholder={artist.bandcamp || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-								<div className={styles.formGroup}>
-									<label className={styles.formLabel} htmlFor="substack">
-										Substack
-									</label>
-									<input
-										type="url"
-										id="substack"
-										name="substack"
-										value={formData.substack}
-										placeholder={artist.substack || ""}
-										onChange={handleInputChange}
-										className={styles.formInput}
-									/>
-								</div>
-							</div>
-						</div>
+						)}
 
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Featured Work</h2>
-							<div className={styles.fieldDescription}>
-								Showcase your best work! Featured pieces appear prominently on
-								your public profile and help collectors understand your artistic
-								style and capabilities. Add 3-5 pieces that represent your range
-								and expertise.
-							</div>
-							<div data-testid="artist-works-length">{artistWorks.length}</div>
-							<div className={styles.buttonGroup}>
-								<button
-									type="button"
-									onClick={handleAddWork}
-									className={styles.sectionButton}
-								>
-									Add Work
-								</button>
-							</div>
-							{artistWorks.length === 0 ? (
-								<p>No works added yet. Click Add Work to create one.</p>
-							) : (
-								artistWorks.map((work, index) => (
-									<div
-										className={styles.formGrid}
-										key={work.id ?? `new-${index}`}
+						{activeTab === "work" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Featured Work</h2>
+								<div className={styles.fieldDescription}>
+									Showcase your best work! Featured pieces appear prominently on
+									your public profile and help collectors understand your
+									artistic style and capabilities. Add 3-5 pieces that represent
+									your range and expertise.
+								</div>
+								<div data-testid="artist-works-length">
+									{artistWorks.length}
+								</div>
+								<div className={styles.buttonGroup}>
+									<button
+										type="button"
+										onClick={handleAddWork}
+										className={styles.sectionButton}
 									>
-										<div className={`${styles.formGroup} ${styles.fullWidth}`}>
-											<label
-												className={styles.formLabel}
-												htmlFor={`work_upload_${index}`}
+										Add Work
+									</button>
+								</div>
+								{artistWorks.length === 0 ? (
+									<p>No works added yet. Click Add Work to create one.</p>
+								) : (
+									artistWorks.map((work, index) => (
+										<div
+											className={styles.formGrid}
+											key={work.id ?? `new-${index}`}
+										>
+											<div
+												className={`${styles.formGroup} ${styles.fullWidth}`}
 											>
-												Work Image
-											</label>
-											<div className={styles.fieldDescription}>
-												{PROFILE_FIELD_DESCRIPTIONS.workImage.description}
-											</div>
-											<div className={styles.fieldHint}>
-												{PROFILE_FIELD_DESCRIPTIONS.workImage.hint}
-											</div>
-											<div className={styles.workPreview}>
-												{work.image_url ? (
-													<Image
-														src={work.image_url}
-														alt={`${artist.name || "Artist"} featured work`}
-														width={220}
-														height={220}
-														className={styles.workImage}
-													/>
-												) : (
-													<div className={styles.workPlaceholder}>
-														No work image uploaded
+												<label
+													className={styles.formLabel}
+													htmlFor={`work_upload_${index}`}
+												>
+													Work Image
+												</label>
+												<div className={styles.fieldDescription}>
+													{PROFILE_FIELD_DESCRIPTIONS.workImage.description}
+												</div>
+												<div className={styles.fieldHint}>
+													{PROFILE_FIELD_DESCRIPTIONS.workImage.hint}
+												</div>
+												<div className={styles.workPreview}>
+													{work.image_url ? (
+														<Image
+															src={work.image_url}
+															alt={`${artist.name || "Artist"} featured work`}
+															width={220}
+															height={220}
+															className={styles.workImage}
+														/>
+													) : (
+														<div className={styles.workPlaceholder}>
+															No work image uploaded
+														</div>
+													)}
+													<div className={styles.avatarControls}>
+														<input
+															type="file"
+															id={`work_upload_${index}`}
+															accept="image/png,image/jpeg,image/webp"
+															onChange={(e) => handleWorkImageUpload(index, e)}
+															disabled={workUploading || saving}
+															className={styles.formInput}
+														/>
+														<p className={styles.avatarHelpText}>
+															Optional. This image will show on your public
+															artist page.
+														</p>
 													</div>
-												)}
-												<div className={styles.avatarControls}>
-													<input
-														type="file"
-														id={`work_upload_${index}`}
-														accept="image/png,image/jpeg,image/webp"
-														onChange={(e) => handleWorkImageUpload(index, e)}
-														disabled={workUploading || saving}
-														className={styles.formInput}
-													/>
-													<p className={styles.avatarHelpText}>
-														Optional. This image will show on your public artist
-														page.
-													</p>
 												</div>
 											</div>
-										</div>
-										<div className={styles.formGroup}>
-											<label
-												className={styles.formLabel}
-												htmlFor={`work_title_${index}`}
+											<div className={styles.formGroup}>
+												<label
+													className={styles.formLabel}
+													htmlFor={`work_title_${index}`}
+												>
+													Work Title
+												</label>
+												<div className={styles.fieldDescription}>
+													{PROFILE_FIELD_DESCRIPTIONS.workTitle.description}
+												</div>
+												<div className={styles.fieldHint}>
+													{PROFILE_FIELD_DESCRIPTIONS.workTitle.hint}
+												</div>
+												<input
+													type="text"
+													id={`work_title_${index}`}
+													value={work.title}
+													onChange={(e) =>
+														handleWorkFieldChange(
+															index,
+															"title",
+															e.target.value,
+														)
+													}
+													className={styles.formInput}
+												/>
+											</div>
+											<div className={styles.formGroup}>
+												<label
+													className={styles.formLabel}
+													htmlFor={`work_medium_${index}`}
+												>
+													Medium
+												</label>
+												<div className={styles.fieldDescription}>
+													{PROFILE_FIELD_DESCRIPTIONS.workMedium.description}
+												</div>
+												<div className={styles.fieldHint}>
+													{PROFILE_FIELD_DESCRIPTIONS.workMedium.hint}
+												</div>
+												<input
+													type="text"
+													id={`work_medium_${index}`}
+													value={work.medium}
+													onChange={(e) =>
+														handleWorkFieldChange(
+															index,
+															"medium",
+															e.target.value,
+														)
+													}
+													className={styles.formInput}
+												/>
+											</div>
+											<div className={styles.formGroup}>
+												<label
+													className={styles.formLabel}
+													htmlFor={`work_link_${index}`}
+												>
+													Work Link
+												</label>
+												<div className={styles.fieldDescription}>
+													{PROFILE_FIELD_DESCRIPTIONS.workLink.description}
+												</div>
+												<div className={styles.fieldHint}>
+													{PROFILE_FIELD_DESCRIPTIONS.workLink.hint}
+												</div>
+												<input
+													type="url"
+													id={`work_link_${index}`}
+													value={work.link_url}
+													onChange={(e) =>
+														handleWorkFieldChange(
+															index,
+															"link_url",
+															e.target.value,
+														)
+													}
+													className={styles.formInput}
+												/>
+											</div>
+											<div
+												className={`${styles.formGroup} ${styles.fullWidth}`}
 											>
-												Work Title
-											</label>
-											<div className={styles.fieldDescription}>
-												{PROFILE_FIELD_DESCRIPTIONS.workTitle.description}
+												<label
+													className={styles.formLabel}
+													htmlFor={`work_description_${index}`}
+												>
+													Work Description
+												</label>
+												<div className={styles.fieldDescription}>
+													{
+														PROFILE_FIELD_DESCRIPTIONS.workDescription
+															.description
+													}
+												</div>
+												<div className={styles.fieldHint}>
+													{PROFILE_FIELD_DESCRIPTIONS.workDescription.hint}
+												</div>
+												<textarea
+													id={`work_description_${index}`}
+													value={work.description}
+													onChange={(e) =>
+														handleWorkFieldChange(
+															index,
+															"description",
+															e.target.value,
+														)
+													}
+													className={styles.formTextarea}
+													rows={4}
+												/>
 											</div>
-											<div className={styles.fieldHint}>
-												{PROFILE_FIELD_DESCRIPTIONS.workTitle.hint}
+											<div className={styles.buttonGroup}>
+												<button
+													type="button"
+													onClick={() => handleDeleteWork(index)}
+													className={`${styles.sectionButton} ${styles.deleteWorkButton}`}
+													disabled={saving || workUploading}
+												>
+													Delete Work
+												</button>
 											</div>
-											<input
-												type="text"
-												id={`work_title_${index}`}
-												value={work.title}
-												onChange={(e) =>
-													handleWorkFieldChange(index, "title", e.target.value)
-												}
-												className={styles.formInput}
-											/>
 										</div>
-										<div className={styles.formGroup}>
-											<label
-												className={styles.formLabel}
-												htmlFor={`work_medium_${index}`}
-											>
-												Medium
-											</label>
-											<div className={styles.fieldDescription}>
-												{PROFILE_FIELD_DESCRIPTIONS.workMedium.description}
-											</div>
-											<div className={styles.fieldHint}>
-												{PROFILE_FIELD_DESCRIPTIONS.workMedium.hint}
-											</div>
-											<input
-												type="text"
-												id={`work_medium_${index}`}
-												value={work.medium}
-												onChange={(e) =>
-													handleWorkFieldChange(index, "medium", e.target.value)
-												}
-												className={styles.formInput}
-											/>
-										</div>
-										<div className={styles.formGroup}>
-											<label
-												className={styles.formLabel}
-												htmlFor={`work_link_${index}`}
-											>
-												Work Link
-											</label>
-											<div className={styles.fieldDescription}>
-												{PROFILE_FIELD_DESCRIPTIONS.workLink.description}
-											</div>
-											<div className={styles.fieldHint}>
-												{PROFILE_FIELD_DESCRIPTIONS.workLink.hint}
-											</div>
-											<input
-												type="url"
-												id={`work_link_${index}`}
-												value={work.link_url}
-												onChange={(e) =>
-													handleWorkFieldChange(
-														index,
-														"link_url",
-														e.target.value,
-													)
-												}
-												className={styles.formInput}
-											/>
-										</div>
-										<div className={`${styles.formGroup} ${styles.fullWidth}`}>
-											<label
-												className={styles.formLabel}
-												htmlFor={`work_description_${index}`}
-											>
-												Work Description
-											</label>
-											<div className={styles.fieldDescription}>
-												{PROFILE_FIELD_DESCRIPTIONS.workDescription.description}
-											</div>
-											<div className={styles.fieldHint}>
-												{PROFILE_FIELD_DESCRIPTIONS.workDescription.hint}
-											</div>
-											<textarea
-												id={`work_description_${index}`}
-												value={work.description}
-												onChange={(e) =>
-													handleWorkFieldChange(
-														index,
-														"description",
-														e.target.value,
-													)
-												}
-												className={styles.formTextarea}
-												rows={4}
-											/>
-										</div>
-										<div className={styles.buttonGroup}>
-											<button
-												type="button"
-												onClick={() => handleDeleteWork(index)}
-												className={`${styles.sectionButton} ${styles.deleteWorkButton}`}
-												disabled={saving || workUploading}
-											>
-												Delete Work
-											</button>
-										</div>
-									</div>
-								))
-							)}
-						</div>
+									))
+								)}
+							</div>
+						)}
 
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Hot Takes</h2>
-							<div className={styles.fieldDescription}>
-								Answer a few quick prompts about your tastes. Only answered
-								prompts will be shown on your public profile.
-							</div>
-							<div className={styles.hotTakesList}>
-								{QUESTIONS.map((q, i) => {
-									const val = hotTakes[q.id];
-									const number = i + 1;
-									return (
-										<div key={q.id} className={styles.hotTakeRow}>
-											<p
-												className={styles.hotTakeText}
-											>{`${number}. ${q.text}`}</p>
-											<div className={styles.hotTakeControls}>
-												<button
-													type="button"
-													onClick={() =>
-														setHotTakes((prev) => ({ ...prev, [q.id]: true }))
-													}
-													className={`${styles.hotTakeButton} ${
-														val === true ? styles.hotTakeButtonAgree : ""
-													}`}
-												>
-													Agree
-												</button>
-												<button
-													type="button"
-													onClick={() =>
-														setHotTakes((prev) => ({ ...prev, [q.id]: false }))
-													}
-													className={`${styles.hotTakeButton} ${
-														val === false ? styles.hotTakeButtonDisagree : ""
-													}`}
-												>
-													Disagree
-												</button>
-												<button
-													type="button"
-													onClick={() => {
-														const copy = { ...hotTakes };
-														delete copy[q.id];
-														setHotTakes(copy);
-													}}
-													className={styles.removeBtn}
-												>
-													Remove
-												</button>
+						{activeTab === "hotTakes" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Hot Takes</h2>
+								<div className={styles.fieldDescription}>
+									Answer a few quick prompts about your tastes. Only answered
+									prompts will be shown on your public profile.
+								</div>
+								<div className={styles.hotTakesList}>
+									{QUESTIONS.map((q, i) => {
+										const val = hotTakes[q.id];
+										const number = i + 1;
+										return (
+											<div key={q.id} className={styles.hotTakeRow}>
+												<p
+													className={styles.hotTakeText}
+												>{`${number}. ${q.text}`}</p>
+												<div className={styles.hotTakeControls}>
+													<button
+														type="button"
+														onClick={() =>
+															setHotTakes((prev) => ({ ...prev, [q.id]: true }))
+														}
+														className={`${styles.hotTakeButton} ${
+															val === true ? styles.hotTakeButtonAgree : ""
+														}`}
+													>
+														Agree
+													</button>
+													<button
+														type="button"
+														onClick={() =>
+															setHotTakes((prev) => ({
+																...prev,
+																[q.id]: false,
+															}))
+														}
+														className={`${styles.hotTakeButton} ${
+															val === false ? styles.hotTakeButtonDisagree : ""
+														}`}
+													>
+														Disagree
+													</button>
+													<button
+														type="button"
+														onClick={() => {
+															const copy = { ...hotTakes };
+															delete copy[q.id];
+															setHotTakes(copy);
+														}}
+														className={styles.removeBtn}
+													>
+														Remove
+													</button>
+												</div>
 											</div>
-										</div>
-									);
-								})}
+										);
+									})}
+								</div>
 							</div>
-						</div>
+						)}
 
 						<div className={styles.buttonGroup}>
 							<button
@@ -1373,234 +1438,249 @@ export default function ArtistProfilePage() {
 					</>
 				) : (
 					<>
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Basic Information</h2>
-							<div className={styles.formGrid}>
-								<div className={styles.fullWidth}>
-									<div className={styles.avatarDisplayRow}>
-										<strong>Profile Picture:</strong>
-										{artist.avatar_url ? (
-											<Image
-												src={artist.avatar_url}
-												alt={`${artist.name || "Artist"} profile picture`}
-												width={120}
-												height={120}
-												className={styles.avatarImage}
-											/>
+						{activeTab === "basic" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Basic Information</h2>
+								<div className={styles.formGrid}>
+									<div className={styles.fullWidth}>
+										<div className={styles.avatarDisplayRow}>
+											<strong>Profile Picture:</strong>
+											{artist.avatar_url ? (
+												<Image
+													src={artist.avatar_url}
+													alt={`${artist.name || "Artist"} profile picture`}
+													width={120}
+													height={120}
+													className={styles.avatarImage}
+												/>
+											) : (
+												"Not set"
+											)}
+										</div>
+									</div>
+									<div>
+										<strong>Name:</strong> {artist.name}
+									</div>
+									<div>
+										<strong>Username:</strong> {artist.username}
+									</div>
+									<div>
+										<strong>Age:</strong>{" "}
+										{calculateAgeFromBirthDate(artist.birthday || "") ||
+											"Not set"}
+									</div>
+									<div>
+										<strong>Birth Date:</strong> {artist.birthday || "Not set"}
+									</div>
+									<div>
+										<strong>Based In:</strong> {artist.based_in || "Not set"}
+									</div>
+									<div>
+										<strong>Mediums:</strong> {artist.mediums || "Not set"}
+									</div>
+									<div>
+										<strong>Past Projects:</strong>{" "}
+										{artist.past_projects || "Not set"}
+									</div>
+									<div>
+										<strong>Ethnic Background:</strong>{" "}
+										{artist.ethnic_background || "Not set"}
+									</div>
+									<div>
+										<strong>Contact:</strong> {artist.contact || "Not set"}
+									</div>
+									<div>
+										<strong>Status:</strong> {artist.status || "Not set"}
+									</div>
+									<div>
+										<strong>Member Since:</strong>{" "}
+										{memberSinceYear || "Not set"}
+									</div>
+									<div className={styles.fullWidth}>
+										<strong>Bio:</strong> {artist.bio || "Not set"}
+									</div>
+								</div>
+							</div>
+						)}
+
+						{activeTab === "social" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Social Links</h2>
+								<div className={styles.formGrid}>
+									<div>
+										<strong>Instagram:</strong>{" "}
+										{artist.instagram ? (
+											<a
+												href={artist.instagram}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.instagram}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>YouTube:</strong>{" "}
+										{artist.youtube ? (
+											<a
+												href={artist.youtube}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.youtube}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>Patreon:</strong>{" "}
+										{artist.patreon ? (
+											<a
+												href={artist.patreon}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.patreon}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>Facebook:</strong>{" "}
+										{artist.facebook ? (
+											<a
+												href={artist.facebook}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.facebook}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>TikTok:</strong>{" "}
+										{artist.tik_tok ? (
+											<a
+												href={artist.tik_tok}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.tik_tok}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>Etsy:</strong>{" "}
+										{artist.etsy ? (
+											<a
+												href={artist.etsy}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.etsy}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>Personal Website:</strong>{" "}
+										{artist.personal_website ? (
+											<a
+												href={artist.personal_website}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.personal_website}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>SoundCloud:</strong>{" "}
+										{artist.soundcloud ? (
+											<a
+												href={artist.soundcloud}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.soundcloud}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>Bandcamp:</strong>{" "}
+										{artist.bandcamp ? (
+											<a
+												href={artist.bandcamp}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.bandcamp}
+											</a>
+										) : (
+											"Not set"
+										)}
+									</div>
+									<div>
+										<strong>Substack:</strong>{" "}
+										{artist.substack ? (
+											<a
+												href={artist.substack}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{artist.substack}
+											</a>
 										) : (
 											"Not set"
 										)}
 									</div>
 								</div>
-								<div>
-									<strong>Name:</strong> {artist.name}
-								</div>
-								<div>
-									<strong>Username:</strong> {artist.username}
-								</div>
-								<div>
-									<strong>Age:</strong>{" "}
-									{calculateAgeFromBirthDate(artist.birthday || "") ||
-										"Not set"}
-								</div>
-								<div>
-									<strong>Birth Date:</strong> {artist.birthday || "Not set"}
-								</div>
-								<div>
-									<strong>Based In:</strong> {artist.based_in || "Not set"}
-								</div>
-								<div>
-									<strong>Mediums:</strong> {artist.mediums || "Not set"}
-								</div>
-								<div>
-									<strong>Past Projects:</strong>{" "}
-									{artist.past_projects || "Not set"}
-								</div>
-								<div>
-									<strong>Ethnic Background:</strong>{" "}
-									{artist.ethnic_background || "Not set"}
-								</div>
-								<div>
-									<strong>Contact:</strong> {artist.contact || "Not set"}
-								</div>
-								<div>
-									<strong>Status:</strong> {artist.status || "Not set"}
-								</div>
-								<div>
-									<strong>Member Since:</strong> {memberSinceYear || "Not set"}
-								</div>
-								<div className={styles.fullWidth}>
-									<strong>Bio:</strong> {artist.bio || "Not set"}
-								</div>
 							</div>
-						</div>
+						)}
 
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Social Links</h2>
-							<div className={styles.formGrid}>
-								<div>
-									<strong>Instagram:</strong>{" "}
-									{artist.instagram ? (
-										<a
-											href={artist.instagram}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.instagram}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>YouTube:</strong>{" "}
-									{artist.youtube ? (
-										<a
-											href={artist.youtube}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.youtube}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Patreon:</strong>{" "}
-									{artist.patreon ? (
-										<a
-											href={artist.patreon}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.patreon}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Facebook:</strong>{" "}
-									{artist.facebook ? (
-										<a
-											href={artist.facebook}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.facebook}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>TikTok:</strong>{" "}
-									{artist.tik_tok ? (
-										<a
-											href={artist.tik_tok}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.tik_tok}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Etsy:</strong>{" "}
-									{artist.etsy ? (
-										<a
-											href={artist.etsy}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.etsy}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Personal Website:</strong>{" "}
-									{artist.personal_website ? (
-										<a
-											href={artist.personal_website}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.personal_website}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>SoundCloud:</strong>{" "}
-									{artist.soundcloud ? (
-										<a
-											href={artist.soundcloud}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.soundcloud}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Bandcamp:</strong>{" "}
-									{artist.bandcamp ? (
-										<a
-											href={artist.bandcamp}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.bandcamp}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-								<div>
-									<strong>Substack:</strong>{" "}
-									{artist.substack ? (
-										<a
-											href={artist.substack}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{artist.substack}
-										</a>
-									) : (
-										"Not set"
-									)}
-								</div>
-							</div>
-						</div>
+						{activeTab === "work" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Featured Work</h2>
+								{artistWorks.length > 0 ? (
+									artistWorks.map((work, index) => {
+										const workLinkUrl = normalizeExternalUrl(work.link_url);
 
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Featured Work</h2>
-							{artistWorks.length > 0 ? (
-								artistWorks.map((work, index) => {
-									const workLinkUrl = normalizeExternalUrl(work.link_url);
-
-									return (
-										<div
-											className={styles.workCard}
-											key={work.id ?? `work-${index}`}
-										>
-											<div className={styles.workMedia}>
-												{work.image_url ? (
-													workLinkUrl ? (
-														<a
-															href={workLinkUrl}
-															target="_blank"
-															rel="noopener noreferrer"
-															className={styles.workImageLink}
-														>
+										return (
+											<div
+												className={styles.workCard}
+												key={work.id ?? `work-${index}`}
+											>
+												<div className={styles.workMedia}>
+													{work.image_url ? (
+														workLinkUrl ? (
+															<a
+																href={workLinkUrl}
+																target="_blank"
+																rel="noopener noreferrer"
+																className={styles.workImageLink}
+															>
+																<Image
+																	src={work.image_url}
+																	alt={`${artist.name || "Artist"} featured work`}
+																	width={240}
+																	height={240}
+																	className={styles.workImage}
+																/>
+															</a>
+														) : (
 															<Image
 																src={work.image_url}
 																alt={`${artist.name || "Artist"} featured work`}
@@ -1608,79 +1688,74 @@ export default function ArtistProfilePage() {
 																height={240}
 																className={styles.workImage}
 															/>
-														</a>
+														)
 													) : (
-														<Image
-															src={work.image_url}
-															alt={`${artist.name || "Artist"} featured work`}
-															width={240}
-															height={240}
-															className={styles.workImage}
-														/>
-													)
-												) : (
-													<div className={styles.workPlaceholder}>
-														No work image set
-													</div>
-												)}
-											</div>
-											<div className={styles.workContent}>
-												<strong>Title:</strong> {work.title || "Not set"}
-												<div>
-													<strong>Medium:</strong> {work.medium || "Not set"}
-												</div>
-												<div>
-													<strong>Description:</strong>{" "}
-													{work.description || "Not set"}
-												</div>
-												<div>
-													<strong>Link:</strong>{" "}
-													{workLinkUrl ? (
-														<a
-															href={workLinkUrl}
-															target="_blank"
-															rel="noopener noreferrer"
-														>
-															{workLinkUrl}
-														</a>
-													) : (
-														"Not set"
+														<div className={styles.workPlaceholder}>
+															No work image set
+														</div>
 													)}
 												</div>
-											</div>
-										</div>
-									);
-								})
-							) : (
-								<p>No featured work added yet.</p>
-							)}
-						</div>
-
-						<div className={styles.profileSection}>
-							<h2 className={styles.sectionTitle}>Hot Takes</h2>
-							{artist.hot_takes && Object.keys(artist.hot_takes).length > 0 ? (
-								<div className={styles.hotTakesList}>
-									{QUESTIONS.filter(
-										(q) => artist.hot_takes && q.id in artist.hot_takes,
-									).map((q) => {
-										const idx = QUESTIONS.findIndex((qq) => qq.id === q.id);
-										const number = idx >= 0 ? idx + 1 : null;
-										return (
-											<div key={q.id} className={styles.hotTakeRow}>
-												<p className={styles.hotTakeText}>
-													{number ? `${number}. ${q.text}` : q.text}
-												</p>
-												<p className={styles.hotTakeResult}>
-													{artist.hot_takes?.[q.id] ? "Agree" : "Disagree"}
-												</p>
+												<div className={styles.workContent}>
+													<strong>Title:</strong> {work.title || "Not set"}
+													<div>
+														<strong>Medium:</strong> {work.medium || "Not set"}
+													</div>
+													<div>
+														<strong>Description:</strong>{" "}
+														{work.description || "Not set"}
+													</div>
+													<div>
+														<strong>Link:</strong>{" "}
+														{workLinkUrl ? (
+															<a
+																href={workLinkUrl}
+																target="_blank"
+																rel="noopener noreferrer"
+															>
+																{workLinkUrl}
+															</a>
+														) : (
+															"Not set"
+														)}
+													</div>
+												</div>
 											</div>
 										);
-									})}
-								</div>
-							) : (
-								<p>No hot takes answered yet.</p>
-							)}
-						</div>
+									})
+								) : (
+									<p>No featured work added yet.</p>
+								)}
+							</div>
+						)}
+
+						{activeTab === "hotTakes" && (
+							<div className={styles.profileSection}>
+								<h2 className={styles.sectionTitle}>Hot Takes</h2>
+								{artist.hot_takes &&
+								Object.keys(artist.hot_takes).length > 0 ? (
+									<div className={styles.hotTakesList}>
+										{QUESTIONS.filter(
+											(q) => artist.hot_takes && q.id in artist.hot_takes,
+										).map((q) => {
+											const idx = QUESTIONS.findIndex((qq) => qq.id === q.id);
+											const number = idx >= 0 ? idx + 1 : null;
+											return (
+												<div key={q.id} className={styles.hotTakeRow}>
+													<p className={styles.hotTakeText}>
+														{number ? `${number}. ${q.text}` : q.text}
+													</p>
+													<p className={styles.hotTakeResult}>
+														{artist.hot_takes?.[q.id] ? "Agree" : "Disagree"}
+													</p>
+												</div>
+											);
+										})}
+									</div>
+								) : (
+									<p>No hot takes answered yet.</p>
+								)}
+							</div>
+						)}
 
 						<div className={styles.buttonGroup}>
 							<Link

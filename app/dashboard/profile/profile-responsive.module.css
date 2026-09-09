@@ -62,4 +62,13 @@
 		display: inline;
 		max-width: 100%;
 	}
+
+	.tabList {
+		margin: 0 -16px;
+		padding: 0 16px;
+	}
+
+	.tabButton {
+		padding: 12px 10px;
+	}
 }

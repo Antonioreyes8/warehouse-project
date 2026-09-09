@@ -175,12 +175,13 @@ export async function getArtistByEmail(email: string): Promise<Artist | null> {
  */
 export async function isEmailAuthorized(email: string): Promise<boolean> {
 	// Allowlist gate helper
-	// Dashboard access depends on this query resolving to an allowed_users match.
+	// Dashboard access and public visibility depend on this resolving to an
+	// allowed_users match that is not suspended.
 	const normalizedEmail = email.trim().toLowerCase();
 
 	const { data, error } = await supabase
 		.from("allowed_users")
-		.select("email")
+		.select("email, account_status")
 		.ilike("email", normalizedEmail)
 		.maybeSingle();
 
@@ -189,7 +190,7 @@ export async function isEmailAuthorized(email: string): Promise<boolean> {
 		return false;
 	}
 
-	return !!data;
+	return !!data && data.account_status !== "suspended";
 }
 
 export async function getArtistWorksByProfileId(

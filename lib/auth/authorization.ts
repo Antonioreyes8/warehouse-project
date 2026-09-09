@@ -4,110 +4,103 @@
  *
  * Responsibilities:
  *   - Check if a Supabase authenticated user is allowed access
- *   - Query allowlist and authorization tables
- *   - Provide reusable auth guard function across app
+ *   - Query the allowlist table for authorization, role, and account status
+ *   - Provide reusable auth guards across the app (artist access, superadmin access)
  *
  * Key Concepts:
  *   - Separation of concerns (auth logic outside UI components)
  *   - Allowlist-based access control (manual admin approval system)
- *   - Multiple table fallback strategies for schema evolution
  *   - Supabase query error resilience
  *
  * How It Fits:
- *   - Used in protected pages like /dashboard/profile
+ *   - Used in protected pages like /dashboard/profile and /dashboard/admin
  *   - Replaces repeated isEmailAuthorized calls in components
  */
 
 import { supabase } from "../supabase/client";
-import type { User } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 
-/**
- * Strategy Pattern: Authorization Strategies
- * Each strategy implements a different approach to checking artist authorization
- */
-interface AuthorizationStrategy {
-	execute(email: string): Promise<boolean>;
-}
+export type UserRole = "admin" | "artist";
 
-class PrimaryTableStrategy implements AuthorizationStrategy {
-	async execute(email: string): Promise<boolean> {
-		const { data, error } = await supabase
-			.from("authorized_artists")
-			.select("email")
-			.ilike("email", email)
-			.maybeSingle();
+type AllowedUserRow = {
+	role: UserRole | null;
+	account_status: "active" | "suspended" | null;
+};
 
-		return !error && !!data;
-	}
-}
-
-class FallbackTableStrategy implements AuthorizationStrategy {
-	async execute(email: string): Promise<boolean> {
-		const { data, error } = await supabase
-			.from("authorized")
-			.select("email")
-			.ilike("email", email)
-			.maybeSingle();
-
-		return !error && !!data;
-	}
-}
-
-class LegacyTableStrategy implements AuthorizationStrategy {
-	async execute(email: string): Promise<boolean> {
-		const { data, error } = await supabase
+// allowed_users is the only allowlist table in the schema; kept as a single
+// lookup rather than multiple fallback strategies for tables that don't exist.
+// Accepts an explicit client so server-side callers (Route Handlers, server
+// components) can pass their cookie-bound server client instead of the
+// browser client, which relies on `document` and cannot run server-side.
+async function fetchAllowedUserRow(
+	email: string,
+	client: SupabaseClient = supabase,
+): Promise<AllowedUserRow | null> {
+	try {
+		const { data, error } = await client
 			.from("allowed_users")
-			.select("email")
+			.select("role, account_status")
 			.ilike("email", email)
 			.maybeSingle();
 
-		return !error && !!data;
-	}
-}
-
-/**
- * Authorization Service using Strategy Pattern
- * Tries multiple authorization strategies in order of preference
- */
-class AuthorizationService {
-	private strategies: AuthorizationStrategy[] = [
-		new PrimaryTableStrategy(),
-		new FallbackTableStrategy(),
-		new LegacyTableStrategy(),
-	];
-
-	async isAuthorized(user: User): Promise<boolean> {
-		if (!user?.email) return false;
-
-		const normalizedEmail = user.email.trim().toLowerCase();
-
-		// Try each strategy until one succeeds
-		for (const strategy of this.strategies) {
-			try {
-				const authorized = await strategy.execute(normalizedEmail);
-				if (authorized) return true;
-			} catch (error) {
-				// Log error but continue to next strategy
-				console.warn("Authorization strategy failed:", error);
-			}
+		if (error) {
+			console.warn("Authorization lookup failed:", error);
+			return null;
 		}
 
-		return false;
+		return data;
+	} catch (error) {
+		console.warn("Authorization lookup failed:", error);
+		return null;
 	}
 }
 
-// Singleton instance for the application
-const authorizationService = new AuthorizationService();
-
 /**
- * Checks whether a user is authorized as an artist.
- *
- * Uses Strategy Pattern with multiple fallback approaches for maximum compatibility
- * during database schema evolution.
- *
+ * Checks whether a user is authorized as an artist (allowlisted and active).
  * @param user - Supabase authenticated user
+ * @param client - Supabase client to query with (defaults to the browser client)
  * @returns true if authorized, false otherwise
  */
-export async function isArtistAuthorized(user: User): Promise<boolean> {
-	return authorizationService.isAuthorized(user);
+export async function isArtistAuthorized(
+	user: User,
+	client?: SupabaseClient,
+): Promise<boolean> {
+	if (!user?.email?.trim()) return false;
+
+	const row = await fetchAllowedUserRow(
+		user.email.trim().toLowerCase(),
+		client,
+	);
+	return !!row && row.account_status !== "suspended";
+}
+
+/**
+ * Returns the allowlisted user's role, or null if not allowlisted/suspended.
+ * @param user - Supabase authenticated user
+ * @param client - Supabase client to query with (defaults to the browser client)
+ */
+export async function getUserRole(
+	user: User,
+	client?: SupabaseClient,
+): Promise<UserRole | null> {
+	if (!user?.email?.trim()) return null;
+
+	const row = await fetchAllowedUserRow(
+		user.email.trim().toLowerCase(),
+		client,
+	);
+	if (!row || row.account_status === "suspended") return null;
+
+	return row.role ?? "artist";
+}
+
+/**
+ * Checks whether a user has superadmin access.
+ * @param user - Supabase authenticated user
+ */
+export async function isSuperAdmin(
+	user: User,
+	client?: SupabaseClient,
+): Promise<boolean> {
+	return (await getUserRole(user, client)) === "admin";
 }

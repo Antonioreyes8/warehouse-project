@@ -17,7 +17,7 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./callback.module.css";
 
 type CallbackState =
@@ -27,8 +27,15 @@ type CallbackState =
 export default function AuthCallbackPage() {
 	const router = useRouter();
 	const [state, setState] = useState<CallbackState>({ status: "loading" });
+	// React 19/Next.js dev runs effects twice (Strict Mode); a PKCE code can only
+	// be exchanged once, so guard against a duplicate run triggering a spurious
+	// "flow_state_already_used" error on the very first real attempt.
+	const hasRun = useRef(false);
 
 	useEffect(() => {
+		if (hasRun.current) return;
+		hasRun.current = true;
+
 		let active = true;
 
 		const finishSignIn = async () => {
@@ -48,12 +55,9 @@ export default function AuthCallbackPage() {
 				const code = url.searchParams.get("code");
 
 				if (code) {
-					// detectSessionInUrl:true (set in client.ts) may have already
-					// exchanged this code automatically before this effect ran.
-					// Attempting to exchange an already-used code throws a PKCE error
-					// even though the session is valid.  We intentionally ignore the
-					// exchange error here and rely on getSession() below to confirm
-					// whether the sign-in actually succeeded.
+					// detectSessionInUrl is off (see lib/supabase/client.ts), so this
+					// manual exchange is the only path that ever processes the code —
+					// a thrown error here is real and should surface below.
 					await supabase.auth.exchangeCodeForSession(code);
 				}
 
