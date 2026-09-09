@@ -69,12 +69,21 @@
 }
 
 .tabList {
-	display: flex;
-	gap: 4px;
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
-	scrollbar-width: none;
-	border-bottom: 1px solid #444;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-bottom: 1px solid #444;
+    background:
+        linear-gradient(to right, #2a2a2a, rgba(42, 42, 42, 0)) left,
+        linear-gradient(to left, #2a2a2a, rgba(42, 42, 42, 0)) right,
+        linear-gradient(to right, rgba(211, 211, 211, 0.35), rgba(211, 211, 211, 0)) left,
+        linear-gradient(to left, rgba(211, 211, 211, 0.35), rgba(211, 211, 211, 0)) right;
+    background-repeat: no-repeat;
+    background-color: #2a2a2a;
+    background-size: 24px 100%, 24px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
 }
 
 .tabList::-webkit-scrollbar {

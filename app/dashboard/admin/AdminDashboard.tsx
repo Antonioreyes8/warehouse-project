@@ -145,6 +145,7 @@ export default function AdminDashboard() {
 				<button type="submit">Invite</button>
 			</form>
 
+            <div className={styles.tableScroll}>
 			<table className={styles.accountsTable}>
 				<thead>
 					<tr>
@@ -224,5 +225,6 @@ export default function AdminDashboard() {
 				</tbody>
 			</table>
 		</div>
+        </div>
 	);
 }

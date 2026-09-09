@@ -57,9 +57,26 @@
 	background-color: #5a5a5a;
 }
 
+.tableScroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* CSS-only "scroll shadow": fades hide when content covers the edge, and
+       reveal when there's more to scroll — a visual cue without needing JS. */
+    background:
+        linear-gradient(to right, #1c1c1c, rgba(28, 28, 28, 0)) left,
+        linear-gradient(to left, #1c1c1c, rgba(28, 28, 28, 0)) right,
+        linear-gradient(to right, rgba(211, 211, 211, 0.35), rgba(211, 211, 211, 0)) left,
+        linear-gradient(to left, rgba(211, 211, 211, 0.35), rgba(211, 211, 211, 0)) right;
+    background-repeat: no-repeat;
+    background-color: #1c1c1c;
+    background-size: 24px 100%, 24px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
+}
+
 .accountsTable {
-	width: 100%;
-	border-collapse: collapse;
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
 }
 
 .accountsTable th,
