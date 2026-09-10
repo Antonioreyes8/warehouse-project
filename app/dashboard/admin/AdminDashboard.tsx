@@ -142,7 +142,7 @@ export default function AdminDashboard() {
 					<option value="artist">Artist</option>
 					<option value="admin">Admin</option>
 				</select>
-				<button type="submit">Invite</button>
+				<button type="submit">Give access</button>
 			</form>
 
             <p className={styles.scrollHint}>Swipe to see more →</p>
