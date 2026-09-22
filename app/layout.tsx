@@ -71,6 +71,8 @@ export default function RootLayout({
 						gtag('config', 'G-6P7ELV8Z82');
 					`}
 				</Script>
+
+				<link rel="icon" href="/icon.svg" type="image/svg+xml" />
 			</head>
 
 			<body>

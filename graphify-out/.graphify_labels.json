@@ -1,0 +1,22 @@
+{
+  "0": "profile/page.tsx",
+  "1": "The Diaspora Project",
+  "2": "projects/queries.ts",
+  "3": "admin/mutations.ts",
+  "4": "package.json",
+  "5": "Functional Requirements",
+  "6": "maxHeap.ts",
+  "7": "aboutSection.tsx",
+  "8": "layout.tsx",
+  "9": "Artist Authentication Setup Guide",
+  "10": "scripts",
+  "11": "compilerOptions",
+  "12": "devDependencies",
+  "13": "dependencies",
+  "14": "financialSection.tsx",
+  "15": "faqSection.tsx",
+  "16": "next.config.ts",
+  "17": "guidelinesSection.tsx",
+  "18": "eslint.config.mjs",
+  "19": "postcss.config.mjs"
+}
