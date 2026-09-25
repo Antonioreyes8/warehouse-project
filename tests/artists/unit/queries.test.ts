@@ -34,7 +34,11 @@ import {
 	updateArtistProfile,
 	deleteArtistProfile,
 } from "@/lib/artists/mutations";
-import { isArtistAuthorized } from "@/lib/auth/authorization";
+import {
+	getUserRole,
+	isArtistAuthorized,
+	isSuperAdmin,
+} from "@/lib/auth/authorization";
 
 beforeEach(() => {
 	resetSupabaseMocks();
@@ -71,6 +75,32 @@ describe("API White-Box: queries.ts behavior", () => {
 		mockMaybeSingle.mockResolvedValueOnce({ data: null, error: null });
 		await isEmailAuthorized("f2arc.8@gmail.com");
 		expect(mockFrom).toHaveBeenCalledWith("allowed_users");
+	});
+
+	it("returns null when profile lookups fail", async () => {
+		mockMaybeSingle
+			.mockResolvedValueOnce({ data: null, error: { message: "query failed" } })
+			.mockResolvedValueOnce({ data: null, error: { message: "query failed" } })
+			.mockResolvedValueOnce({
+				data: null,
+				error: { message: "query failed" },
+			});
+
+		await expect(getArtistByUsername("artist")).resolves.toBeNull();
+		await expect(getArtistByUserId("uid-1")).resolves.toBeNull();
+		await expect(getArtistByEmail("artist@example.com")).resolves.toBeNull();
+	});
+
+	it("rejects email authorization when the database errors or account is suspended", async () => {
+		mockMaybeSingle
+			.mockResolvedValueOnce({ data: null, error: { message: "query failed" } })
+			.mockResolvedValueOnce({
+				data: { email: "artist@example.com", account_status: "suspended" },
+				error: null,
+			});
+
+		await expect(isEmailAuthorized("artist@example.com")).resolves.toBe(false);
+		await expect(isEmailAuthorized("artist@example.com")).resolves.toBe(false);
 	});
 });
 
@@ -118,5 +148,38 @@ describe("API White-Box: authorization.ts table order", () => {
 
 		expect(mockFrom).toHaveBeenNthCalledWith(1, "allowed_users");
 		expect(result).toBe(false);
+	});
+
+	it("defaults an active allowlisted user with no role to artist", async () => {
+		mockMaybeSingle.mockResolvedValueOnce({
+			data: { role: null, account_status: "active" },
+			error: null,
+		});
+
+		await expect(
+			getUserRole({
+				id: "uid-1",
+				email: " Artist@Example.com ",
+			} as unknown as User),
+		).resolves.toBe("artist");
+		expect(mockIlike).toHaveBeenCalledWith("email", "artist@example.com");
+	});
+
+	it("recognizes admins and rejects artists as superadmins", async () => {
+		mockMaybeSingle
+			.mockResolvedValueOnce({
+				data: { role: "admin", account_status: "active" },
+				error: null,
+			})
+			.mockResolvedValueOnce({
+				data: { role: "artist", account_status: "active" },
+				error: null,
+			});
+
+		const admin = { id: "admin-1", email: "admin@example.com" } as User;
+		const artist = { id: "artist-1", email: "artist@example.com" } as User;
+
+		await expect(isSuperAdmin(admin)).resolves.toBe(true);
+		await expect(isSuperAdmin(artist)).resolves.toBe(false);
 	});
 });
