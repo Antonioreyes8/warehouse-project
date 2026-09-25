@@ -1,5 +1,10 @@
 /**
  * File: app/artists/[slug]/page.tsx
+ * Purpose: Load and compose a public artist page from its username route segment.
+ * Key Decisions:
+ *   - Resolve route params before querying because App Router params may be asynchronous.
+ *   - Return a deliberate setup-pending state for missing profiles instead of treating every absence as a 404.
+ *   - Hide work rows with no meaningful image, title, or description so empty records do not create blank cards.
  */
 
 import AboutSection from "../aboutSection";

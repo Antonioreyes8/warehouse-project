@@ -1,5 +1,10 @@
 /**
  * File: app/projects/collaboratorsSection.tsx
+ * Purpose: Render collaborator links grouped under their project roles.
+ * Key Decisions:
+ *   - Normalize optional source fields before rendering so incomplete project rows still produce safe labels and links.
+ *   - Use a fixed role order for predictable scanning, then alphabetize names within each role.
+ *   - Use Next Link for internal artist routes so navigation stays inside the app.
  */
 
 import styles from "./project.module.css";

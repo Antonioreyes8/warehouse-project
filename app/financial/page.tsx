@@ -1,5 +1,8 @@
 /**
- * File: app/financials/page.tsx
+ * File: app/financial/page.tsx
+ * Purpose: Define the financial-information route and its document metadata.
+ * Key Decision: Keep route metadata in this server page while delegating the
+ * browser-sized chart to the client component in financialSection.tsx.
  */
 
 import FinancialSection from "./financialSection";

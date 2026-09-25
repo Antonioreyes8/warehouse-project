@@ -90,6 +90,39 @@ scoped to avoid accidental cross-page style collisions.
   quiz-result, and link-hub views each have nearby style files. Global reset,
   typography, and shared design tokens belong in `app/globals.css`.
 
+Complete stylesheet index (the route/component paragraphs above explain their
+roles):
+
+- Global and shared: `app/globals.css`, `app/components/header.module.css`,
+  `app/components/footer.module.css`.
+- Home: `app/home/home.module.css`, `app/home/home-hero.module.css`,
+  `app/home/home-projects.module.css`.
+- Artists: `app/artists/about-section.module.css`,
+  `app/artists/artist-bio.module.css`, `app/artists/artist-header.module.css`,
+  `app/artists/artist-hot-takes.module.css`,
+  `app/artists/artist-info.module.css`, `app/artists/empty-state.module.css`,
+  `app/artists/page-layout.module.css`, `app/artists/works-section.module.css`.
+- Projects: `app/projects/project-layout.module.css`,
+  `app/projects/project-sections.module.css`, `app/projects/project.module.css`.
+- Profile dashboard: `app/dashboard/profile/profile.module.css`,
+  `app/dashboard/profile/profile-buttons.module.css`,
+  `app/dashboard/profile/profile-form.module.css`,
+  `app/dashboard/profile/profile-responsive.module.css`,
+  `app/dashboard/profile/profile-shell.module.css`,
+  `app/dashboard/profile/profile-states.module.css`.
+- Other views: `app/dashboard/admin/admin.module.css`,
+  `app/login/login.module.css`, `app/auth/callback/callback.module.css`,
+  `app/manifesto/manifesto.module.css`,
+  `app/guidelines/guidelines.module.css`, `app/FAQ/faq.module.css`,
+  `app/financial/financials.css`, `app/discovery/quiz/quiz.module.css`,
+  `app/discovery/quiz/result/result.module.css`,
+  `app/linktree/linktree.module.css`, `app/linktree/linktree-links.module.css`,
+  `app/linktree/linktree-layout.module.css`.
+
+Most are CSS Modules imported by a nearby component. The financial stylesheet
+and project base stylesheet use ordinary class names; check their imports
+before treating them as scoped CSS Modules.
+
 ## API Routes
 
 | Endpoint | Methods | Responsibilities |

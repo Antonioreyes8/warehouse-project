@@ -1,5 +1,10 @@
 /**
- * File: app/financials/financialSection.tsx
+ * File: app/financial/financialSection.tsx
+ * Purpose: Present the project's published funding allocation and explanation.
+ * Key Decisions:
+ *   - Use a client component because Recharts' responsive chart reads browser layout.
+ *   - Keep the chart data local because this view presents a fixed public model, not live accounting records.
+ *   - Pair text with the chart so each percentage remains understandable without relying on color alone.
  */
 
 "use client";
