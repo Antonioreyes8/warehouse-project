@@ -14,7 +14,7 @@
  */
 
 import "server-only";
-import { supabaseAdmin } from "../supabase/admin";
+import { getSupabaseAdmin } from "../supabase/admin";
 
 export type AccountRole = "admin" | "artist";
 export type AccountStatus = "active" | "suspended";
@@ -43,6 +43,7 @@ export type AuditLogEntry = {
  * Lists every allowlisted account, joined with its public profile username if one exists.
  */
 export async function listAccounts(): Promise<AdminAccountRow[]> {
+	const supabaseAdmin = getSupabaseAdmin();
 	const { data: allowedUsers, error: allowedUsersError } = await supabaseAdmin
 		.from("allowed_users")
 		.select("email, role, account_status, invited_by, invited_at")
@@ -81,6 +82,7 @@ export async function listAccounts(): Promise<AdminAccountRow[]> {
  * Fetches recent admin audit log entries, most recent first.
  */
 export async function getAuditLog(limit = 100): Promise<AuditLogEntry[]> {
+	const supabaseAdmin = getSupabaseAdmin();
 	const { data, error } = await supabaseAdmin
 		.from("admin_audit_log")
 		.select("id, created_at, actor_email, action, target_email, details")

@@ -42,7 +42,7 @@ function resetAdminMocks() {
 }
 
 vi.mock("@/lib/supabase/admin", () => ({
-	supabaseAdmin: { from: mockFrom },
+	getSupabaseAdmin: () => ({ from: mockFrom }),
 }));
 
 import {

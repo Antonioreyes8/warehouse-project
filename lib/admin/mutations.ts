@@ -16,7 +16,7 @@
  */
 
 import "server-only";
-import { supabaseAdmin } from "../supabase/admin";
+import { getSupabaseAdmin } from "../supabase/admin";
 import type { AccountRole, AccountStatus } from "./queries";
 
 export type MutationResult = { success: boolean; error?: string };
@@ -27,6 +27,7 @@ async function logAction(
 	targetEmail: string,
 	details?: Record<string, unknown>,
 ): Promise<void> {
+	const supabaseAdmin = getSupabaseAdmin();
 	const { error } = await supabaseAdmin.from("admin_audit_log").insert({
 		actor_email: actorEmail,
 		action,
@@ -47,6 +48,7 @@ export async function inviteCollaborator(
 		role?: AccountRole;
 	},
 ): Promise<MutationResult> {
+	const supabaseAdmin = getSupabaseAdmin();
 	const normalizedEmail = input.email.trim().toLowerCase();
 	if (!normalizedEmail) {
 		return { success: false, error: "Email is required" };
@@ -74,6 +76,7 @@ export async function setAccountStatus(
 	targetEmail: string,
 	status: AccountStatus,
 ): Promise<MutationResult> {
+	const supabaseAdmin = getSupabaseAdmin();
 	const normalizedEmail = targetEmail.trim().toLowerCase();
 
 	const { error } = await supabaseAdmin
@@ -99,6 +102,7 @@ export async function changeRole(
 	targetEmail: string,
 	role: AccountRole,
 ): Promise<MutationResult> {
+	const supabaseAdmin = getSupabaseAdmin();
 	const normalizedEmail = targetEmail.trim().toLowerCase();
 
 	// Guard against demoting the last remaining admin.
@@ -142,6 +146,7 @@ export async function revokeAccess(
 	actorEmail: string,
 	targetEmail: string,
 ): Promise<MutationResult> {
+	const supabaseAdmin = getSupabaseAdmin();
 	const normalizedEmail = targetEmail.trim().toLowerCase();
 
 	const { error } = await supabaseAdmin
