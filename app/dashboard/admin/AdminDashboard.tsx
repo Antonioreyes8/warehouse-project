@@ -43,7 +43,9 @@ export default function AdminDashboard() {
 		try {
 			setAccounts(await fetchAccounts());
 		} catch (error) {
-			setError(error instanceof Error ? error.message : "Failed to load accounts");
+			setError(
+				error instanceof Error ? error.message : "Failed to load accounts",
+			);
 		}
 	}
 
@@ -166,87 +168,87 @@ export default function AdminDashboard() {
 				<button type="submit">Give access</button>
 			</form>
 
-            <p className={styles.scrollHint}>Swipe to see more →</p>
-            <div className={styles.tableScroll}>
-			<table className={styles.accountsTable}>
-				<thead>
-					<tr>
-						<th>Email</th>
-						<th>Name</th>
-						<th>Profile</th>
-						<th>Role</th>
-						<th>Status</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{accounts.map((account) => (
-						<tr key={account.email}>
-							<td>{account.email}</td>
-							<td>{account.profile_name || "—"}</td>
-							<td>
-								{account.profile_username ? (
-									<Link href={`/artists/${account.profile_username}`}>
-										{account.profile_username}
-									</Link>
-								) : (
-									"—"
-								)}
-							</td>
-							<td>{account.role}</td>
-							<td
-								className={
-									account.account_status === "suspended"
-										? styles.statusSuspended
-										: styles.statusActive
-								}
-							>
-								{account.account_status}
-							</td>
-							<td>
-								{account.account_status === "active" ? (
+			<p className={styles.scrollHint}>Swipe to see more →</p>
+			<div className={styles.tableScroll}>
+				<table className={styles.accountsTable}>
+					<thead>
+						<tr>
+							<th>Email</th>
+							<th>Name</th>
+							<th>Profile</th>
+							<th>Role</th>
+							<th>Status</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{accounts.map((account) => (
+							<tr key={account.email}>
+								<td>{account.email}</td>
+								<td>{account.profile_name || "—"}</td>
+								<td>
+									{account.profile_username ? (
+										<Link href={`/artists/${account.profile_username}`}>
+											{account.profile_username}
+										</Link>
+									) : (
+										"—"
+									)}
+								</td>
+								<td>{account.role}</td>
+								<td
+									className={
+										account.account_status === "suspended"
+											? styles.statusSuspended
+											: styles.statusActive
+									}
+								>
+									{account.account_status}
+								</td>
+								<td>
+									{account.account_status === "active" ? (
+										<button
+											className={styles.actionButton}
+											onClick={() =>
+												patchAccount(account.email, {
+													accountStatus: "suspended",
+												})
+											}
+										>
+											Suspend
+										</button>
+									) : (
+										<button
+											className={styles.actionButton}
+											onClick={() =>
+												patchAccount(account.email, { accountStatus: "active" })
+											}
+										>
+											Reinstate
+										</button>
+									)}
 									<button
 										className={styles.actionButton}
 										onClick={() =>
 											patchAccount(account.email, {
-												accountStatus: "suspended",
+												role: account.role === "admin" ? "artist" : "admin",
 											})
 										}
 									>
-										Suspend
+										{account.role === "admin" ? "Demote" : "Make admin"}
 									</button>
-								) : (
 									<button
-										className={styles.actionButton}
-										onClick={() =>
-											patchAccount(account.email, { accountStatus: "active" })
-										}
+										className={`${styles.actionButton} ${styles.revokeButton}`}
+										onClick={() => handleRevoke(account.email)}
 									>
-										Reinstate
+										Revoke
 									</button>
-								)}
-								<button
-									className={styles.actionButton}
-									onClick={() =>
-										patchAccount(account.email, {
-											role: account.role === "admin" ? "artist" : "admin",
-										})
-									}
-								>
-									{account.role === "admin" ? "Demote" : "Make admin"}
-								</button>
-								<button
-									className={`${styles.actionButton} ${styles.revokeButton}`}
-									onClick={() => handleRevoke(account.email)}
-								>
-									Revoke
-								</button>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</div>
-        </div>
 	);
 }

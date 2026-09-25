@@ -119,7 +119,7 @@ export default function LoginPage() {
 					>
 						{message}
 					</p>
-					) : (
+				) : (
 					<Suspense fallback={null}>
 						<OAuthErrorMessage />
 					</Suspense>
@@ -131,13 +131,10 @@ export default function LoginPage() {
 
 function OAuthErrorMessage() {
 	const searchParams = useSearchParams();
-	const oauthError = searchParams.get("error_description") ?? searchParams.get("error");
+	const oauthError =
+		searchParams.get("error_description") ?? searchParams.get("error");
 	if (!oauthError) return null;
 
 	const message = `Error signing in: ${oauthError}`;
-	return (
-		<p className={`${styles.loginMessage} ${styles.error}`}>
-			{message}
-		</p>
-	);
+	return <p className={`${styles.loginMessage} ${styles.error}`}>{message}</p>;
 }
