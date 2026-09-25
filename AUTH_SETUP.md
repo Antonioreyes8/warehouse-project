@@ -1,146 +1,81 @@
-# Artist Authentication Setup Guide
+# Artist Authentication Setup
 
-This guide walks you through setting up Google OAuth authentication for artists in your Supabase-powered Next.js app.
+This guide describes the authentication flow implemented in this repository and the Supabase configuration it depends on. The repository does not include SQL migrations or database setup scripts, so provision and verify the schema and policies separately.
 
 ## Prerequisites
 
-- Supabase project created
-- Next.js app with the authentication code implemented
-- Artist profiles table exists in Supabase
+- A Supabase project.
+- A Google OAuth client configured as a web application.
+- A deployed or local copy of this Next.js application.
+- The database tables and policies described under [Database prerequisites](#database-prerequisites).
 
-## Step 1: Set Up Google OAuth in Supabase
+## 1. Configure Google OAuth
 
-### 1.1 Create Google OAuth Credentials
+1. In Google Cloud Console, create OAuth credentials for a web application.
+2. Set the authorized redirect URI to Supabase's provider callback:
+   `https://<project-ref>.supabase.co/auth/v1/callback`.
+3. In Supabase Dashboard, open **Authentication > Providers > Google**, enable
+   Google, and enter the Google client ID and secret.
+4. In Supabase **Authentication > URL Configuration**, set the Site URL to the
+   application origin and add each permitted application callback URL, such as
+   `http://localhost:3000/auth/callback` and
+   `https://your-domain.example/auth/callback`.
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing
-3. Enable the Google+ API:
-   - Go to "APIs & Services" > "Library"
-   - Search for "Google+ API" and enable it
-4. Create OAuth 2.0 credentials:
-   - Go to "APIs & Services" > "Credentials"
-   - Click "Create Credentials" > "OAuth 2.0 Client IDs"
-   - Choose "Web application"
-   - Add authorized redirect URIs:
-     - `https://your-project.supabase.co/auth/v1/callback`
-   - Copy the Client ID and Client Secret
+The Google redirect URI is the Supabase callback. The application redirect URI is `/auth/callback`; they are different hops in the OAuth flow.
 
-### 1.2 Configure Supabase Auth
+## 2. Configure Environment Variables
 
-1. Go to your [Supabase Dashboard](https://supabase.com/dashboard)
-2. Select your project
-3. Navigate to **Authentication > Providers**
-4. Find **Google** and click to enable it
-5. Enter the Client ID and Client Secret from step 1.1
-6. Click "Save"
+Create `.env.local` in the project root. There is no `.env.example` file in this repository.
 
-## Step 2: Set Up Database Tables and Policies
-
-### 2.1 Run Database Setup SQL
-
-1. In your Supabase Dashboard, go to **SQL Editor**
-2. Copy and paste the contents of `database-setup.sql`
-3. Run the SQL commands
-
-This will:
-
-- Enable Row Level Security on the profiles table
-- Create the authorized_artists table
-- Set up RLS policies for secure access
-
-### 2.2 Add Authorized Artist Emails
-
-For each artist you want to grant access:
-
-```sql
-INSERT INTO authorized_artists (email) VALUES ('artist1@gmail.com');
-INSERT INTO authorized_artists (email) VALUES ('artist2@gmail.com');
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 ```
 
-## Step 3: Create Artist Profiles
+The first two values are used by the browser and server Supabase clients. The service-role key is used only for administrator data operations. Keep it server-side, do not prefix it with `NEXT_PUBLIC_`, and do not commit it. CI builds with placeholder public values and does not require the service-role key until an admin operation is invoked.
 
-For each authorized artist, you need to create their profile manually:
+## 3. Database Prerequisites
 
-### 3.1 Get the User's Auth ID
+The application references these resources:
 
-1. Have the artist sign in once (they'll see an error about profile not found)
-2. In Supabase Dashboard, go to **Authentication > Users**
-3. Find the user's email and copy their UUID (id column)
+- `allowed_users`: email, role, account status, and invitation metadata used for artist/admin authorization.
+- `profiles`: public artist profile fields.
+- `artist_works`: portfolio work rows associated with a profile.
+- `admin_audit_log`: audit entries attempted by privileged admin mutations.
+- `projects`: project data shown on home and project pages.
 
-### 3.2 Create the Profile
+These tables, their columns, constraints, and indexes are not created by this repository. Confirm them in the target Supabase project before using the app. Enable and test Row Level Security for all browser-accessible data, and configure Storage policies for uploads. Client-side checks are not a security boundary.
 
-In SQL Editor, run:
+To grant access, add an active row to `allowed_users` for the artist email. To bootstrap an administrator, ensure the first administrator's row has `role = 'admin'`. The admin feature also requires `SUPABASE_SERVICE_ROLE_KEY` in the server deployment.
 
-```sql
-INSERT INTO profiles (id, email, name, username, is_artist)
-VALUES (
-    'paste-user-uuid-here',
-    'artist@gmail.com',
-    'Artist Name',
-    'artist_username',
-    true
-);
-```
+An artist profile may need to be provisioned separately before the artist can edit it. The dashboard currently finds profiles by email. The repository has a known historical mismatch between `profiles.id` and the Supabase Auth UUID, so do not assume they can be joined directly without checking the deployed schema.
 
-## Step 4: Configure Environment Variables
+## 4. Authentication Flow
 
-Make sure your `.env.local` file has:
+1. The artist chooses Google sign-in on `/login`.
+2. The browser Supabase client starts OAuth and uses `/auth/callback` as the application redirect.
+3. The callback exchanges the PKCE authorization code for a session.
+4. The user is redirected to `/dashboard/profile` after successful session setup.
+5. Artist authorization checks the signed-in email against an active `allowed_users` row.
+6. The profile dashboard loads profile and work records and submits edits through the data helpers.
 
-```
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+`middleware.ts` refreshes auth cookies for requests. Admin page/API handlers also check the current session and admin role server-side. The artist profile dashboard includes client-side access checks; production data security must therefore be enforced by database and Storage policies as well.
 
-## Step 5: Test the Authentication Flow
+Suspension is an application allowlist state: it blocks authorization checks that consult `allowed_users`, but does not disable the Supabase Auth account and does not hide public artist pages.
 
-1. Start your development server: `npm run dev`
-2. Go to `/login`
-3. Sign in with an authorized Google account
-4. You should be redirected to `/dashboard/profile`
-5. You should see your profile and be able to edit it
-6. Changes should save to the database
+## 5. Verify the Setup
 
-## Step 6: Set Up Production Redirect URLs
-
-When deploying to production:
-
-1. In Supabase Auth settings, add production redirect URLs:
-   - `https://yourdomain.com/dashboard/profile`
-2. Update Google OAuth credentials with production domain if needed
+1. Start the app with `npm run dev`.
+2. Open `/login` and complete Google sign-in with an email present in `allowed_users`.
+3. Confirm the callback returns to `/dashboard/profile` and that the profile row can be loaded.
+4. Test profile edits and uploads against the configured RLS and Storage policies.
+5. For admin setup, confirm `/dashboard/admin` is reachable only by an active administrator and verify each admin API rejects a non-admin.
 
 ## Troubleshooting
 
-### "Email not authorized"
-
-- Check that the email is in the `authorized_artists` table
-- Verify the email matches exactly (case-sensitive)
-
-### "Profile not found"
-
-- Ensure the profile exists in the `profiles` table
-- Prefer setting `profiles.id` to `auth.users.id` for clean ownership policies
-- If your setup links by email, ensure `profiles.email` matches the signed-in Google email
-
-### OAuth redirect issues
-
-- Check that redirect URLs are correctly set in both Google Cloud Console and Supabase
-- Ensure the URLs match your domain exactly
-
-### Can't save changes
-
-- Verify RLS policies are applied correctly
-- Check that the user owns the profile (id matches auth.uid())
-
-## Security Notes
-
-- Only authorized emails can sign in
-- Users can only edit their own profiles
-- Public profile viewing is allowed for all users
-- All database operations go through RLS policies
-
-## Next Steps
-
-- Consider adding profile pictures upload
-- Add email notifications for profile updates
-- Create an admin interface for managing authorized artists
-- Add audit logging for profile changes
+- **OAuth returns to the wrong page:** Check Supabase Site URL and Redirect URLs. The application callback is `/auth/callback`; ensure it is allowlisted for the correct origin.
+- **Access denied after sign-in:** Confirm the authenticated email has an active `allowed_users` row. The app normalizes email case and whitespace for lookup.
+- **Profile not found:** Confirm a `profiles` row exists for the signed-in email. The dashboard read currently uses email lookup.
+- **Admin page/API unavailable:** Confirm the user has `role = 'admin'` and the server environment contains the correct `SUPABASE_SERVICE_ROLE_KEY` and project URL.
+- **Database or upload permission errors:** Verify the deployed RLS policies, table schema, Storage bucket names, and Storage policies. Those are not installed by this repository.
