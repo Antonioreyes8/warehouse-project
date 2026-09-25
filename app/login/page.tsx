@@ -16,8 +16,8 @@
 "use client";
 
 import { supabase } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import styles from "./login.module.css";
@@ -26,18 +26,6 @@ export default function LoginPage() {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState("");
-
-	useEffect(() => {
-		// Surfaces OAuth errors forwarded here (from the callback page, or from
-		// app/layout.tsx's safety-net redirect when Supabase's Site URL sends an
-		// error to the wrong page).
-		const params = new URLSearchParams(window.location.search);
-		const oauthError = params.get("error_description") ?? params.get("error");
-		if (oauthError) {
-			setMessage("Error signing in: " + oauthError.replace(/\+/g, " "));
-			router.replace("/login");
-		}
-	}, [router]);
 
 	useEffect(() => {
 		// Session pre-check section
@@ -70,6 +58,11 @@ export default function LoginPage() {
 	}, [router]);
 
 	const handleGoogleSignIn = async () => {
+		const params = new URLSearchParams(window.location.search);
+		if (params.has("error") || params.has("error_description")) {
+			window.history.replaceState(null, "", window.location.pathname);
+		}
+
 		// Submit lifecycle section
 		// Reset message, lock button, and start OAuth flow.
 		setLoading(true);
@@ -120,14 +113,31 @@ export default function LoginPage() {
 					<FontAwesomeIcon icon={faGoogle} style={{ marginRight: "8px" }} />
 					{loading ? "Signing in..." : "Sign in with Google"}
 				</button>
-				{message && (
+				{message ? (
 					<p
 						className={`${styles.loginMessage} ${message.includes("Error") ? styles.error : styles.success}`}
 					>
 						{message}
 					</p>
+					) : (
+					<Suspense fallback={null}>
+						<OAuthErrorMessage />
+					</Suspense>
 				)}
 			</div>
 		</div>
+	);
+}
+
+function OAuthErrorMessage() {
+	const searchParams = useSearchParams();
+	const oauthError = searchParams.get("error_description") ?? searchParams.get("error");
+	if (!oauthError) return null;
+
+	const message = `Error signing in: ${oauthError}`;
+	return (
+		<p className={`${styles.loginMessage} ${styles.error}`}>
+			{message}
+		</p>
 	);
 }

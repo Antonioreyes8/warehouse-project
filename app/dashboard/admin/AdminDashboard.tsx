@@ -40,18 +40,39 @@ export default function AdminDashboard() {
 	const [inviteRole, setInviteRole] = useState<AccountRole>("artist");
 
 	async function loadAccounts() {
-		const res = await fetch("/api/admin/accounts");
-		if (!res.ok) {
-			const data = await res.json().catch(() => null);
-			setError(data?.error ?? "Failed to load accounts");
-			return;
+		try {
+			setAccounts(await fetchAccounts());
+		} catch (error) {
+			setError(error instanceof Error ? error.message : "Failed to load accounts");
 		}
-		const data = await res.json();
-		setAccounts(data.accounts ?? []);
+	}
+
+	async function fetchAccounts(): Promise<AdminAccountRow[]> {
+		const res = await fetch("/api/admin/accounts");
+		const data = await res.json().catch(() => null);
+		if (!res.ok) {
+			throw new Error(data?.error ?? "Failed to load accounts");
+		}
+		return data.accounts ?? [];
 	}
 
 	useEffect(() => {
-		loadAccounts();
+		let isActive = true;
+		fetchAccounts().then(
+			(nextAccounts) => {
+				if (isActive) setAccounts(nextAccounts);
+			},
+			(error: unknown) => {
+				if (isActive) {
+					setError(
+						error instanceof Error ? error.message : "Failed to load accounts",
+					);
+				}
+			},
+		);
+		return () => {
+			isActive = false;
+		};
 	}, []);
 
 	async function handleInvite(event: React.FormEvent) {
