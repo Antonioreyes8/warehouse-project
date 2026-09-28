@@ -30,67 +30,67 @@ This repository does not contain database migrations or SQL setup scripts. Datab
 
 ## 3. Users and Core Outcomes
 
-| User | Desired outcome |
-|---|---|
-| Visitor | Browse artists and projects, read informational pages, and use the discovery quiz without an account. |
-| Approved artist | Sign in, view/edit their profile, manage featured work, and upload profile/work media. |
-| Administrator | Review allowlisted accounts, grant/revoke access, change roles, suspend/reinstate accounts, and have mutations attempted in an audit log. |
-| Maintainer | Run lint, type-checked production builds, tests, and CI without production secrets being needed at build time. |
+| User            | Desired outcome                                                                                                                           |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Visitor         | Browse artists and projects, read informational pages, and use the discovery quiz without an account.                                     |
+| Approved artist | Sign in, view/edit their profile, manage featured work, and upload profile/work media.                                                    |
+| Administrator   | Review allowlisted accounts, grant/revoke access, change roles, suspend/reinstate accounts, and have mutations attempted in an audit log. |
+| Maintainer      | Run lint, type-checked production builds, tests, and CI without production secrets being needed at build time.                            |
 
 ## 4. Functional Requirements and Current Status
 
 ### 4.1 Public Pages and Discovery
 
-| ID | Requirement and acceptance outcome | Status |
-|---|---|---|
-| REQ-PUB-001 | The home route presents the project and a project listing. Project data comes from the project query layer rather than being duplicated in the route. | Implemented in code |
-| REQ-PUB-002 | A visitor can open an artist page by username and see available profile information and work. Missing profiles produce a deliberate empty state. | Implemented in code; public data policy not verified |
-| REQ-PUB-003 | A visitor can open a project page by slug and see project, collaborator, cause, and available recap media. Unknown slugs use the framework not-found response. | Implemented in code; storage setup not verified |
-| REQ-PUB-004 | The quiz accepts answers without login, preserves completed answers for the result route, and presents a ranked artist match. | Implemented in code; test coverage partial |
-| REQ-PUB-005 | Informational routes exist for manifesto, guidelines, FAQ, financial information, and link hub. | Implemented in code |
-| REQ-PUB-006 | Public profile routes provide route-specific metadata and all displayed images use framework optimization. | Partial/not verified: the artist route has no route-specific metadata in inspected code, and several images opt out of optimization. |
+| ID          | Requirement and acceptance outcome                                                                                                                             | Status                                                                                                                               |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| REQ-PUB-001 | The home route presents the project and a project listing. Project data comes from the project query layer rather than being duplicated in the route.          | Implemented in code                                                                                                                  |
+| REQ-PUB-002 | A visitor can open an artist page by username and see available profile information and work. Missing profiles produce a deliberate empty state.               | Implemented in code; public data policy not verified                                                                                 |
+| REQ-PUB-003 | A visitor can open a project page by slug and see project, collaborator, cause, and available recap media. Unknown slugs use the framework not-found response. | Implemented in code; storage setup not verified                                                                                      |
+| REQ-PUB-004 | The quiz accepts answers without login, preserves completed answers for the result route, and presents a ranked artist match.                                  | Implemented in code; test coverage partial                                                                                           |
+| REQ-PUB-005 | Informational routes exist for manifesto, guidelines, FAQ, financial information, and link hub.                                                                | Implemented in code                                                                                                                  |
+| REQ-PUB-006 | Public profile routes provide route-specific metadata and all displayed images use framework optimization.                                                     | Partial/not verified: the artist route has no route-specific metadata in inspected code, and several images opt out of optimization. |
 
 ### 4.2 Authentication and Artist Access
 
-| ID | Requirement and acceptance outcome | Status |
-|---|---|---|
-| REQ-AUTH-001 | A visitor can start Google OAuth with Supabase and return through `/auth/callback`, where the PKCE code is exchanged before dashboard navigation. | Implemented in code; provider settings are an external prerequisite |
-| REQ-AUTH-002 | Artist app access is allowed only when the signed-in email matches an active `allowed_users` row. Lookup failures deny access. | Implemented in code; RLS and deployed table are external prerequisites |
-| REQ-AUTH-003 | Auth sessions are refreshed through request middleware, and callback/login/dashboard routes respond to auth state. | Implemented in code; Next currently warns that the middleware convention is deprecated |
-| REQ-AUTH-004 | The signed-in artist's existing profile can be found and edits target the correct profile. | Partial: the dashboard reads by email; a user-ID helper exists and profile updates try numeric ID then email. The project has a known `profiles.id` versus Auth UUID mismatch. |
-| REQ-AUTH-005 | UI checks are backed by server/database policies so users cannot access another artist's private data by bypassing the UI. | Not verified: dashboard checks include client-side logic; production RLS/Storage policies are not in this repository. |
+| ID           | Requirement and acceptance outcome                                                                                                                | Status                                                                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| REQ-AUTH-001 | A visitor can start Google OAuth with Supabase and return through `/auth/callback`, where the PKCE code is exchanged before dashboard navigation. | Implemented in code; provider settings are an external prerequisite                                                                                                            |
+| REQ-AUTH-002 | Artist app access is allowed only when the signed-in email matches an active `allowed_users` row. Lookup failures deny access.                    | Implemented in code; RLS and deployed table are external prerequisites                                                                                                         |
+| REQ-AUTH-003 | Auth sessions are refreshed through request middleware, and callback/login/dashboard routes respond to auth state.                                | Implemented in code; Next currently warns that the middleware convention is deprecated                                                                                         |
+| REQ-AUTH-004 | The signed-in artist's existing profile can be found and edits target the correct profile.                                                        | Partial: the dashboard reads by email; a user-ID helper exists and profile updates try numeric ID then email. The project has a known `profiles.id` versus Auth UUID mismatch. |
+| REQ-AUTH-005 | UI checks are backed by server/database policies so users cannot access another artist's private data by bypassing the UI.                        | Not verified: dashboard checks include client-side logic; production RLS/Storage policies are not in this repository.                                                          |
 
 ### 4.3 Profile and Portfolio Management
 
-| ID | Requirement and acceptance outcome | Status |
-|---|---|---|
-| REQ-PROF-001 | An approved artist can edit supported profile fields, including biography, location, mediums, status, and social/contact links. | Implemented in code; field-level UI tests partial |
-| REQ-PROF-002 | The editor can upload profile and work images after client-side type/size validation. | Implemented in code; storage policies and upload integration tests not verified |
-| REQ-PROF-003 | An artist can retain, add, update, reorder, and remove work records through the work synchronization helper. | Implemented in code; automated coverage partial |
-| REQ-PROF-004 | Profile deletion requires deliberate user action, removes the profile record, and ends the local session. | Partial: code removes the profile row and signs out; deletion of the Supabase Auth identity is not demonstrated. |
-| REQ-PROF-005 | A new artist can create their own profile through the dashboard. | Not implemented in the inspected dashboard flow; existing profiles are loaded for editing and setup may require manual provisioning. |
+| ID           | Requirement and acceptance outcome                                                                                              | Status                                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| REQ-PROF-001 | An approved artist can edit supported profile fields, including biography, location, mediums, status, and social/contact links. | Implemented in code; field-level UI tests partial                                                                                    |
+| REQ-PROF-002 | The editor can upload profile and work images after client-side type/size validation.                                           | Implemented in code; storage policies and upload integration tests not verified                                                      |
+| REQ-PROF-003 | An artist can retain, add, update, reorder, and remove work records through the work synchronization helper.                    | Implemented in code; automated coverage partial                                                                                      |
+| REQ-PROF-004 | Profile deletion requires deliberate user action, removes the profile record, and ends the local session.                       | Partial: code removes the profile row and signs out; deletion of the Supabase Auth identity is not demonstrated.                     |
+| REQ-PROF-005 | A new artist can create their own profile through the dashboard.                                                                | Not implemented in the inspected dashboard flow; existing profiles are loaded for editing and setup may require manual provisioning. |
 
 ### 4.4 Administrator Operations
 
-| ID | Requirement and acceptance outcome | Status |
-|---|---|---|
-| REQ-ADMIN-001 | The admin dashboard is rendered only after a server-side session and admin-role check. | Implemented in code |
-| REQ-ADMIN-002 | Admin API operations re-check the current user's admin role server-side; UI visibility alone never authorizes a mutation. | Implemented in code |
-| REQ-ADMIN-003 | Admins can list accounts, grant allowlist access, change role/status, and revoke access. | Implemented in code; database availability is an external prerequisite |
-| REQ-ADMIN-004 | Admin mutations attempt to write an audit record with actor, operation, target, and details. | Implemented in code; audit-write failure is logged and does not roll back the primary operation |
-| REQ-ADMIN-005 | A suspended allowlist entry cannot access protected artist dashboard flows. | Implemented for app authorization checks; suspension does not disable Supabase Auth login or hide public artist pages |
-| REQ-ADMIN-006 | Service-role credentials are unavailable to browser bundles and unnecessary for static build-time route collection. | Implemented through a server-only lazy client; production admin requests still require the secret |
+| ID            | Requirement and acceptance outcome                                                                                        | Status                                                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| REQ-ADMIN-001 | The admin dashboard is rendered only after a server-side session and admin-role check.                                    | Implemented in code                                                                                                   |
+| REQ-ADMIN-002 | Admin API operations re-check the current user's admin role server-side; UI visibility alone never authorizes a mutation. | Implemented in code                                                                                                   |
+| REQ-ADMIN-003 | Admins can list accounts, grant allowlist access, change role/status, and revoke access.                                  | Implemented in code; database availability is an external prerequisite                                                |
+| REQ-ADMIN-004 | Admin mutations attempt to write an audit record with actor, operation, target, and details.                              | Implemented in code; audit-write failure is logged and does not roll back the primary operation                       |
+| REQ-ADMIN-005 | A suspended allowlist entry cannot access protected artist dashboard flows.                                               | Implemented for app authorization checks; suspension does not disable Supabase Auth login or hide public artist pages |
+| REQ-ADMIN-006 | Service-role credentials are unavailable to browser bundles and unnecessary for static build-time route collection.       | Implemented through a server-only lazy client; production admin requests still require the secret                     |
 
 ### 4.5 Security and Operations
 
-| ID | Requirement and acceptance outcome | Status |
-|---|---|---|
-| REQ-SEC-001 | All data access is protected by appropriately scoped PostgreSQL RLS policies. | External prerequisite/not verified: no migration or policy files are present |
-| REQ-SEC-002 | Storage uploads are constrained by server/database policy as well as client-side validation. | Partial/not verified: client validation exists; deployed Storage policies are unavailable here |
-| REQ-SEC-003 | `SUPABASE_SERVICE_ROLE_KEY` is server-only and never exposed through a public environment variable. | Implemented by client separation and environment naming; production deployment must honor it |
-| REQ-OPS-001 | CI installs the lockfile, runs lint, builds, and runs the configured API coverage suite. | Implemented in `.github/workflows/ci.yml` |
-| REQ-OPS-002 | CI build completes without real Supabase credentials. | Implemented through lazy admin-client initialization and placeholder public CI values |
-| REQ-OPS-003 | New behavior has focused tests and the configured coverage gates remain enforced. | Implemented: Vitest thresholds are 25% lines/statements, 77% functions, and 78% branches for the measured file set |
+| ID          | Requirement and acceptance outcome                                                                  | Status                                                                                                             |
+| ----------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| REQ-SEC-001 | All data access is protected by appropriately scoped PostgreSQL RLS policies.                       | External prerequisite/not verified: no migration or policy files are present                                       |
+| REQ-SEC-002 | Storage uploads are constrained by server/database policy as well as client-side validation.        | Partial/not verified: client validation exists; deployed Storage policies are unavailable here                     |
+| REQ-SEC-003 | `SUPABASE_SERVICE_ROLE_KEY` is server-only and never exposed through a public environment variable. | Implemented by client separation and environment naming; production deployment must honor it                       |
+| REQ-OPS-001 | CI installs the lockfile, runs lint, builds, and runs the configured API coverage suite.            | Implemented in `.github/workflows/ci.yml`                                                                          |
+| REQ-OPS-002 | CI build completes without real Supabase credentials.                                               | Implemented through lazy admin-client initialization and placeholder public CI values                              |
+| REQ-OPS-003 | New behavior has focused tests and the configured coverage gates remain enforced.                   | Implemented: Vitest thresholds are 25% lines/statements, 77% functions, and 78% branches for the measured file set |
 
 ## 5. Architecture and Technology Decisions
 

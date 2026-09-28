@@ -78,8 +78,8 @@ npm ci
 ```
 
 3. Create `.env.local` manually in the project root and add the required public
-	Supabase values (and the server-only admin key if using admin features).
-	There is no `.env.example` in this repository.
+   Supabase values (and the server-only admin key if using admin features).
+   There is no `.env.example` in this repository.
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -122,24 +122,24 @@ npm run start
 #### Rendering and Client-Server Boundaries
 
 - Pages are Server Components by default. Public artist/project pages and most
-	informational pages render on the server.
+  informational pages render on the server.
 - Client Components are used where the UI needs browser APIs, local state,
-	event handlers, OAuth session listeners, local storage, or interactive charts.
+  event handlers, OAuth session listeners, local storage, or interactive charts.
 - The profile dashboard is client-side guarded. The admin dashboard has a
-	server-side role check before its client interface is rendered.
+  server-side role check before its client interface is rendered.
 - Some routes combine server-rendered composition with client-only sections;
-	see the repository guide for route-specific boundaries.
+  see the repository guide for route-specific boundaries.
 
 #### Data Layer
 
 - **Queries**: Read operations in `lib/*/queries.ts`
 - **Mutations**: Write operations in `lib/*/mutations.ts`
 - **Auth**: Allowlist and role helpers in `lib/auth/`; cookie-bound server
-	checks are used where access must be decided before rendering.
+  checks are used where access must be decided before rendering.
 - **Admin**: Server-only account reads/writes in `lib/admin/`; API routes verify
-	admin access before invoking the privileged service-role client.
+  admin access before invoking the privileged service-role client.
 - **Storage**: Project media helper in `lib/projects/media.ts`; profile and
-	work uploads are initiated by the profile dashboard.
+  work uploads are initiated by the profile dashboard.
 
 #### Styling Organization
 
@@ -176,9 +176,9 @@ The main API handlers are:
 
 - `/api/admin/accounts`: `GET` lists accounts; `POST` grants allowlist access.
 - `/api/admin/accounts/[email]`: `PATCH` changes account status/role; `DELETE`
-	revokes allowlist access.
+  revokes allowlist access.
 - `/api/admin/whoami`: `GET` reports whether the current user has the admin
-	role for UI visibility. Admin mutations still enforce their own server guard.
+  role for UI visibility. Admin mutations still enforce their own server guard.
 
 Artist and project query/mutation helpers are in `lib/artists/` and
 `lib/projects/`; the repository guide explains their behavior and callers.
@@ -241,7 +241,7 @@ We welcome contributions from the community! Here's how to get involved:
 - Include white-box tests for internal logic and black-box tests for end-to-end behavior
 - Test UI components with Testing Library
 - Keep coverage above the thresholds configured in `vitest.config.ts`; these
-	thresholds cover selected library files and are not a whole-app target.
+  thresholds cover selected library files and are not a whole-app target.
 
 ## Testing
 
@@ -276,14 +276,14 @@ npm run test:ui
 ### Test Organization
 
 - `tests/artists/api/`: Standard behavior and edge-case tests for artist data
-	functions.
+  functions.
 - `tests/artists/unit/`: White-box query/mutation and authorization behavior.
 - `tests/admin/`: Admin guard and privileged mutation tests.
 - `tests/auth/`: Authorization failures and auth-related edge cases.
 - `tests/forms/`: Form validation tests.
 - `tests/projects/`: Project-media helper tests.
 - `tests/integration/`: Composed flows using mocked Supabase interactions;
-	these are not browser-driven production E2E tests.
+  these are not browser-driven production E2E tests.
 - `tests/__mocks__/` and `tests/setup.ts`: shared mocks and test setup.
 
 Configured thresholds are 25% lines/statements, 77% functions, and 78%
