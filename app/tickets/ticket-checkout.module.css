@@ -1,0 +1,84 @@
+.ticketPurchase {
+	display: flex;
+	align-items: end;
+	flex-wrap: wrap;
+	gap: 20px;
+	width: 100%;
+	max-width: 640px;
+	margin: 28px 0 0;
+	padding: 20px 0 0;
+	border-top: 1px solid #a6a6a6;
+}
+
+.ticketLabel,
+.quantityLabel span {
+	display: block;
+	margin: 0 0 6px;
+	color: #505050;
+	font-size: 13px;
+}
+
+.ticketPrice {
+	margin: 0;
+	color: #1c1c1c;
+	font-size: 20px;
+}
+
+.ticketPrice span {
+	color: #686868;
+	font-size: 13px;
+}
+
+.quantityLabel select {
+	min-width: 72px;
+	min-height: 42px;
+	padding: 0 10px;
+	border: 1px solid #a6a6a6;
+	border-radius: 4px;
+	background: #fff;
+	color: #171717;
+}
+
+.checkoutButton {
+	min-height: 42px;
+	padding: 0 18px;
+	border: 0;
+	border-radius: 4px;
+	background: #1c1c1c;
+	color: #fff;
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.checkoutButton:hover:not(:disabled) {
+	background: #444;
+}
+
+.checkoutButton:disabled {
+	background: #d3d3d3;
+	color: #505050;
+	cursor: not-allowed;
+}
+
+.checkoutError {
+	flex-basis: 100%;
+	margin: 0;
+	color: #ffb4a8;
+}
+
+.checkoutError a {
+	color: #fff;
+}
+
+@media (max-width: 560px) {
+	.ticketPurchase {
+		align-items: stretch;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.checkoutButton {
+		width: 100%;
+	}
+}

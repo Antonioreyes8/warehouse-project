@@ -75,7 +75,7 @@ export default async function ProjectPage(props: ProjectPageProps) {
 				priority
 			/>
 			<p>
-				<strong>Date:</strong> {project.date}
+				<strong>Date:</strong> {project.dateLabel}
 			</p>
 			<p>{project.description}</p>
 

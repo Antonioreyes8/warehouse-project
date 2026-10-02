@@ -1,0 +1,107 @@
+.ticketPage {
+	--shop-bg: #2a2a2a;
+	--shop-panel: #ededeb;
+	--shop-muted: #505050;
+	min-height: 100vh;
+	padding: 48px 32px 96px;
+	background: var(--shop-bg);
+	color: #f4f4f4;
+}
+
+.eventCard {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	width: min(1180px, 100%);
+	min-height: 620px;
+	margin: 0 auto;
+	background: var(--shop-panel);
+	border: 1px solid #a6a6a6;
+	border-left: 3px solid #1c1c1c;
+	border-radius: 5px;
+	color: #1c1c1c;
+	overflow: hidden;
+}
+
+.posterFrame {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 0;
+	padding: clamp(20px, 4vw, 48px);
+	background: #d3d3d3;
+}
+
+.eventDetails {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-width: 0;
+	padding: clamp(24px, 4vw, 52px);
+}
+
+.eventDate {
+	margin: 0 0 12px;
+	color: #505050;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.eventTitle {
+	margin: 0 0 20px;
+	font-family: "LoosExtended", sans-serif;
+	font-size: 40px;
+	font-weight: 700;
+	line-height: 1.08;
+}
+
+.eventPoster {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: 760px;
+	object-fit: contain;
+}
+
+.eventDescription {
+	max-width: 580px;
+	margin: 0;
+	color: #505050;
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.notForSale {
+	margin-top: 24px;
+	color: #8b1f1f;
+}
+
+@media (max-width: 760px) {
+	.ticketPage {
+		padding: 28px 18px 56px;
+	}
+
+	.eventCard {
+		grid-template-columns: minmax(0, 1fr);
+		min-height: 0;
+	}
+
+	.posterFrame {
+		min-height: 360px;
+		padding: 24px;
+	}
+
+	.eventPoster {
+		width: min(100%, 440px);
+		max-height: 620px;
+	}
+
+	.eventDetails {
+		padding: 26px 22px 18px;
+	}
+
+	.eventTitle {
+		font-size: 32px;
+	}
+}

@@ -16,6 +16,7 @@ import type {
 	Collaborator,
 	CollaboratorRole,
 	Project,
+	ProjectVisibility,
 	Source,
 } from "@/lib/projects/types";
 
@@ -54,6 +55,21 @@ function asString(value: unknown): string | undefined {
 	return typeof value === "string" && value.trim().length > 0
 		? value.trim()
 		: undefined;
+}
+
+function formatProjectDateLabel(value: unknown): string {
+	const rawDate = asString(value);
+	if (!rawDate) return "TBA";
+
+	const eventDate = new Date(rawDate);
+	if (Number.isNaN(eventDate.getTime())) return "TBA";
+
+	const label = new Intl.DateTimeFormat("en-US", {
+		month: "long",
+		year: "2-digit",
+		timeZone: "UTC",
+	}).format(eventDate);
+	return `${label}'`;
 }
 
 /**
@@ -147,16 +163,26 @@ function normalizeCollaborators(value: unknown): Collaborator[] | undefined {
 function mapProjectRow(row: JsonRecord): Project | null {
 	const slug = asString(row.slug);
 	const title = asString(row.title);
-	const date = asString(row.date);
+	const dateLabel = formatProjectDateLabel(row.event_date);
 
 	// Image fallback chain (multiple DB column possibilities)
 	const img =
 		asString(row.img) ?? asString(row.image_url) ?? asString(row.poster_url);
 
 	// If required fields are missing, skip project entirely
-	if (!slug || !title || !date || !img) return null;
+	if (!slug || !title || !img) return null;
 
 	const description = asString(row.description) ?? "";
+	const id = Number(row.id);
+	const ticketPrice = Number(row.ticket_price);
+	const maxTicketsPerOrder = Number(row.max_tickets_per_order);
+	const rawVisibility = row.visibility_status ?? row.is_it_visible;
+	const visibilityStatus: ProjectVisibility =
+		rawVisibility === true || rawVisibility === "visible"
+			? "visible"
+			: rawVisibility === false || rawVisibility === "cover_only"
+				? "cover_only"
+				: "hidden";
 
 	// Nested structured sections
 	const causeSection = normalizeCauseSection(row);
@@ -165,9 +191,15 @@ function mapProjectRow(row: JsonRecord): Project | null {
 	);
 
 	return {
+		...(Number.isSafeInteger(id) && id > 0 ? { id } : {}),
 		slug,
 		title,
-		date,
+		dateLabel,
+		...(Number.isFinite(ticketPrice) && ticketPrice > 0 ? { ticketPrice } : {}),
+		...(Number.isSafeInteger(maxTicketsPerOrder) && maxTicketsPerOrder > 0
+			? { maxTicketsPerOrder }
+			: {}),
+		visibilityStatus,
 		img,
 		description,
 		causeSection,

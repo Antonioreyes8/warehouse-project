@@ -78,7 +78,7 @@
 }
 
 .loginMessage.success {
-	background-color: #1a3a1a;
-	color: #a5f5a5;
-	border-left: 3px solid #a5f5a5;
+	background-color: #222;
+	color: #d3d3d3;
+	border-left: 3px solid #d3d3d3;
 }

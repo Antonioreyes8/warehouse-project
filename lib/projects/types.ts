@@ -39,10 +39,16 @@ export type Collaborator = {
 	slug?: string;
 };
 
+export type ProjectVisibility = "visible" | "cover_only" | "hidden";
+
 export type Project = {
+	id?: number;
 	slug: string;
 	title: string;
-	date: string;
+	dateLabel: string;
+	ticketPrice?: number;
+	maxTicketsPerOrder?: number;
+	visibilityStatus: ProjectVisibility;
 	img: string;
 	description: string;
 	causeSection?: CauseSectionType;
