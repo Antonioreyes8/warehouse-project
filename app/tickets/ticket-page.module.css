@@ -54,7 +54,6 @@
 	font-size: 40px;
 	font-weight: 700;
 	line-height: 1.08;
-	overflow-wrap: anywhere;
 }
 
 .eventPoster {
@@ -141,6 +140,8 @@
 	}
 
 	.eventTitle {
-		font-size: 32px;
+		font-size: clamp(20px, 7.5vw, 30px);
+		overflow-wrap: normal;
+		word-break: normal;
 	}
 }
