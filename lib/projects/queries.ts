@@ -175,6 +175,12 @@ function mapProjectRow(row: JsonRecord): Project | null {
 	const description = asString(row.description) ?? "";
 	const id = Number(row.id);
 	const ticketPrice = Number(row.ticket_price);
+	const capacity =
+		row.capacity === null
+			? null
+			: Number.isSafeInteger(Number(row.capacity)) && Number(row.capacity) >= 0
+				? Number(row.capacity)
+				: undefined;
 	const maxTicketsPerOrder = Number(row.max_tickets_per_order);
 	const rawVisibility = row.visibility_status ?? row.is_it_visible;
 	const visibilityStatus: ProjectVisibility =
@@ -196,6 +202,7 @@ function mapProjectRow(row: JsonRecord): Project | null {
 		title,
 		dateLabel,
 		...(Number.isFinite(ticketPrice) && ticketPrice > 0 ? { ticketPrice } : {}),
+		...(capacity !== undefined ? { capacity } : {}),
 		...(Number.isSafeInteger(maxTicketsPerOrder) && maxTicketsPerOrder > 0
 			? { maxTicketsPerOrder }
 			: {}),

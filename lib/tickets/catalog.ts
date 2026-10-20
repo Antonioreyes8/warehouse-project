@@ -1,5 +1,6 @@
 import "server-only";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { getAvailableTicketCount } from "@/lib/tickets/availability";
 
 export type TicketEvent = {
 	id: number;
@@ -10,14 +11,16 @@ export type TicketEvent = {
 	eventDate: string;
 	eventDateLabel: string;
 	price: number;
+	availableTickets: number | null;
 	maxTicketsPerOrder: number;
 };
 
 export async function getTicketEvents(): Promise<TicketEvent[]> {
-	const { data, error } = await getSupabaseAdmin()
+	const supabase = getSupabaseAdmin();
+	const { data, error } = await supabase
 		.from("projects")
 		.select(
-			"id, slug, title, description, img, event_date, ticket_price, max_tickets_per_order",
+			"id, slug, title, description, img, event_date, ticket_price, capacity, max_tickets_per_order",
 		)
 		.gt("ticket_price", 0)
 		.not("event_date", "is", null)
@@ -29,10 +32,30 @@ export async function getTicketEvents(): Promise<TicketEvent[]> {
 		return [];
 	}
 
-	return (data ?? []).flatMap((row) => {
+	const rows = data ?? [];
+	let availableByProjectId: Map<number, number | null>;
+	try {
+		availableByProjectId = new Map(
+			await Promise.all(
+				rows.map(async (row) => {
+					const id = Number(row.id);
+					const capacity = row.capacity === null ? null : Number(row.capacity);
+					return [
+						id,
+						await getAvailableTicketCount(id, capacity),
+					] as const;
+				}),
+			),
+		);
+	} catch {
+		return [];
+	}
+
+	return rows.flatMap((row) => {
 		const id = Number(row.id);
 		const price = Number(row.ticket_price);
 		const maxTicketsPerOrder = Number(row.max_tickets_per_order);
+		const capacity = row.capacity === null ? null : Number(row.capacity);
 		const eventDate = row.event_date;
 		if (
 			!Number.isSafeInteger(id) ||
@@ -42,6 +65,8 @@ export async function getTicketEvents(): Promise<TicketEvent[]> {
 			!eventDate ||
 			!Number.isFinite(price) ||
 			price <= 0 ||
+			(capacity !== null &&
+				(!Number.isSafeInteger(capacity) || capacity < 0)) ||
 			!Number.isSafeInteger(maxTicketsPerOrder) ||
 			maxTicketsPerOrder < 1
 		) {
@@ -63,6 +88,7 @@ export async function getTicketEvents(): Promise<TicketEvent[]> {
 					year: "numeric",
 				}),
 				price,
+				availableTickets: availableByProjectId.get(id) ?? null,
 				maxTicketsPerOrder,
 			},
 		];

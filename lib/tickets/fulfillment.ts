@@ -1,5 +1,6 @@
 import "server-only";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { sendOrderTicketsEmail } from "@/lib/tickets/email";
 import { getStripe } from "@/lib/tickets/stripe";
 
 export class PermanentTicketEventError extends Error {}
@@ -81,7 +82,7 @@ export async function processTicketPaymentEvent(
 	);
 
 	if (error) throw error;
-	if (result !== "capacity_exceeded") {
+	if (result === "fulfilled") {
 		const { data: order, error: orderError } = await supabase
 			.from("ticket_orders")
 			.select("id")
@@ -94,6 +95,8 @@ export async function processTicketPaymentEvent(
 			.update({ first_name: firstName, last_name: lastName })
 			.eq("order_id", order.id);
 		if (ticketError) throw ticketError;
+
+		await sendOrderTicketsEmail(order.id);
 	}
 	if (result === "capacity_exceeded") {
 		const refund = await stripe.refunds.create(

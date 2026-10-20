@@ -98,6 +98,41 @@ npm run dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Ticket confirmation emails
+
+Ticket emails are sent from the Stripe payment webhook after the database has
+issued the tickets. To enable delivery:
+
+1. Create a Resend account, add a domain you control, and publish the DNS
+   records Resend provides to verify it.
+2. Create a Resend API key and choose a sender address on that verified domain,
+   such as `The Diaspora Project <tickets@your-domain.example>`.
+3. Add these server-only variables to `.env.local` for local testing and to the
+   hosting provider for production:
+
+   ```env
+   RESEND_API_KEY=re_your_api_key
+   RESEND_FROM_EMAIL="The Diaspora Project <tickets@your-domain.example>"
+   ```
+
+4. Apply
+   [`supabase/migrations/20261019000004_ticket_order_email_delivery.sql`](./supabase/migrations/20261019000004_ticket_order_email_delivery.sql)
+   to the same Supabase project used by the app. It adds fields used to record
+   successful ticket email delivery.
+5. Restart the local server or redeploy after setting the environment values.
+   Complete a Stripe test-mode purchase and confirm the buyer receives an
+      email containing each event poster, buyer name, ticket code, and inline QR
+      code generated from that ticket's Supabase `qr_token`. The post-checkout
+      event page checks webhook delivery status and confirms the email only after
+      delivery succeeds.
+
+   Event ticket pages show the remaining count derived from the project's
+   `capacity` and the exact count of `paid`, `issued`, and `checked_in` tickets.
+
+The Resend request uses a stable order idempotency key so Stripe webhook retries
+do not normally send duplicate messages. Do not use a Resend test sender for
+real customers; production messages require a verified sending domain.
+
 ### Build for Production
 
 ```bash

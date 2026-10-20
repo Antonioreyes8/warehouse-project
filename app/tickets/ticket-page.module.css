@@ -54,6 +54,7 @@
 	font-size: 40px;
 	font-weight: 700;
 	line-height: 1.08;
+	overflow-wrap: anywhere;
 }
 
 .eventPoster {
@@ -70,6 +71,44 @@
 	color: #505050;
 	font-size: 15px;
 	line-height: 1.6;
+}
+
+.availability {
+	margin: 20px 0 0;
+	color: #505050;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.soldOut {
+	color: #8b1f1f;
+}
+
+.deliveryStatus {
+	margin-top: 20px;
+	padding: 14px 16px;
+	border: 1px solid #668a6e;
+	border-radius: 4px;
+	background: #e8f2e9;
+	color: #244d2b;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.deliveryStatus p {
+	margin: 0;
+}
+
+.deliveryStatus button {
+	margin-top: 10px;
+	padding: 8px 12px;
+	border: 1px solid currentColor;
+	border-radius: 4px;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
 }
 
 .notForSale {

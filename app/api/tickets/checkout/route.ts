@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 	const { data: projects, error } = await getSupabaseAdmin()
 		.from("projects")
 		.select(
-			"id, title, slug, img, ticket_price, event_date, max_tickets_per_order",
+			"id, title, slug, img, ticket_price, event_date, capacity, max_tickets_per_order",
 		)
 		.in("id", projectIds);
 
@@ -101,6 +101,44 @@ export async function POST(request: Request) {
 		return NextResponse.json(
 			{ error: "Ticket quantity exceeds the limit for this event" },
 			{ status: 400 },
+		);
+	}
+
+	const { data: soldTickets, error: ticketsError } = await getSupabaseAdmin()
+		.from("tickets")
+		.select("project_id")
+		.in("project_id", projectIds)
+		.in("status", ["paid", "issued", "checked_in"]);
+
+	if (ticketsError) {
+		console.error("Could not check ticket availability", ticketsError);
+		return NextResponse.json(
+			{ error: "Could not check ticket availability" },
+			{ status: 500 },
+		);
+	}
+
+	const soldByProjectId = new Map<number, number>();
+	for (const ticket of soldTickets ?? []) {
+		const projectId = Number(ticket.project_id);
+		soldByProjectId.set(projectId, (soldByProjectId.get(projectId) ?? 0) + 1);
+	}
+
+	if (
+		checkoutItems.some((item) => {
+			const capacity = item.project?.capacity;
+			if (capacity === null || capacity === undefined) return false;
+			const remaining =
+				Number(capacity) - (soldByProjectId.get(item.projectId) ?? 0);
+			return !Number.isSafeInteger(Number(capacity)) || item.quantity > remaining;
+		})
+	) {
+		return NextResponse.json(
+			{
+				error:
+					"Not enough tickets remain for one or more events. Refresh the page and update your cart.",
+			},
+			{ status: 409 },
 		);
 	}
 
@@ -154,7 +192,7 @@ export async function POST(request: Request) {
 					})),
 				),
 			},
-			success_url: `${siteUrl}/tickets/${firstProject!.slug}?ticket=success`,
+			success_url: `${siteUrl}/tickets/${firstProject!.slug}?ticket=success&session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${siteUrl}/tickets/${firstProject!.slug}?ticket=cancelled`,
 		});
 

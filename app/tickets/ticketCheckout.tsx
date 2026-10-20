@@ -7,14 +7,20 @@ export default function TicketCheckout({
 	projectId,
 	price,
 	maxTicketsPerOrder,
+	availableTickets,
 }: {
 	projectId: number;
 	price: number;
 	maxTicketsPerOrder: number;
+	availableTickets: number | null;
 }) {
 	const [quantity, setQuantity] = useState(1);
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+	const maxPurchasable = Math.min(
+		maxTicketsPerOrder,
+		availableTickets ?? maxTicketsPerOrder,
+	);
 
 	async function startCheckout() {
 		setLoading(true);
@@ -59,11 +65,11 @@ export default function TicketCheckout({
 				<span>Quantity</span>
 				<select
 					value={quantity}
-					disabled={loading}
+					disabled={loading || maxPurchasable === 0}
 					onChange={(event) => setQuantity(Number(event.target.value))}
 				>
 					{Array.from(
-						{ length: maxTicketsPerOrder },
+						{ length: maxPurchasable },
 						(_, index) => index + 1,
 					).map((count) => (
 						<option key={count} value={count}>
@@ -75,10 +81,14 @@ export default function TicketCheckout({
 			<button
 				className={styles.checkoutButton}
 				type="button"
-				disabled={loading}
+				disabled={loading || maxPurchasable === 0}
 				onClick={startCheckout}
 			>
-				{loading ? "Opening checkout..." : "Buy tickets"}
+				{maxPurchasable === 0
+					? "Sold out"
+					: loading
+						? "Opening checkout..."
+						: "Buy tickets"}
 			</button>
 			{error && (
 				<p className={styles.checkoutError} role="alert">

@@ -47,6 +47,7 @@ export type Project = {
 	title: string;
 	dateLabel: string;
 	ticketPrice?: number;
+	capacity?: number | null;
 	maxTicketsPerOrder?: number;
 	visibilityStatus: ProjectVisibility;
 	img: string;

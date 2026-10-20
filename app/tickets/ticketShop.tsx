@@ -38,15 +38,19 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 				if (saved) {
 					const parsed = JSON.parse(saved) as CartLine[];
 					setCart(
-						parsed.filter(
-							(line) =>
-								events.some((event) => event.id === line.eventId) &&
+						parsed.filter((line) => {
+							const event = events.find((item) => item.id === line.eventId);
+							return (
+								event !== undefined &&
 								Number.isInteger(line.quantity) &&
 								line.quantity >= 1 &&
 								line.quantity <=
-									(events.find((event) => event.id === line.eventId)
-										?.maxTicketsPerOrder ?? 0),
-						),
+									Math.min(
+										event.maxTicketsPerOrder,
+										event.availableTickets ?? Number.MAX_SAFE_INTEGER,
+									)
+							);
+						}),
 					);
 				}
 			} catch {
@@ -73,6 +77,13 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 			);
 			return;
 		}
+		if (
+			event.availableTickets !== null &&
+			existingQuantity >= event.availableTickets
+		) {
+			setError(`No tickets remain for ${event.title}.`);
+			return;
+		}
 		setCart((current) => {
 			const existing = current.find((line) => line.eventId === eventId);
 			if (!existing) return [...current, { eventId, quantity: 1 }];
@@ -94,6 +105,13 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 			setError(
 				`The limit for ${event.title} is ${event.maxTicketsPerOrder} tickets.`,
 			);
+			return;
+		}
+		if (
+			event.availableTickets !== null &&
+			quantity > event.availableTickets
+		) {
+			setError(`Only ${event.availableTickets} tickets remain for ${event.title}.`);
 			return;
 		}
 		setError("");
@@ -164,6 +182,12 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 							{events.map((event) => {
 								const quantity =
 									cart.find((line) => line.eventId === event.id)?.quantity ?? 0;
+								const soldOut = event.availableTickets === 0;
+								const reachedAvailability =
+									event.availableTickets !== null &&
+									quantity >= event.availableTickets;
+								const reachedOrderLimit =
+									quantity >= event.maxTicketsPerOrder;
 								return (
 									<article className={styles.eventCard} key={event.id}>
 										<a
@@ -184,6 +208,24 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 											<p className={styles.eventDate}>{event.eventDateLabel}</p>
 											<h2>{event.title}</h2>
 											<p className={styles.description}>{event.description}</p>
+											{event.availableTickets !== null && (
+												<p
+													className={`${styles.availability} ${soldOut ? styles.soldOut : ""}`}
+													aria-label={
+														soldOut
+															? "Sold out"
+															: `${event.availableTickets} tickets remaining`
+													}
+												>
+													{soldOut
+														? "Sold out"
+														: `${event.availableTickets} ${
+																event.availableTickets === 1
+																	? "ticket"
+																	: "tickets"
+															} left`}
+												</p>
+											)}
 											<div className={styles.cardFooter}>
 												<p className={styles.price}>
 													{money.format(event.price)}
@@ -192,12 +234,18 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 													className={styles.addButton}
 													type="button"
 													onClick={() => addEvent(event.id)}
-													disabled={quantity >= event.maxTicketsPerOrder}
+													disabled={
+														soldOut || reachedAvailability || reachedOrderLimit
+													}
 													aria-label={`Add ${event.title} ticket to cart`}
 													title={
-														quantity >= event.maxTicketsPerOrder
-															? `Event limit is ${event.maxTicketsPerOrder} tickets`
-															: "Add to cart"
+														soldOut
+															? "This event is sold out"
+															: reachedAvailability
+																? "No more tickets are available"
+																: reachedOrderLimit
+																			? `Event limit is ${event.maxTicketsPerOrder} tickets`
+																			: "Add to cart"
 													}
 												>
 													{quantity ? `Added ${quantity}` : "Add to cart"}
