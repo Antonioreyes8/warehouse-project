@@ -34,11 +34,6 @@ export default function Footer() {
 						</Link>
 					</p>
 					<p>
-						<Link href="/tickets" className={styles.link}>
-							Tickets
-						</Link>
-					</p>
-					<p>
 						<Link href="/manifesto" className={styles.link}>
 							Manifesto
 						</Link>
