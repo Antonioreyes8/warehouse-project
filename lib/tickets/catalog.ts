@@ -10,6 +10,7 @@ export type TicketEvent = {
 	image: string;
 	eventDate: string;
 	eventDateLabel: string;
+	location?: string;
 	price: number;
 	availableTickets: number | null;
 	maxTicketsPerOrder: number;
@@ -20,7 +21,7 @@ export async function getTicketEvents(): Promise<TicketEvent[]> {
 	const { data, error } = await supabase
 		.from("projects")
 		.select(
-			"id, slug, title, description, img, event_date, ticket_price, capacity, max_tickets_per_order",
+			"id, slug, title, description, img, event_date, location, ticket_price, capacity, max_tickets_per_order",
 		)
 		.gt("ticket_price", 0)
 		.not("event_date", "is", null)
@@ -87,6 +88,9 @@ export async function getTicketEvents(): Promise<TicketEvent[]> {
 					day: "numeric",
 					year: "numeric",
 				}),
+				...(typeof row.location === "string" && row.location.trim()
+					? { location: row.location.trim() }
+					: {}),
 				price,
 				availableTickets: availableByProjectId.get(id) ?? null,
 				maxTicketsPerOrder,

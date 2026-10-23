@@ -92,6 +92,13 @@
 	text-transform: uppercase;
 }
 
+.eventLocation {
+	margin: -2px 0 10px;
+	color: var(--shop-muted);
+	font-size: 13px;
+	line-height: 1.4;
+}
+
 .cardBody h2 {
 	margin: 0;
 	font-family: "LoosExtended", sans-serif;

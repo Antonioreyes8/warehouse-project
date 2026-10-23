@@ -37,6 +37,9 @@ export default async function TicketPage({
 				</div>
 				<div className={styles.eventDetails}>
 					<p className={styles.eventDate}>{event.dateLabel}</p>
+					{event.location && (
+						<p className={styles.eventLocation}>{event.location}</p>
+					)}
 					<h1 className={styles.eventTitle}>{event.title}</h1>
 					<p className={styles.eventDescription}>{event.description}</p>
 					{availableTickets !== null && (

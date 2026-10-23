@@ -76,7 +76,7 @@ const socialLinks: LinkItem[] = [
 ];
 
 const RSVP_LINK: LinkItem = {
-	title: "Get your tickets for the next event!",
+	title: "Tickets for DiasporaWeen 10/25 in Denton, Tx!!!!!",
 	url: "https://thediasporaproject.org/tickets",
 	icon: faStar,
 };

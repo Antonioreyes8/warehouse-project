@@ -48,6 +48,13 @@
 	text-transform: uppercase;
 }
 
+.eventLocation {
+	margin: -4px 0 16px;
+	color: #505050;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
 .eventTitle {
 	margin: 0 0 20px;
 	font-family: "LoosExtended", sans-serif;

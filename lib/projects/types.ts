@@ -46,6 +46,7 @@ export type Project = {
 	slug: string;
 	title: string;
 	dateLabel: string;
+	location?: string;
 	ticketPrice?: number;
 	capacity?: number | null;
 	maxTicketsPerOrder?: number;

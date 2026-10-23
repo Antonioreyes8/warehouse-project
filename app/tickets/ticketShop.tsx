@@ -206,6 +206,11 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 										</a>
 										<div className={styles.cardBody}>
 											<p className={styles.eventDate}>{event.eventDateLabel}</p>
+											{event.location && (
+												<p className={styles.eventLocation}>
+													{event.location}
+												</p>
+											)}
 											<h2>{event.title}</h2>
 											<p className={styles.description}>{event.description}</p>
 											{event.availableTickets !== null && (

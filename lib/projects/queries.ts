@@ -164,6 +164,7 @@ function mapProjectRow(row: JsonRecord): Project | null {
 	const slug = asString(row.slug);
 	const title = asString(row.title);
 	const dateLabel = formatProjectDateLabel(row.event_date);
+	const location = asString(row.location);
 
 	// Image fallback chain (multiple DB column possibilities)
 	const img =
@@ -201,6 +202,7 @@ function mapProjectRow(row: JsonRecord): Project | null {
 		slug,
 		title,
 		dateLabel,
+		...(location ? { location } : {}),
 		...(Number.isFinite(ticketPrice) && ticketPrice > 0 ? { ticketPrice } : {}),
 		...(capacity !== undefined ? { capacity } : {}),
 		...(Number.isSafeInteger(maxTicketsPerOrder) && maxTicketsPerOrder > 0
