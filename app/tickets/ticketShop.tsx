@@ -334,6 +334,7 @@ export default function TicketShop({ events }: { events: TicketEvent[] }) {
 					<p className={styles.taxNote}>
 						Taxes, if applicable, are calculated at checkout.
 					</p>
+					<p className={styles.taxNote}>Promo code FRIENDS20 gives 100% off at checkout.</p>
 					{error && (
 						<p className={styles.error} role="alert">
 							{error}

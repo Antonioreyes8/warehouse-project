@@ -154,6 +154,7 @@ export async function POST(request: Request) {
 		const firstProject = checkoutItems[0].project;
 		const session = await getStripe().checkout.sessions.create({
 			mode: "payment",
+			allow_promotion_codes: true,
 			managed_payments: { enabled: false },
 			customer_creation: "always",
 			custom_fields: [

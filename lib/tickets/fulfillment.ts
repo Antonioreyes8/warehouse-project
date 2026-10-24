@@ -59,8 +59,7 @@ export async function processTicketPaymentEvent(
 		!userEmail ||
 		!firstName ||
 		!lastName ||
-		!paymentIntentId ||
-		!session.amount_total
+		session.amount_total == null
 	) {
 		throw new PermanentTicketEventError(
 			`Checkout session ${session.id} has invalid ticket metadata`,
@@ -73,7 +72,7 @@ export async function processTicketPaymentEvent(
 		{
 			p_checkout_session_id: session.id,
 			p_stripe_event_id: stripeEventId,
-			p_payment_intent_id: paymentIntentId,
+			p_payment_intent_id: paymentIntentId ?? null,
 			p_cart_items: cartItems,
 			p_user_email: userEmail,
 			p_amount_total: session.amount_total,
@@ -98,7 +97,7 @@ export async function processTicketPaymentEvent(
 
 		await sendOrderTicketsEmail(order.id);
 	}
-	if (result === "capacity_exceeded") {
+	if (result === "capacity_exceeded" && paymentIntentId) {
 		const refund = await stripe.refunds.create(
 			{ payment_intent: paymentIntentId },
 			{ idempotencyKey: `ticket-capacity-refund-${session.id}` },
