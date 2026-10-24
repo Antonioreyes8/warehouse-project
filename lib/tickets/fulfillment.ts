@@ -16,7 +16,12 @@ export async function processTicketPaymentEvent(
 			`Checkout session ${session.id} is not a payment session`,
 		);
 	}
-	if (session.payment_status !== "paid") return;
+	if (
+		session.payment_status !== "paid" &&
+		session.payment_status !== "no_payment_required"
+	) {
+		return;
+	}
 
 	let cartItems: Array<{ p: number; q: number; c: number }>;
 	try {
