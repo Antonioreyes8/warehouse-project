@@ -78,7 +78,6 @@ export default function TicketCheckout({
 					))}
 				</select>
 			</label>
-			<p>Promo code FRIENDS20 gives 100% off at checkout.</p>
 			<button
 				className={styles.checkoutButton}
 				type="button"
